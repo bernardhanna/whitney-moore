@@ -10,7 +10,7 @@ $settings = get_field('blog_settings', 'option') ?: [];
 
 // 2) Background image logic
 $hero_bg = ! empty($settings['hero_background_image']['url'])
-? $settings['hero_background_image']
+? $settings['hero_background_image'] 
 : null;
 
 if ($hero_bg) {
