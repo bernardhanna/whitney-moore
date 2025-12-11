@@ -1,9 +1,6 @@
 <?php
 /**
  * Flexi Block: Testimonials Slider (Slick)
- * - Name = post title, Position = post excerpt, Testimonial = post content (HTML)
- * - Modes: latest | select | manual
- * - No design options pulled; defaults are hard-coded
  */
 
 $section_id = 'testimonials-' . wp_rand(1000, 9999);
@@ -25,7 +22,8 @@ $dots_enabled     = (bool) get_sub_field('dots');
 $autoplay_enabled = (bool) get_sub_field('autoplay');
 $autoplay_speed   = (int) get_sub_field('autoplay_speed') ?: 5000;
 
-$slides_xl = (int) get_sub_field('slides_xl') ?: 3;
+/** Force desktop to 4; keep your smaller breakpoints */
+$slides_xl = 4; // force 4 visible at first
 $slides_lg = (int) get_sub_field('slides_lg') ?: 3;
 $slides_md = (int) get_sub_field('slides_md') ?: 2;
 $slides_sm = (int) get_sub_field('slides_sm') ?: 1;
@@ -66,9 +64,9 @@ if ($data_source === 'latest') {
   ]);
   while ($q->have_posts()) { $q->the_post();
     $pid       = get_the_ID();
-    $name      = get_the_title($pid);                                          // name
-    $position  = get_the_excerpt($pid);                                        // position
-    $text_html = apply_filters('the_content', get_post_field('post_content', $pid)); // testimonial
+    $name      = get_the_title($pid);
+    $position  = get_the_excerpt($pid);
+    $text_html = apply_filters('the_content', get_post_field('post_content', $pid));
     $image_id  = get_post_thumbnail_id($pid);
     [$logo_img_id, $logo_svg] = _matrix_t_logo($pid);
     $slides[] = compact('name','position','text_html','image_id','logo_img_id','logo_svg');
@@ -139,7 +137,7 @@ $allowed_svg = [
     </div>
 
     <!-- Slider -->
-    <div class="overflow-hidden relative mt-8 w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
+    <div class="overflow-visible relative mt-8 w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
       <!-- Track -->
       <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
         <?php foreach ($slides as $s) :
@@ -162,7 +160,6 @@ $allowed_svg = [
               endif; ?>
 
               <div class="absolute right-6 bottom-6 left-6">
-                <!-- Fixed overlay defaults (no options) -->
                 <div class="relative backdrop-blur-lg bg-white/20 rounded-lg shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
 
                   <!-- Company logo -->
@@ -227,6 +224,15 @@ $allowed_svg = [
     </div>
   </div>
 
+  <!-- Scoped CSS to enable the right-side peek -->
+  <style>
+    #<?php echo esc_attr($section_id); ?> .slick-list{overflow:visible;padding-right:2rem}
+    /* Optional: tighten slide gaps on huge screens if needed */
+    @media (min-width:1536px){
+      #<?php echo esc_attr($section_id); ?> .slick-list{padding-right:2.5rem}
+    }
+  </style>
+
   <script>
   jQuery(function($){
     var $root   = $('#<?php echo esc_js($section_id); ?>');
@@ -237,9 +243,9 @@ $allowed_svg = [
 
     if (!$track.hasClass('slick-initialized')) {
       $track.slick({
-        slidesToShow: <?php echo (int) $slides_xl; ?>,
+        slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
         slidesToScroll: 1,
-        infinite: true, // ← make infinite
+        infinite: true,
         arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
         prevArrow: $prev,
         nextArrow: $next,
