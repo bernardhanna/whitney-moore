@@ -98,26 +98,26 @@ if (file_exists(get_template_directory() . '/vendor/autoload.php')) {
     // Handle error or provide a fallback
     error_log('Composer autoload file not found.');
 }
+add_action('init', function () {
+    // Autoload ACF fields
+    require_once get_template_directory() . '/inc/autoload-acf-fields.php';
 
-// Autoload ACF fields
-require_once get_template_directory() . '/inc/autoload-acf-fields.php';
+    // Autoload Custom Post Types and Taxonomies
+    require_once get_template_directory() . '/inc/cpts/init.php';
+    require_once get_template_directory() . '/inc/autoload-acf-groups.php';
 
-// Autoload Custom Post Types and Taxonomies
-require_once get_template_directory() . '/inc/cpts/init.php';
-require_once get_template_directory() . '/inc/autoload-acf-groups.php';
+    // Include the ACF theme options setup
+    require_once get_template_directory() . '/inc/theme-options.php';
 
-// Include the ACF theme options setup
-require_once get_template_directory() . '/inc/theme-options.php';
+    // Include login customizations
+    require_once get_template_directory() . '/inc/login-customizations.php';
 
-// Include login customizations
-require_once get_template_directory() . '/inc/login-customizations.php';
+    // Include the pagination functions
+    require_once get_template_directory() . '/inc/pagination.php';
 
-// Include the pagination functions
-require_once get_template_directory() . '/inc/pagination.php';
-
-//Include WooCommerce
-require_once get_template_directory() . '/inc/woocommerce.php';
-
+    //Include WooCommerce
+    require_once get_template_directory() . '/inc/woocommerce.php';
+});
 // Customize excerpt more text
 function custom_excerpt_more($more)
 {
