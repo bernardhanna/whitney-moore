@@ -39,8 +39,7 @@ function matrix_starter_setup() {
 add_action('after_setup_theme', 'matrix_starter_setup');
 
 /**
- * Menu link attributes (ensure theme_location slug check is correct)
- * Note: theme_location is the slug, not the label.
+ * Menu link attributes (theme_location is the slug)
  */
 add_filter('nav_menu_link_attributes', function ($atts, $item, $args) {
     if (!empty($args->theme_location) && $args->theme_location === 'footer_one') {
@@ -59,9 +58,7 @@ if (file_exists(get_template_directory() . '/vendor/autoload.php')) {
 }
 
 /**
- * Includes that should be available BEFORE 'init' fires.
- * This ensures any internal add_action('init', ...) in these files
- * is registered in time for THIS request.
+ * Includes that can load immediately (no ACF calls at include time)
  */
 require_once get_template_directory() . '/inc/enqueue-fonts.php';
 require_once get_template_directory() . '/inc/enqueue-scripts.php';
@@ -69,16 +66,26 @@ require_once get_template_directory() . '/inc/hero-functions.php';
 require_once get_template_directory() . '/inc/flexible-content-functions.php';
 require_once get_template_directory() . '/inc/helpers/utils/menu-icon.php';
 
-// ACF-related includes (these typically hook into acf/init or other actions)
-require_once get_template_directory() . '/inc/autoload-acf-fields.php';
-require_once get_template_directory() . '/inc/autoload-acf-groups.php';
-require_once get_template_directory() . '/inc/theme-options.php';
-
-// CPTs & taxonomies: these must be loaded BEFORE 'init' so their internal
-// add_action('init', ...) hooks are in place when WordPress reaches 'init'.
+/**
+ * CPTs & taxonomies
+ * These files typically add their own add_action('init', ...) which must be
+ * registered BEFORE WP hits 'init', so require them now.
+ */
 require_once get_template_directory() . '/inc/cpts/init.php';
 
-// Other theme includes
+/**
+ * ACF-dependent files — run them on acf/init (fires at/after init),
+ * so ACF translations (textdomain 'acf') won’t be loaded too early.
+ */
+add_action('acf/init', function () {
+    require_once get_template_directory() . '/inc/autoload-acf-fields.php';
+    require_once get_template_directory() . '/inc/autoload-acf-groups.php';
+    require_once get_template_directory() . '/inc/theme-options.php';
+}, 5);
+
+/**
+ * Other theme includes
+ */
 require_once get_template_directory() . '/inc/login-customizations.php';
 require_once get_template_directory() . '/inc/pagination.php';
 require_once get_template_directory() . '/inc/woocommerce.php';
@@ -107,7 +114,6 @@ function handle_tailwind_config_update() {
         error_log('CSS file not found at: ' . $css_path);
     }
 }
-
 add_action('acf/save_post', function ($post_id) {
     if ($post_id === 'options') {
         handle_tailwind_config_update();
@@ -233,7 +239,7 @@ add_action('wp_enqueue_scripts', function () {
 }, 1);
 
 /**
- * Build ACF Select choices from menus (single implementation)
+ * Build ACF Select choices from menus
  */
 function mytheme_acf_menu_item_choices(): array {
     $cache_key = 'mytheme_nav_menu_item_choices';
