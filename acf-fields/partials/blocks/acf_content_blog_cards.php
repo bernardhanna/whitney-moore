@@ -73,11 +73,11 @@ $blog_cards
         ->addSelect('text_color_class', [
             'label'   => 'Heading/Text Color Class',
             'choices' => [
-                'text-primary-blue' => 'text-primary-blue',
+                'text-primary' => 'text-primary',
                 'text-white'        => 'text-white',
                 'text-black'        => 'text-black',
             ],
-            'default_value' => 'text-primary-blue',
+            'default_value' => 'text-primary',
             'ui' => 1,
         ])
         ->addSelect('date_color_class', [

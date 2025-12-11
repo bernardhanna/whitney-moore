@@ -92,10 +92,10 @@ $sections = $item->children ?? [];
                       <?php endif; ?>
 
                       <div class="min-w-0">
-                        <h3 class="text-base font-semibold text-black">
+                        <h3 class="text-base font-semibold text-black whitespace-nowrap">
                           <a
                             href="<?php echo esc_url($e_url); ?>"
-                            class="rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
+                            class="whitespace-nowrap rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
                             role="menuitem"
                             aria-label="<?php echo esc_attr($e_label); ?>"
                           >
@@ -141,7 +141,7 @@ $sections = $item->children ?? [];
                           <h3 class="text-base font-semibold text-black">
                             <a
                               href="<?php echo esc_url($c_url); ?>"
-                              class="rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
+                              class="whitespace-nowrap rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
                               role="menuitem"
                               aria-label="<?php echo esc_attr($c_label); ?>"
                             >
@@ -190,7 +190,7 @@ $sections = $item->children ?? [];
                           <h3 class="text-base font-semibold text-black">
                             <a
                               href="<?php echo esc_url($g_url); ?>"
-                              class="rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
+                              class="whitespace-nowrap rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
                               role="menuitem"
                               aria-label="<?php echo esc_attr($g_label); ?>"
                             >

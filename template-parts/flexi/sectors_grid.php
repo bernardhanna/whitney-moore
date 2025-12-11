@@ -116,7 +116,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 [
                                                     'alt'     => esc_attr($img_alt),
                                                     'title'   => esc_attr(get_the_title($thumb_id) ?: $title),
-                                                    'class'   => 'w-full h-full object-cover',
+                                                    'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                     'loading' => 'lazy',
                                                 ]
                                             );
@@ -124,7 +124,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         ?>
                                     </div>
                                     <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
-                                        <h3 class="text-base font-semibold"><?php echo esc_html($title); ?></h3>
+                                        <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                     </div>
                                 </a>
                             </article>
@@ -175,7 +175,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     [
                                                         'alt'     => esc_attr($img_alt),
                                                         'title'   => esc_attr(get_the_title($thumb) ?: $title),
-                                                        'class'   => 'w-full h-full object-cover',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -183,7 +183,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             ?>
                                         </div>
                                         <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
-                                            <h3 class="text-base font-semibold"><?php echo esc_html($title); ?></h3>
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
                                 </article>
@@ -226,7 +226,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     [
                                                         'alt'     => esc_attr($img_alt),
                                                         'title'   => esc_attr(get_the_title($thumb) ?: $title),
-                                                        'class'   => 'w-full h-full object-cover',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -234,7 +234,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             ?>
                                         </div>
                                         <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
-                                            <h3 class="text-base font-semibold"><?php echo esc_html($title); ?></h3>
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
                                 </article>
@@ -274,7 +274,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     [
                                                         'alt'     => esc_attr($img_alt),
                                                         'title'   => esc_attr(get_the_title($thumb) ?: $title),
-                                                        'class'   => 'w-full h-full object-cover',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -282,7 +282,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             ?>
                                         </div>
                                         <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
-                                            <h3 class="text-base font-semibold"><?php echo esc_html($title); ?></h3>
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
                                 </article>

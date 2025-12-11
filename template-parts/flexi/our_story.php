@@ -47,7 +47,7 @@ if ($right_image_id) {
     style="background-color: <?php echo esc_attr($section_bg); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:py-20 max-w-container max-lg:px-5">
         <!-- Two-column layout: left content, right single image -->
         <div class="flex flex-col gap-10 w-full lg:flex-row lg:gap-12">
             <!-- Left content -->
@@ -82,7 +82,7 @@ if ($right_image_id) {
                         <div class="mt-8">
                             <a
                                 href="<?php echo esc_url($cta_button['url']); ?>"
-                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none text-primary bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-50"
+                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none bg-white transition-colors text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-50"
                                 target="<?php echo esc_attr($cta_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($cta_button['title']); ?>"
                                 title="<?php echo esc_attr($cta_button['title']); ?>"

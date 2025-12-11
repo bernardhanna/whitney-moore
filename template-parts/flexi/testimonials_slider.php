@@ -116,7 +116,7 @@ $allowed_svg = [
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-lg:px-5">
 
     <!-- Headings -->
     <div class="flex flex-col gap-4 items-start w-full">
@@ -126,7 +126,7 @@ $allowed_svg = [
 
       <?php if ($main_heading) : ?>
         <<?php echo esc_attr($main_heading_tag); ?> id="<?php echo esc_attr($section_id); ?>-heading"
-          class="text-primary-blue text-3xl md:text-[32px] font-bold leading-10 tracking-wide">
+          class="text-primary text-3xl md:text-[32px] font-bold leading-10 tracking-wide">
           <?php echo esc_html($main_heading); ?>
         </<?php echo esc_attr($main_heading_tag); ?>>
       <?php endif; ?>
@@ -139,7 +139,8 @@ $allowed_svg = [
     </div>
 
     <!-- Slider -->
-    <div class="mt-8 w-full">
+    <div class="overflow-hidden relative mt-8 w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
+      <!-- Track -->
       <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
         <?php foreach ($slides as $s) :
           $name        = $s['name'];
@@ -152,7 +153,7 @@ $allowed_svg = [
           $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
         ?>
           <div class="px-2">
-            <article class="relative h-[456px] rounded-lg overflow-hidden group">
+            <article class="relative h-[480px] rounded-lg overflow-hidden group">
               <?php if ($image_id) :
                 echo wp_get_attachment_image($image_id, 'large', false, [
                   'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
@@ -201,37 +202,49 @@ $allowed_svg = [
         <?php endforeach; ?>
       </div>
 
-      <?php if ($arrow_enabled || $dots_enabled): ?>
-        <div class="flex gap-4 justify-center items-center mt-8" data-slick-controls="<?php echo esc_attr($section_id); ?>">
-          <?php if ($arrow_enabled): ?>
-            <button type="button" class="flex justify-center items-center w-16 h-16 rounded-full transition-all matrix-prev bg-neutral-grey hover:opacity-90">
+      <!-- Overlaid arrows -->
+      <?php if ($arrow_enabled): ?>
+        <div class="absolute inset-0 pointer-events-none">
+          <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
+            <button type="button" aria-label="<?php esc_attr_e('Previous testimonials', 'matrix-starter'); ?>"
+              class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button type="button" class="flex justify-center items-center w-16 h-16 bg-blue-600 rounded-full transition-all matrix-next hover:opacity-90">
+          </div>
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-auto md:right-3 lg:right-4 xl:right-6">
+            <button type="button" aria-label="<?php esc_attr_e('Next testimonials', 'matrix-starter'); ?>"
+              class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-14 md:h-14 bg-primary matrix-next hover:opacity-90">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-          <?php endif; ?>
-          <?php if ($dots_enabled): ?><div class="matrix-dots"></div><?php endif; ?>
+          </div>
         </div>
+      <?php endif; ?>
+
+      <!-- Dots (optional, below slider) -->
+      <?php if ($dots_enabled): ?>
+        <div class="flex gap-4 justify-center items-center mt-6" data-slick-dots="<?php echo esc_attr($section_id); ?>"></div>
       <?php endif; ?>
     </div>
   </div>
 
   <script>
   jQuery(function($){
-    var $root  = $('#<?php echo esc_js($section_id); ?>');
-    var $track = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
-    var $ctrls = $root.find('[data-slick-controls="<?php echo esc_js($section_id); ?>"]');
+    var $root   = $('#<?php echo esc_js($section_id); ?>');
+    var $track  = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
+    var $prev   = $root.find('.matrix-prev');
+    var $next   = $root.find('.matrix-next');
+    var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
+
     if (!$track.hasClass('slick-initialized')) {
       $track.slick({
         slidesToShow: <?php echo (int) $slides_xl; ?>,
         slidesToScroll: 1,
-        infinite: false,
+        infinite: true, // ← make infinite
         arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
-        prevArrow: $ctrls.find('.matrix-prev'),
-        nextArrow: $ctrls.find('.matrix-next'),
+        prevArrow: $prev,
+        nextArrow: $next,
         dots: <?php echo $dots_enabled ? 'true' : 'false'; ?>,
-        appendDots: $ctrls.find('.matrix-dots'),
+        appendDots: $dots.length ? $dots : undefined,
         autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
         autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
         adaptiveHeight: false,

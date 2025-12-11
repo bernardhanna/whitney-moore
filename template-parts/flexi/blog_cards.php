@@ -26,7 +26,7 @@ $section_bg_color   = get_sub_field('section_bg_color');
 $overlay_bg_class   = get_sub_field('overlay_bg_class') ?: 'bg-white/10';
 $overlay_blur_class = get_sub_field('overlay_blur_class') ?: 'backdrop-blur-[15px]';
 
-$text_color_class   = get_sub_field('text_color_class') ?: 'text-primary-blue';
+$text_color_class   = get_sub_field('text_color_class') ?: 'text-primary';
 $date_color_class   = get_sub_field('date_color_class') ?: 'text-black';
 $link_color_class   = get_sub_field('link_color_class') ?: 'text-black/60 hover:text-black';
 
@@ -121,14 +121,14 @@ wp_reset_postdata();
                                 <div class="absolute bottom-6 left-6 right-6 <?php echo esc_attr($overlay_blur_class . ' ' . $overlay_bg_class); ?> p-6 flex flex-col gap-6 rounded-md">
                                     <div class="flex flex-col gap-2">
                                         <?php if ($cat) : ?>
-                                            <div class="<?php echo esc_attr($text_color_class); ?> font-montserrat text-base font-medium tracking-wide">
+                                            <div class="<?php echo esc_attr($text_color_class); ?> font-primary text-base  tracking-[1px] font-medium  text-left">
                                                 <?php echo esc_html($cat); ?>
                                             </div>
                                         <?php endif; ?>
-                                        <h3 class="<?php echo esc_attr($text_color_class); ?> font-montserrat text-xl font-semibold leading-6 max-w-[483px]">
+                                        <h3 class="<?php echo esc_attr($text_color_class); ?> font-primary text-xl font-semibold leading-6 max-w-[483px]">
                                             <?php echo esc_html($title); ?>
                                         </h3>
-                                        <p class="<?php echo esc_attr($date_color_class); ?> font-montserrat text-lg font-medium">
+                                        <p class="<?php echo esc_attr($date_color_class); ?> font-primary text-lg font-medium">
                                             <?php echo esc_html($date); ?>
                                         </p>
                                     </div>
@@ -175,15 +175,15 @@ wp_reset_postdata();
                                     <div class="flex flex-col gap-4">
                                         <div class="flex flex-col gap-2">
                                             <?php if ($cat) : ?>
-                                                <div class="<?php echo esc_attr($text_color_class); ?> font-montserrat text-base font-medium tracking-wide max-w-[518px]">
+                                                <div class="<?php echo esc_attr($text_color_class); ?> font-primary text-base font-medium tracking-wide max-w-[518px]">
                                                     <?php echo esc_html($cat); ?>
                                                 </div>
                                             <?php endif; ?>
-                                            <h3 class="<?php echo esc_attr($text_color_class); ?> font-montserrat text-xl font-semibold leading-6 max-w-[518px]">
+                                            <h3 class="<?php echo esc_attr($text_color_class); ?> font-primary text-xl font-semibold leading-6 max-w-[518px]">
                                                 <?php echo esc_html($title); ?>
                                             </h3>
                                         </div>
-                                        <p class="<?php echo esc_attr($date_color_class); ?> font-montserrat text-base font-medium max-w-[405px]">
+                                        <p class="<?php echo esc_attr($date_color_class); ?> font-primary text-base font-medium max-w-[405px]">
                                             <?php echo esc_html($date); ?>
                                         </p>
                                     </div>
