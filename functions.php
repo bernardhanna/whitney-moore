@@ -23,13 +23,14 @@ function matrix_starter_setup()
     add_image_size('hero-large', 1280, 800, true);
     add_image_size('hero-xlarge', 1600, 900, true);
     add_image_size('hero-xxlarge', 1920, 1080, true);
-    register_nav_menus(array(
-        'primary' => esc_html__('Primary Menu', 'matrix-starter'),
-        'Footer One' => esc_html__('Footer One Menu', 'matrix-starter'),
-        'Footer Two' => esc_html__('Footer Two Menu', 'matrix-starter'),
-        'Footer Three' => esc_html__('Footer Three Menu', 'matrix-starter'),
-        'copyright' => esc_html__('Copyright Menu', 'matrix-starter'),
-    ));
+    register_nav_menus( array(
+    'primary'       => esc_html__( 'Primary Menu', 'matrix-starter' ),
+    'footer_one'    => esc_html__( 'Footer One Menu', 'matrix-starter' ),
+    'footer_two'    => esc_html__( 'Footer Two Menu', 'matrix-starter' ),
+    'footer_three'  => esc_html__( 'Footer Three Menu', 'matrix-starter' ),
+    'footer_four'   => esc_html__( 'Footer Four Menu', 'matrix-starter' ), // NEW
+    'copyright'     => esc_html__( 'Copyright Menu', 'matrix-starter' ),
+    ) );
 }
 add_action('after_setup_theme', 'matrix_starter_setup');
 
@@ -48,6 +49,8 @@ require_once get_template_directory() . '/inc/enqueue-scripts.php';
 // load the helper functions
 require_once get_template_directory() . '/inc/hero-functions.php';
 require_once get_template_directory() . '/inc/flexible-content-functions.php';
+// support nav menu-icons/images
+require_once get_template_directory() . '/inc/helpers/utils/menu-icon.php';
 
 // Function to handle Tailwind config updates and trigger rebuilds
 function handle_tailwind_config_update()
@@ -101,6 +104,7 @@ require_once get_template_directory() . '/inc/autoload-acf-fields.php';
 
 // Autoload Custom Post Types and Taxonomies
 require_once get_template_directory() . '/inc/cpts/init.php';
+require_once get_template_directory() . '/inc/autoload-acf-groups.php';
 
 // Include the ACF theme options setup
 require_once get_template_directory() . '/inc/theme-options.php';
@@ -238,3 +242,64 @@ add_filter('acf/load_field/name=menu_item', function ($field) {
     return $field;
 });
 
+
+
+//Loader for “Select menu item” choices
+function mytheme_acf_menu_item_choices(): array {
+    $cache_key = 'mytheme_nav_menu_item_choices';
+    $choices = get_transient($cache_key);
+    if (is_array($choices)) {
+        return $choices;
+    }
+
+    $choices = [];
+    $menus = wp_get_nav_menus();
+
+    if (!empty($menus)) {
+        foreach ($menus as $menu) {
+            $items = wp_get_nav_menu_items($menu->term_id, ['update_post_term_cache' => false]);
+            if (empty($items)) {
+                continue;
+            }
+
+            // Index by ID for parent traversal
+            $by_id = [];
+            foreach ($items as $it) {
+                $by_id[$it->ID] = $it;
+            }
+
+            // Label = Menu Name › Parent › Child › Item
+            foreach ($items as $it) {
+                $crumbs = [$it->title];
+                $p = $it->menu_item_parent;
+                while (!empty($p) && isset($by_id[$p])) {
+                    array_unshift($crumbs, $by_id[$p]->title);
+                    $p = $by_id[$p]->menu_item_parent;
+                }
+                $label = $menu->name . ' › ' . implode(' › ', $crumbs);
+                $choices[$it->ID] = $label;
+            }
+        }
+    }
+
+    // Cache for 12 hours
+    set_transient($cache_key, $choices, HOUR_IN_SECONDS * 12);
+    return $choices;
+}
+
+/**
+ * Clear cached choices when menus are updated.
+ */
+add_action('wp_update_nav_menu', function () {
+    delete_transient('mytheme_nav_menu_item_choices');
+});
+
+/**
+ * Populate any 'menu_item' Select in our Navigation Settings repeaters.
+ * NOTE: If you have other fields named 'menu_item' elsewhere, consider
+ * switching this to 'acf/load_field/key=FIELD_KEY' for each Select instead.
+ */
+add_filter('acf/load_field/name=menu_item', function ($field) {
+    $field['choices'] = mytheme_acf_menu_item_choices();
+    return $field;
+});

@@ -14,16 +14,16 @@ $fields
       'font_awesome'   => 'Font Awesome',
       'flowbite'       => 'Flowbite',
       'slick'          => 'Slick JS',
-      'hamburger_css'  => 'Hamburgers CSS',
       'headroom'       => 'Headroom.js',
       'leaflet'        => 'Leaflet (OpenStreetMap)',
       'cloudflare_turnstile' => 'Cloudflare Turnstile',
+      'nice_select'    => 'jQuery Nice Select',
     ],
     'default_value' => [
       'slick',
       'font_awesome',
-      'hamburger_css',
       'headroom',
+      'cloudflare_turnstile'
     ],
     'layout'       => 'vertical',
   ])

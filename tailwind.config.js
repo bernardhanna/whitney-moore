@@ -10,28 +10,26 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['Lato', 'sans-serif'],
-        secondary: ['Poppins', 'sans-serif'],
+        primary: ['Montserrat', 'sans-serif'],
+        secondary: ['Playfair', 'serif'],
+      },
+      letterSpacing: {
+        "normal": "0em",
+        "wider": "0.1em",
       },
       colors: {
         primary: {
-          DEFAULT: '#ED1C24',
-          light: '#9AA770',
-          dark: '#788941',
-          200: '#BBC4A0',
-          100: '#DDE2CF',
-          50: '#EEF0E7',
+          DEFAULT: '#0902A4',
+          light: '#9B97FF',
+          dark: '#00005E',
         },
         secondary: {
-          DEFAULT: '#fff',
-          light: '#E9A777',
-          dark: '#DE7C34',
-          200: '#F0C5A5',
-          100: '#F8E2D2',
-          50: '#FBF0E8',
+          DEFAULT: '#F5F5F5',
+          light: '#ffffff',
+          dark: '#E2E2E2',
         },
         tertiary: {
-          DEFAULT: '#5F7176',
+          DEFAULT: '#13161E',
         },
         background: {
           DEFAULT: '#ffffff',
@@ -62,8 +60,8 @@ module.exports = {
           accent: '#1D2939',
         },
         hover: {
-          bg: '#F6F6F6', // Using primary-light as hover background
-          text: '#000', // Using accent-greenDark as hover text
+          bg: ' #00005E', // Using primary-light as hover background
+          text: '#fff', // Using accent-greenDark as hover text
         },
       },
       backgroundColor: {
@@ -80,10 +78,10 @@ module.exports = {
       width: {
         'container-md': '1084px',
         'container-lg': '1280px',
-        'container': '1280px',
+        'container': '1568px',
       },
       maxWidth: {
-        'container': '1139px',
+        'container': '1568px',
         'xxs': '320px',
         'xs': '480px',
         'mob': '575px',
@@ -138,7 +136,7 @@ module.exports = {
         md: '768px',
         lg: '1024px',
         xl: '1280px',
-        xxl: '1480px',
+        xxl: '1568px',
         ultrawide: '1920px',
       },
     },
