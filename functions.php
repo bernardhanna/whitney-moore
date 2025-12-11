@@ -222,7 +222,9 @@ add_action( 'wp_footer', function () {
     }
 } );
 
-wp_enqueue_script('jquery-ui-draggable');
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_script('jquery-ui-draggable');
+}, 1);
 /**
  * Fill the choices with every top-level item in the “primary” menu.
  */
