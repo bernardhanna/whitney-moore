@@ -288,3 +288,12 @@ add_filter('acf/load_field/name=menu_item', function ($field) {
     $field['choices'] = mytheme_acf_menu_item_choices();
     return $field;
 });
+
+
+
+add_filter('override_load_textdomain', function ($override, $domain, $mofile) {
+    if ($domain === 'acf' && ! did_action('init')) {
+        error_log('ACF textdomain attempted early. Backtrace: ' . wp_debug_backtrace_summary());
+    }
+    return $override;
+}, 10, 3);
