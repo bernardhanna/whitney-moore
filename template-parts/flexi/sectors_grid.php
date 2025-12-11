@@ -69,7 +69,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
             <?php if (!empty($main_heading)) : ?>
                 <<?php echo esc_attr($main_heading_tag); ?>
                     id="<?php echo esc_attr($section_id); ?>-heading"
-                    class="mt-2.5 text-3xl font-extrabold leading-none"
+                    class="mt-2.5 relative text-[2rem] tracking-[1px] leading-[2.5rem] font-primary text-primary text-center font-bold"
                 >
                     <?php echo esc_html($main_heading); ?>
                 </<?php echo esc_attr($main_heading_tag); ?>>
@@ -106,7 +106,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                             <article class="h-full">
                                 <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                    href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                    <div class="relative w-full h-[200px] sm:h-[220px] md:h-[240px] overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                    <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                         <?php
                                         if ($thumb_id) {
                                             echo wp_get_attachment_image(
@@ -165,7 +165,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 <article class="h-full">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                        <div class="relative w-full h-[240px] overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                        <div class="relative w-full  overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
                                                 echo wp_get_attachment_image(
@@ -216,7 +216,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/2">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                        <div class="relative w-full h-[240px] overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                        <div class="relative w-full  overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
                                                 echo wp_get_attachment_image(
@@ -264,7 +264,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/4">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                        <div class="relative w-full h-[240px] overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                        <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
                                                 echo wp_get_attachment_image(
