@@ -53,9 +53,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
   role="contentinfo"
   aria-label="<?php esc_attr_e('Site footer', 'matrix-starter'); ?>"
 >
-  <div class="flex flex-col gap-12 justify-center items-center w-full mx-auto max-w-container  py-12 max-md:gap-8 max-md:py-8 max-sm:gap-6 max-xxl:px-5 max-sm:py-6 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+  <div class="flex flex-col gap-12 justify-center items-center w-full mx-auto max-w-container  py-12 max-md:gap-8 max-md:py-8 max-sm:gap-6 max-xxl:px-[1rem] max-sm:py-6 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
-    <div class="h-px w-[100px] bg-white/20 self-start" aria-hidden="true"></div>
+    <div class="h-px w-[100px] bg-[#ffffff85] self-start" aria-hidden="true"></div>
 
     <!-- Top Columns (5) -->
     <nav class="flex gap-8 items-start self-stretch max-md:flex-wrap max-md:gap-6 max-sm:flex-col max-sm:gap-8" aria-label="<?php esc_attr_e('Footer navigation', 'matrix-starter'); ?>">
@@ -243,7 +243,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
     </nav>
 
-    <div class="h-px w-[100px] bg-white/20 self-start" aria-hidden="true"></div>
+    <div class="h-px w-[100px] bg-[#ffffff85] self-start" aria-hidden="true"></div>
 
     <!-- Partner logos -->
     <?php if (!empty($partner_logos)) : ?>

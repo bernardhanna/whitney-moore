@@ -22,8 +22,8 @@ $dots_enabled     = (bool) get_sub_field('dots');
 $autoplay_enabled = (bool) get_sub_field('autoplay');
 $autoplay_speed   = (int) get_sub_field('autoplay_speed') ?: 5000;
 
-/** Force desktop to 4; keep your smaller breakpoints */
-$slides_xl = 4; // force 4 visible at first
+/** Force desktop to 4; keep smaller breakpoints */
+$slides_xl = 4;
 $slides_lg = (int) get_sub_field('slides_lg') ?: 3;
 $slides_md = (int) get_sub_field('slides_md') ?: 2;
 $slides_sm = (int) get_sub_field('slides_sm') ?: 1;
@@ -114,7 +114,7 @@ $allowed_svg = [
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-lg:px-5">
+  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
 
     <!-- Headings -->
     <div class="flex flex-col gap-4 items-start w-full">
@@ -136,79 +136,76 @@ $allowed_svg = [
       <?php endif; ?>
     </div>
 
-    <!-- Slider -->
-    <div class="overflow-visible relative mt-8 w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
-      <!-- Track -->
-      <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
-        <?php foreach ($slides as $s) :
-          $name        = $s['name'];
-          $position    = $s['position'];
-          $text_html   = $s['text_html'];
-          $image_id    = (int) $s['image_id'];
-          $logo_img_id = (int) $s['logo_img_id'];
-          $logo_svg    = $s['logo_svg'];
-          $img_alt     = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: $name) : $name;
-          $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
-        ?>
-          <div class="px-2">
-            <article class="relative h-[480px] rounded-lg overflow-hidden group">
-              <?php if ($image_id) :
-                echo wp_get_attachment_image($image_id, 'large', false, [
-                  'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
-                  'class' => 'absolute inset-0 w-full h-full object-cover', 'loading' => 'lazy',
-                ]);
-              endif; ?>
+    <!-- Slider wrapper provides positioning for arrows -->
+    <div class="relative mt-8 w-full">
+      <!-- Shell is clipped: hides left strip, allows right overflow -->
+      <div class="overflow-visible relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
+        <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
+          <?php foreach ($slides as $s) :
+            $name        = $s['name'];
+            $position    = $s['position'];
+            $text_html   = $s['text_html'];
+            $image_id    = (int) $s['image_id'];
+            $logo_img_id = (int) $s['logo_img_id'];
+            $logo_svg    = $s['logo_svg'];
+            $img_alt     = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: $name) : $name;
+            $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
+          ?>
+            <div class="px-2">
+              <article class="relative h-[480px] overflow-hidden group">
+                <?php if ($image_id) :
+                  echo wp_get_attachment_image($image_id, 'large', false, [
+                    'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
+                    'class' => 'absolute inset-0 w-full h-full object-cover', 'loading' => 'lazy',
+                  ]);
+                endif; ?>
 
-              <div class="absolute right-6 bottom-6 left-6">
-                <div class="relative backdrop-blur-lg bg-white/20 rounded-lg shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
-
-                  <!-- Company logo -->
-                  <div class="flex items-start">
-                    <?php
-                    if ($logo_img_id) {
-                      echo wp_get_attachment_image($logo_img_id, 'medium', false, [
-                        'alt' => esc_attr($name . ' logo'), 'class' => 'h-6 w-auto', 'loading' => 'lazy',
-                      ]);
-                    } elseif (!empty($logo_svg)) {
-                      echo wp_kses($logo_svg, $allowed_svg);
-                    }
-                    ?>
-                  </div>
-
-                  <!-- Testimonial text (content) -->
-                  <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
-                    <?php echo $text_html; ?>
-                  </div>
-
-                  <!-- Name + Position -->
-                  <div class="flex flex-col">
-                    <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
-                      <?php echo esc_html($name); ?>
+                <div class="absolute right-6 bottom-6 left-6">
+                  <div class="relative backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
+                    <div class="flex items-start">
+                      <?php
+                      if ($logo_img_id) {
+                        echo wp_get_attachment_image($logo_img_id, 'medium', false, [
+                          'alt' => esc_attr($name . ' logo'), 'class' => 'h-6 w-auto', 'loading' => 'lazy',
+                        ]);
+                      } elseif (!empty($logo_svg)) {
+                        echo wp_kses($logo_svg, $allowed_svg);
+                      }
+                      ?>
                     </div>
-                    <?php if (!empty($position)) : ?>
-                      <div class="text-sm tracking-tight leading-5 text-black/60">
-                        <?php echo esc_html($position); ?>
-                      </div>
-                    <?php endif; ?>
-                  </div>
 
+                    <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
+                      <?php echo $text_html; ?>
+                    </div>
+
+                    <div class="flex flex-col">
+                      <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
+                        <?php echo esc_html($name); ?>
+                      </div>
+                      <?php if (!empty($position)) : ?>
+                        <div class="text-sm tracking-tight leading-5 text-black/60">
+                          <?php echo esc_html($position); ?>
+                        </div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
-        <?php endforeach; ?>
+              </article>
+            </div>
+          <?php endforeach; ?>
+        </div>
       </div>
 
-      <!-- Overlaid arrows -->
+      <!-- Overlaid arrows (outside clipped shell so they don't get cut) -->
       <?php if ($arrow_enabled): ?>
         <div class="absolute inset-0 pointer-events-none">
-          <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
+          <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
             <button type="button" aria-label="<?php esc_attr_e('Previous testimonials', 'matrix-starter'); ?>"
               class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
-          <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-auto md:right-3 lg:right-4 xl:right-6">
+          <div class="absolute right-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:right-3 lg:right-4 xl:right-6">
             <button type="button" aria-label="<?php esc_attr_e('Next testimonials', 'matrix-starter'); ?>"
               class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-14 md:h-14 bg-primary matrix-next hover:opacity-90">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -224,12 +221,20 @@ $allowed_svg = [
     </div>
   </div>
 
-  <!-- Scoped CSS to enable the right-side peek -->
+  <!-- Scoped CSS: allow right peek & hide only left via clip-path -->
   <style>
-    #<?php echo esc_attr($section_id); ?> .slick-list{overflow:visible;padding-right:2rem}
-    /* Optional: tighten slide gaps on huge screens if needed */
+    /* Allow the next slide to peek on the right */
+    #<?php echo esc_attr($section_id); ?> .slick-list { overflow: visible; padding-right: 2rem; }
     @media (min-width:1536px){
-      #<?php echo esc_attr($section_id); ?> .slick-list{padding-right:2.5rem}
+      #<?php echo esc_attr($section_id); ?> .slick-list { padding-right: 2.5rem; }
+    }
+
+    /* Hide ONLY the left side of the shell.
+       inset: top | right | bottom | left
+       Right is negative to allow right-side overflow to show. */
+    #<?php echo esc_attr($section_id); ?> [data-slick-shell] {
+      clip-path: inset(0 -100vw 0 24px);
+      -webkit-clip-path: inset(0 -100vw 0 24px);
     }
   </style>
 

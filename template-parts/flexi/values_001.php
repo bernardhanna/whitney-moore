@@ -77,7 +77,7 @@ $div_colors = [
 
 // Compose dynamic classes
 $section_classes = trim('relative flex overflow-hidden');
-$inner_wrapper_classes = trim('flex flex-col items-center w-full mx-auto max-w-container py-20 max-lg:px-5 ' . implode(' ', $padding_classes));
+$inner_wrapper_classes = trim('flex flex-col items-center w-full mx-auto max-w-container py-20 max-xxl:px-[1rem] ' . implode(' ', $padding_classes));
 
 // Section style (colors)
 $section_style = '';

@@ -47,7 +47,7 @@ if ($right_image_id) {
     style="background-color: <?php echo esc_attr($section_bg); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:py-20 max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:py-20 max-w-container max-xxl:px-[1rem]">
         <!-- Two-column layout: left content, right single image -->
         <div class="flex flex-col gap-10 w-full lg:flex-row lg:gap-12">
             <!-- Left content -->

@@ -50,12 +50,12 @@ $blog_cards
         ->addSelect('overlay_bg_class', [
             'label'   => 'Overlay Background Class',
             'choices' => [
-                'bg-white/10'  => 'bg-white/10',
-                'bg-white/20'  => 'bg-white/20',
+                'bg-[#ffffff85]'  => 'bg-[#ffffff85]',
+                'bg-[#ffffff85]'  => 'bg-[#ffffff85]',
                 'bg-black/20'  => 'bg-black/20',
                 'bg-black/30'  => 'bg-black/30',
             ],
-            'default_value' => 'bg-white/10',
+            'default_value' => 'bg-[#ffffff85]',
             'ui' => 1,
         ])
         ->addSelect('overlay_blur_class', [

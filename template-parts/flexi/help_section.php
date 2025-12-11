@@ -133,7 +133,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
     style="background-color: <?php echo esc_attr($background_color); ?>; color: <?php echo esc_attr($text_color); ?>;"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container py-12  max-lg:px-5 <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-container py-12  max-xxl:px-[1rem] <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
 
         <div class="flex relative flex-col gap-2 justify-center items-center self-stretch max-sm:px-4 max-sm:py-6">
             <div class="flex relative gap-8 justify-center items-center w-full max-md:flex-col max-md:gap-6 max-md:items-center max-sm:gap-5">

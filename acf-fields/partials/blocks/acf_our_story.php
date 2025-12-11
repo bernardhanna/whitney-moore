@@ -48,7 +48,7 @@ $our_story
         ])
         ->addColorPicker('content_background_color', [
             'label' => 'Content Background Color',
-            'default_value' => 'rgba(67,56,202,0.9)',
+            'default_value' => '#0902a4',
         ])
         ->addColorPicker('text_color', [
             'label' => 'Text Color',

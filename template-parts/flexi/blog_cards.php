@@ -23,7 +23,7 @@ $big_cta_text       = get_sub_field('big_cta_text') ?: 'Read more';
 
 // Design
 $section_bg_color   = get_sub_field('section_bg_color');
-$overlay_bg_class   = get_sub_field('overlay_bg_class') ?: 'bg-white/10';
+$overlay_bg_class   = get_sub_field('overlay_bg_class') ?: 'bg-[#ffffff85]';
 $overlay_blur_class = get_sub_field('overlay_blur_class') ?: 'backdrop-blur-[15px]';
 
 $text_color_class   = get_sub_field('text_color_class') ?: 'text-primary';
@@ -82,7 +82,7 @@ wp_reset_postdata();
     style="background-color: <?php echo esc_attr($section_bg_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container max-xxl:px-[1rem]">
         <?php if (!empty($section_heading)) : ?>
             <<?php echo esc_attr($section_heading_tag); ?>
                 id="<?php echo esc_attr($section_id); ?>-heading"
@@ -107,7 +107,7 @@ wp_reset_postdata();
                             $cat     = _matrix_first_cat_name($pid);
                             $date    = get_the_date( get_option('date_format'), $pid );
                             ?>
-                            <article class="relative h-[332px] rounded-lg overflow-hidden group">
+                            <article class="relative h-[332px]  overflow-hidden group">
                                 <?php
                                 if ($image) {
                                     echo wp_get_attachment_image(
@@ -118,7 +118,7 @@ wp_reset_postdata();
                                     );
                                 }
                                 ?>
-                                <div class="absolute bottom-6 left-6 right-6 <?php echo esc_attr($overlay_blur_class . ' ' . $overlay_bg_class); ?> p-6 flex flex-col gap-6 rounded-md">
+                                <div class="absolute bottom-6 left-6 right-6 rounded-none <?php echo esc_attr($overlay_blur_class . ' ' . $overlay_bg_class); ?> p-6 flex flex-col gap-6">
                                     <div class="flex flex-col gap-2">
                                         <?php if ($cat) : ?>
                                             <div class="<?php echo esc_attr($text_color_class); ?> font-primary text-base  tracking-[1px] font-medium  text-left">
@@ -160,7 +160,7 @@ wp_reset_postdata();
                             $cat     = _matrix_first_cat_name($pid);
                             $date    = get_the_date( get_option('date_format'), $pid );
                             ?>
-                            <article class="relative h-[696px] rounded-lg overflow-hidden group">
+                            <article class="relative h-[696px]  overflow-hidden group">
                                 <?php
                                 if ($image) {
                                     echo wp_get_attachment_image(
@@ -171,7 +171,7 @@ wp_reset_postdata();
                                     );
                                 }
                                 ?>
-                                <div class="absolute bottom-6 left-6 right-6 <?php echo esc_attr($overlay_blur_class . ' ' . $overlay_bg_class); ?> p-6 flex flex-col gap-6 rounded-md">
+                                <div class="absolute bottom-6 left-6 right-6 rounded-none <?php echo esc_attr($overlay_blur_class . ' ' . $overlay_bg_class); ?> p-6 flex flex-col gap-6">
                                     <div class="flex flex-col gap-4">
                                         <div class="flex flex-col gap-2">
                                             <?php if ($cat) : ?>

@@ -30,7 +30,7 @@ if (have_rows('padding_settings')) {
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
         <div class="box-border flex relative flex-col gap-4 items-center py-0 mx-auto my-0 w-full max-w-[1728px] max-md:px-10 max-md:py-0 max-sm:px-5 max-sm:py-0">
             <header class="flex relative justify-between items-center w-full max-w-[1568px] max-md:flex-col max-md:gap-6 max-md:items-center">
                 <?php if (!empty($heading)): ?>

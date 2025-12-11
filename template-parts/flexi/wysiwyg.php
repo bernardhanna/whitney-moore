@@ -15,7 +15,7 @@ if (have_rows('padding_settings')) {
 ?>
 
 <section class="flex overflow-hidden relative wp_editor">
-  <div class="w-full mx-auto max-w-[1095px] flex flex-col md:flex-row-reverse items-center justify-between max-lg:px-5  max-xxl:px-5 pb-20">
+  <div class="w-full mx-auto max-w-[1095px] flex flex-col md:flex-row-reverse items-center justify-between max-xxl:px-[1rem]  max-xxl:px-[1rem] pb-20">
    
       <div class="relative">
         <?php if ($text_content): ?>

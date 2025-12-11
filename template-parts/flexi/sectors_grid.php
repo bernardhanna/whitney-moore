@@ -3,6 +3,7 @@
  * Flexi Block: Sectors Grid
  * - Tablet & below: simple grid (1 / 2 / 3 cols)
  * - Desktop (lg+): 33/33/33 then 50/25/25 per 6 items
+ * - Integrates Metronet Reorder Posts when active
  */
 
 $section_heading      = get_sub_field('section_heading');
@@ -39,25 +40,57 @@ if (have_rows('padding_settings')) {
     }
 }
 
-// query
-$sectors_query = new WP_Query([
-    'post_type'      => 'sectors',
-    'posts_per_page' => $posts_per_page,
-    'post_status'    => 'publish',
-    'orderby'        => 'menu_order',
-    'order'          => 'ASC',
-]);
+// Detect Metronet Reorder Posts
+$metronet_active = false;
+if (!function_exists('is_plugin_active')) {
+    @include_once ABSPATH . 'wp-admin/includes/plugin.php';
+}
+if (function_exists('is_plugin_active')) {
+    $metronet_active = is_plugin_active('metronet-reorder-posts/metronet-reorder-posts.php');
+}
 
+/**
+ * Build posts array:
+ * - If Metronet is active: use get_posts() with menu_order ASC (up to 50)
+ * - Else: use original WP_Query with ACF posts_per_page
+ */
+$posts_array   = [];
+$sectors_query = null;
+
+if ($metronet_active) {
+    $posts_array = get_posts([
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+        'post_type'      => 'sectors',
+        'posts_per_page' => 50,
+        'suppress_filters' => false,
+    ]);
+} else {
+    $sectors_query = new WP_Query([
+        'post_type'      => 'sectors',
+        'posts_per_page' => $posts_per_page,
+        'post_status'    => 'publish',
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+    ]);
+    $posts_array = $sectors_query->posts;
+}
+
+$total      = is_array($posts_array) ? count($posts_array) : 0;
 $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 ?>
 
 <section
     id="<?php echo esc_attr($section_id); ?>"
     class="flex overflow-hidden relative"
-    style="background-color: <?php echo esc_attr($background_color); ?>; color: <?php echo esc_attr($text_color); ?>;"
+    style="<?php
+        echo $background_color ? 'background-color:' . esc_attr($background_color) . ';' : '';
+        echo $text_color ? ' color:' . esc_attr($text_color) . ';' : '';
+    ?>"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 md:py-12 max-lg:px-5 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 md:py-12 max-xxl:px-[1rem] <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
         <header class="flex flex-col justify-center items-center w-full text-center">
             <?php if (!empty($section_heading)) : ?>
@@ -76,12 +109,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
             <?php endif; ?>
         </header>
 
-        <?php if ($sectors_query->have_posts()) : ?>
-            <?php
-            // We'll use the raw posts array twice (once for <lg grid, once for lg+ alternating).
-            $posts_array = $sectors_query->posts;
-            $total       = count($posts_array);
-            ?>
+        <?php if ($total > 0) : ?>
 
             <!-- Simple GRID for mobile/tablet: 1 / 2 / 3 cols -->
             <div class="mt-10 w-full max-md:mt-8 lg:hidden">
@@ -123,7 +151,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         }
                                         ?>
                                     </div>
-                                    <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
+                                    <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
                                         <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                     </div>
                                 </a>
@@ -165,7 +193,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 <article class="h-full">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                        <div class="relative w-full  overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                        <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
                                                 echo wp_get_attachment_image(
@@ -182,7 +210,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
+                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
@@ -216,7 +244,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/2">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
-                                        <div class="relative w-full  overflow-hidden <?php echo esc_attr($image_radius); ?>">
+                                        <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
                                                 echo wp_get_attachment_image(
@@ -233,7 +261,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
+                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
@@ -281,7 +309,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="border-top: 2px solid <?php echo esc_attr($underline_color); ?>;">
+                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>
@@ -301,6 +329,11 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
             </div>
         <?php endif; ?>
 
-        <?php wp_reset_postdata(); ?>
+        <?php
+        // Reset only if we used WP_Query
+        if ($sectors_query instanceof WP_Query) {
+            wp_reset_postdata();
+        }
+        ?>
     </div>
 </section>

@@ -41,7 +41,7 @@ if (have_rows('counters')) {
     x-data="countersSection()"
     x-intersect.once="startCounters()"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container max-lg:px-5 py-24 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-container max-xxl:px-[1rem] py-24 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
         <header class="flex flex-col gap-6 items-center self-stretch">
             <?php if (!empty($heading)): ?>

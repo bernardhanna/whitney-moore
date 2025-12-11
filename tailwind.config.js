@@ -122,7 +122,7 @@ module.exports = {
       ipad: '1084px',
       lg: '1100px',
       xl: '1280px',
-      xxl: '1440px',
+      xxl: '1600px',
       ultrawide: '1920px',
     },
     container: {

@@ -42,7 +42,7 @@ $filter_title = $settings['filter_section_title'] ?? 'Filter by';
   }">
   <section class="flex overflow-hidden relative bg-primary">
       <div <?php echo $section_style; ?>  class="flex flex-col items-center mx-auto w-full bg-primary">
-          <div class="overflow-hidden relative max-w-[1408px] max-xxl:px-5 w-full hero-background">
+          <div class="overflow-hidden relative max-w-[1408px] max-xxl:px-[1rem] w-full hero-background">
 
               <div class="flex z-0 flex-col pt-14 pb-8 w-full max-md:max-w-full">
 
@@ -299,7 +299,7 @@ $filter_title = $settings['filter_section_title'] ?? 'Filter by';
 </div>
 
 <section class="flex overflow-hidden relative">
-<div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+<div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
   <div class="flex flex-col gap-8 pt-12 pb-14 w-full bg-white max-md:p-8 max-sm:p-4">
 
     <!-- Heading: Total posts + Clear Filters Button -->

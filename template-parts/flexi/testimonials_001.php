@@ -60,7 +60,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
     style="<?php echo $background_color ? 'background-color:' . esc_attr($background_color) . ';' : ''; ?>"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center w-full mx-auto py-20  max-lg:px-5 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto py-20  max-xxl:px-[1rem] <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
         <div class="mx-auto w-full max-w-7xl">
             <?php if (!empty($heading)) : ?>

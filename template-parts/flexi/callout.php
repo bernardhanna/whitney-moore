@@ -37,7 +37,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-row justify-center items-center mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-row justify-center items-center mx-auto w-full max-w-container max-xxl:px-[1rem]">
 
         <!-- Left Image -->
         <?php if ($left_image): ?>
