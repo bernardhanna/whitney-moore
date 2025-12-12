@@ -130,7 +130,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
 
         <!-- Right Image -->
         <?php if ($right_image): ?>
-            <div class="flex-shrink-0 w-full max-w-[551px] max-md:max-w-full max-tab:hidden">
+            <div class="flex-shrink-0 w-full max-w-[551px] max-md:max-w-full max-md:hidden">
                 <?php echo wp_get_attachment_image($right_image, 'full', false, [
                     'alt'     => esc_attr($right_image_alt),
                     'class'   => 'object-cover w-full h-auto',
