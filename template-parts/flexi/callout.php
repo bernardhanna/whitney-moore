@@ -44,7 +44,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-row justify-center items-center mx-auto w-full max-w-container max-xxl:px-[1rem]">
+    <div class="flex flex-row justify-center items-center mx-auto w-full max-w-container max-sm:px-0 max-xxl:px-[1rem]">
 
         <!-- Left Image -->
         <?php if ($left_image): ?>
@@ -58,8 +58,8 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
         <?php endif; ?>
 
         <!-- Center Content -->
-        <div class="flex flex-col items-center my-auto w-full max-md:max-w-full max-sm:p-6 max-tab:pb-12">
-            <div class="flex flex-col items-center max-w-full tracking-wider text-center lg:w-[581px]">
+        <div class="flex flex-col items-center my-auto w-full max-md:max-w-full max-tab:pb-12">
+            <div class="flex flex-col items-center max-w-full tracking-wider text-center lg:w-[581px] max-sm:px-5">
 
                 <!-- Headings Container -->
                 <div class="flex flex-col items-start max-w-full w-[492px]">
