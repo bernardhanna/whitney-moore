@@ -159,11 +159,11 @@ $secondary_navigation = Navi::make()->build('secondary');
             <a
               href="<?php echo esc_url($contact_button['url']); ?>"
               target="<?php echo esc_attr($contact_button['target'] ?: '_self'); ?>"
-              class="cta-button btn flex relative gap-2 justify-center items-center px-8 py-3 bg-primary transition-all duration-200 cursor-pointer border-none ease-in-out max-w-[200px] w-fit whitespace-nowrap max-md:gap-1.5 max-md:px-6 max-md:py-2.5 max-sm:gap-1 max-sm:px-5 max-sm:py-2 text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-primary-light text-center"
+              class="cta-button btn flex relative gap-2 justify-center items-center px-8 py-3 bg-primary transition-all duration-200 cursor-pointer border-none ease-in-out max-w-[200px] w-fit whitespace-nowrap max-md:gap-1.5 max-md:px-6 max-md:py-2.5 max-sm:gap-1 max-sm:px-5 max-sm:py-2 text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-primary-light text-center hover:bg-primary-dark"
               aria-label="<?php echo esc_attr($contact_button['title']); ?>"
               role="button"
             >
-              <span class="relative text-base font-semibold tracking-normal leading-4 text-center text-white max-md:text-base max-md:tracking-normal max-md:leading-4 max-sm:text-sm max-sm:tracking-normal max-sm:leading-4">
+              <span class="relative text-[1rem] tracking-[0.01em] leading-[1rem] font-semibold font-primary text-white text-center">
                 <?php echo esc_html($contact_button['title']); ?>
               </span>
               <span aria-hidden="true">

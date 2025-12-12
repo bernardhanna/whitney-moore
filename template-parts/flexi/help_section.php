@@ -136,13 +136,13 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
     <div class="flex flex-col items-center w-full mx-auto max-w-container py-12  max-xxl:px-[1rem] <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
 
         <div class="flex relative flex-col gap-2 justify-center items-center self-stretch max-sm:px-4 max-sm:py-6">
-            <div class="flex relative gap-8 justify-center items-center w-full max-md:flex-col max-md:gap-6 max-md:items-center max-sm:gap-5">
+            <div class="flex relative gap-8 justify-center items-center w-full max-lg:flex-col max-lg:gap-6 max-lg:items-center max-sm:gap-5">
 
                 <?php if (!empty($heading)) : ?>
                     <header class="flex relative gap-2 justify-center items-center">
                         <<?php echo esc_attr($heading_tag); ?>
                             id="<?php echo esc_attr($section_id); ?>-heading"
-                            class="relative text-3xl font-bold tracking-wider leading-10 max-md:text-3xl max-md:leading-9 max-md:text-center max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
+                            class="relative text-3xl font-bold tracking-wider leading-10 max-lg:text-3xl max-lg:leading-9 max-lg:text-center max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
                         >
                             <?php echo esc_html($heading); ?>
                         </<?php echo esc_attr($heading_tag); ?>>
@@ -150,7 +150,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                 <?php endif; ?>
 
                 <!-- Dropdown wrapper -->
-                <div class="flex relative flex-col items-start self-stretch w-[356px] max-md:w-full max-md:max-w-[400px] max-sm:w-full">
+                <div class="flex relative flex-col items-start self-stretch w-full lg:w-[356px] max-lg:w-full  max-sm:w-full">
                     <div class="flex relative flex-col gap-1 items-start self-stretch">
                         <div class="relative w-full">
 
@@ -245,14 +245,14 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                                 <button
                                     id="<?php echo esc_attr($dropdown_button_id); ?>"
                                     type="button"
-                                    class="flex relative justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid transition-colors duration-200 cursor-pointer btn max-md:px-3.5 max-md:py-2.5 max-sm:px-3 max-sm:py-2 hover:bg-indigo-50"
+                                    class="flex relative justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid transition-colors duration-200 cursor-pointer btn max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2 hover:bg-indigo-50"
                                     aria-haspopup="listbox"
                                     aria-expanded="false"
                                     aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
                                 >
                                     <div class="flex relative gap-2 items-center">
                                         <span id="<?php echo esc_attr($dropdown_button_id); ?>-label" class="relative text-base leading-6 text-black">
-                                            <span class="text-base text-black max-md:text-base max-sm:text-sm js-selected-label">
+                                            <span class="text-base text-black max-lg:text-base max-sm:text-sm js-selected-label">
                                                 <?php echo esc_html($dropdown_placeholder); ?>
                                             </span>
                                         </span>
@@ -288,7 +288,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                                         <?php foreach ($items as $it) : ?>
                                             <li
                                                 role="option"
-                                                class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-indigo-50 focus:bg-indigo-50 max-md:px-3.5 max-md:py-2.5 max-sm:px-3 max-sm:py-2"
+                                                class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-indigo-50 focus:bg-indigo-50 max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2"
                                                 data-url="<?php echo esc_url($it['url']); ?>"
                                                 tabindex="-1"
                                             >
@@ -308,7 +308,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                 </div>
 
                 <!-- Search button (navigates to the selected item) -->
-                <div class="flex relative flex-col gap-2 items-start w-32 max-md:w-full max-md:max-w-[200px] max-sm:w-full">
+                <div class="flex relative flex-col gap-2 items-start w-32 max-lg:w-full max-w-full lg:max-w-[200px] max-sm:w-full">
                     <button
                         type="button"
                         class="inline-flex justify-center items-center px-8 py-4 w-full text-lg leading-5 text-center whitespace-nowrap transition-colors duration-300 cursor-pointer max-sm:px-6 max-sm:py-3.5 max-sm:text-base border border-solid <?php echo esc_attr($search_btn_class); ?>"
