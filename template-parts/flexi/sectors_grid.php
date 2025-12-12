@@ -144,7 +144,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 [
                                                     'alt'     => esc_attr($img_alt),
                                                     'title'   => esc_attr(get_the_title($thumb_id) ?: $title),
-                                                    'class'   => 'w-full object-cover h-[275px] sm:h-[340px]',
+                                                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
                                                     'loading' => 'lazy',
                                                 ]
                                             );
