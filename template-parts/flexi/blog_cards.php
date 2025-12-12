@@ -17,13 +17,6 @@ $section_heading_tag = get_sub_field('section_heading_tag') ?: 'h2';
 // Always enforce minimum of 3 posts
 $posts_per_page = max(3, (int) get_sub_field('posts_per_page'));
 
-// CTAs
-$small_cta      = get_sub_field('small_cta');
-$small_cta_text = get_sub_field('small_cta_text') ?: 'Discover';
-
-$big_cta      = get_sub_field('big_cta');
-$big_cta_text = get_sub_field('big_cta_text') ?: 'Read more';
-
 // ---------------------------------
 // Design
 // ---------------------------------
@@ -33,10 +26,9 @@ $overlay_blur_class = get_sub_field('overlay_blur_class') ?: 'backdrop-blur-[15p
 
 $text_color_class = get_sub_field('text_color_class') ?: 'text-primary';
 $date_color_class = get_sub_field('date_color_class') ?: 'text-black';
-$link_color_class = get_sub_field('link_color_class') ?: 'text-black/60 hover:text-black';
 
 // ---------------------------------
-// Padding (Repeater)
+// Padding
 // ---------------------------------
 $padding_classes = [];
 if (have_rows('padding_settings')) {
@@ -64,9 +56,6 @@ $query = new WP_Query([
     'no_found_rows'       => true,
 ]);
 
-// ---------------------------------
-// Helpers
-// ---------------------------------
 function _matrix_first_cat_name($post_id) {
     $terms = get_the_terms($post_id, 'category');
     if (is_wp_error($terms) || empty($terms)) return '';
@@ -83,19 +72,13 @@ if ($query->have_posts()) {
     $i = 0;
     while ($query->have_posts()) {
         $query->the_post();
-        if ($i < 2) {
-            $left_posts[] = get_post();
-        } else {
-            $right_posts[] = get_post();
-        }
+        if ($i < 2) $left_posts[] = get_post();
+        else        $right_posts[] = get_post();
         $i++;
     }
 }
 wp_reset_postdata();
 
-// ---------------------------------
-// Layout logic
-// ---------------------------------
 $has_right_post = !empty($right_posts);
 $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 ?>
@@ -118,20 +101,28 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
         <?php endif; ?>
 
         <div class="px-4 py-8 w-full md:px-8 lg:px-0">
-            <div class="max-w-[1728px] mx-auto flex flex-col <?php echo esc_attr($layout_class); ?> items-start gap-8">
+            <div class="max-w-[1728px] mx-auto flex flex-col <?php echo esc_attr($layout_class); ?> gap-8">
 
                 <!-- LEFT COLUMN -->
-                <div class="flex flex-col gap-8 max-lg:w-full lg:flex-1">
+                <div class="flex flex-col gap-8 lg:flex-1">
                     <?php foreach ($left_posts as $post_obj) :
-                        $pid     = $post_obj->ID;
-                        $title   = get_the_title($pid);
-                        $link    = get_permalink($pid);
-                        $image   = get_post_thumbnail_id($pid);
-                        $img_alt = $image ? (get_post_meta($image, '_wp_attachment_image_alt', true) ?: $title) : $title;
-                        $cat     = _matrix_first_cat_name($pid);
-                        $date    = get_the_date(get_option('date_format'), $pid);
+                        $pid   = $post_obj->ID;
+                        $link  = get_permalink($pid);
+                        $title = get_the_title($pid);
+                        $image = get_post_thumbnail_id($pid);
+                        $cat   = _matrix_first_cat_name($pid);
+                        $date  = get_the_date(get_option('date_format'), $pid);
+                        $alt   = $image ? (get_post_meta($image, '_wp_attachment_image_alt', true) ?: $title) : $title;
                     ?>
-                        <article class="flex max-lg:justify-center max-lg:items-center relative max-lg:h-[294px] lg:h-[332px] overflow-hidden group">
+                        <article class="relative h-[332px] overflow-hidden group">
+
+                            <!-- FULL CLICKABLE LINK -->
+                            <a
+                                href="<?php echo esc_url($link); ?>"
+                                class="absolute inset-0 z-20"
+                                aria-label="<?php echo esc_attr($title); ?>"
+                            ></a>
+
                             <?php
                             if ($image) {
                                 echo wp_get_attachment_image(
@@ -139,55 +130,52 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     'large',
                                     false,
                                     [
-                                        'alt' => esc_attr($img_alt),
+                                        'alt' => esc_attr($alt),
                                         'class' => 'absolute inset-0 w-full h-full object-cover',
                                         'loading' => 'lazy'
                                     ]
                                 );
                             }
                             ?>
-                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
-                                <div class="flex flex-col gap-2">
-                                    <?php if ($cat) : ?>
-                                        <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium tracking-[1px]">
-                                            <?php echo esc_html($cat); ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <h3 class="<?php echo esc_attr($text_color_class); ?> text-xl font-semibold leading-6">
-                                        <?php echo esc_html($title); ?>
-                                    </h3>
-                                    <p class="<?php echo esc_attr($date_color_class); ?> text-lg font-medium">
-                                        <?php echo esc_html($date); ?>
-                                    </p>
-                                </div>
 
-                                <?php
-                                $href   = !empty($small_cta['url']) ? esc_url($small_cta['url']) : esc_url($link);
-                                $target = !empty($small_cta['target']) ? ' target="'.esc_attr($small_cta['target']).'" rel="noopener"' : '';
-                                $label  = !empty($small_cta['title']) ? esc_html($small_cta['title']) : esc_html($small_cta_text);
-                                ?>
-                                <a href="<?php echo $href; ?>" class="<?php echo esc_attr($link_color_class); ?> underline"<?php echo $target; ?>>
-                                    <?php echo $label; ?>
-                                </a>
+                            <div class="relative z-10 absolute bottom-6 left-6 right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-4">
+                                <?php if ($cat) : ?>
+                                    <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium tracking-wide">
+                                        <?php echo esc_html($cat); ?>
+                                    </div>
+                                <?php endif; ?>
+                                <h3 class="<?php echo esc_attr($text_color_class); ?> text-xl font-semibold leading-6">
+                                    <?php echo esc_html($title); ?>
+                                </h3>
+                                <p class="<?php echo esc_attr($date_color_class); ?> text-lg font-medium">
+                                    <?php echo esc_html($date); ?>
+                                </p>
                             </div>
                         </article>
                     <?php endforeach; ?>
                 </div>
 
-                <!-- RIGHT COLUMN (only if exists) -->
-                <?php if ($has_right_post) : ?>
-                    <div class="max-lg:w-full lg:flex-1">
-                        <?php
-                        $post_obj = $right_posts[0];
-                        $pid     = $post_obj->ID;
-                        $title   = get_the_title($pid);
-                        $link    = get_permalink($pid);
-                        $image   = get_post_thumbnail_id($pid);
-                        $img_alt = $image ? (get_post_meta($image, '_wp_attachment_image_alt', true) ?: $title) : $title;
-                        $cat     = _matrix_first_cat_name($pid);
-                        $date    = get_the_date(get_option('date_format'), $pid);
-                        ?>
-                        <article class="flex max-lg:justify-center max-lg:items-center  relative max-lg:h-[294px] lg:h-[696px] overflow-hidden group">
+                <!-- RIGHT COLUMN -->
+                <?php if ($has_right_post) :
+                    $post = $right_posts[0];
+                    $pid  = $post->ID;
+                    $link = get_permalink($pid);
+                    $title= get_the_title($pid);
+                    $image= get_post_thumbnail_id($pid);
+                    $cat  = _matrix_first_cat_name($pid);
+                    $date = get_the_date(get_option('date_format'), $pid);
+                    $alt  = $image ? (get_post_meta($image, '_wp_attachment_image_alt', true) ?: $title) : $title;
+                ?>
+                    <div class="lg:flex-1">
+                        <article class="relative h-[696px] overflow-hidden group">
+
+                            <!-- FULL CLICKABLE LINK -->
+                            <a
+                                href="<?php echo esc_url($link); ?>"
+                                class="absolute inset-0 z-20"
+                                aria-label="<?php echo esc_attr($title); ?>"
+                            ></a>
+
                             <?php
                             if ($image) {
                                 echo wp_get_attachment_image(
@@ -195,36 +183,26 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     'full',
                                     false,
                                     [
-                                        'alt' => esc_attr($img_alt),
+                                        'alt' => esc_attr($alt),
                                         'class' => 'absolute inset-0 w-full h-full object-cover',
                                         'loading' => 'lazy'
                                     ]
                                 );
                             }
                             ?>
-                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
-                                <div>
-                                    <?php if ($cat) : ?>
-                                        <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium">
-                                            <?php echo esc_html($cat); ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <h3 class="<?php echo esc_attr($text_color_class); ?> text-xl font-semibold">
-                                        <?php echo esc_html($title); ?>
-                                    </h3>
-                                    <p class="<?php echo esc_attr($date_color_class); ?> text-base font-medium">
-                                        <?php echo esc_html($date); ?>
-                                    </p>
-                                </div>
 
-                                <?php
-                                $href   = !empty($big_cta['url']) ? esc_url($big_cta['url']) : esc_url($link);
-                                $target = !empty($big_cta['target']) ? ' target="'.esc_attr($big_cta['target']).'" rel="noopener"' : '';
-                                $label  = !empty($big_cta['title']) ? esc_html($big_cta['title']) : esc_html($big_cta_text);
-                                ?>
-                                <a href="<?php echo $href; ?>" class="<?php echo esc_attr($link_color_class); ?> underline"<?php echo $target; ?>>
-                                    <?php echo $label; ?>
-                                </a>
+                            <div class="relative z-10 absolute bottom-6 left-6 right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-4">
+                                <?php if ($cat) : ?>
+                                    <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium">
+                                        <?php echo esc_html($cat); ?>
+                                    </div>
+                                <?php endif; ?>
+                                <h3 class="<?php echo esc_attr($text_color_class); ?> text-xl font-semibold">
+                                    <?php echo esc_html($title); ?>
+                                </h3>
+                                <p class="<?php echo esc_attr($date_color_class); ?> text-base font-medium">
+                                    <?php echo esc_html($date); ?>
+                                </p>
                             </div>
                         </article>
                     </div>
