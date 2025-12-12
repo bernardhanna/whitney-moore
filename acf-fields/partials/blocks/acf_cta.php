@@ -60,6 +60,43 @@ $cta
         'label' => 'Layout',
         'placement' => 'top',
     ])
+    ->addSelect('visibility_mode', [
+        'label' => 'Section Visibility',
+        'instructions' => 'Choose whether to hide this section below or above a breakpoint.',
+        'choices' => [
+            'none'       => 'Show on all screens',
+            'hide_below' => 'Hide below breakpoint',
+            'hide_above' => 'Hide above breakpoint',
+        ],
+        'default_value' => 'none',
+        'wrapper' => ['width' => 50],
+    ])
+    ->addSelect('visibility_breakpoint', [
+        'label' => 'Visibility Breakpoint',
+        'instructions' => 'Select the breakpoint used for the visibility rule.',
+        'choices' => [
+            'xxs'       => 'xxs',
+            'xs'        => 'xs',
+            'mob'       => 'mob',
+            'sm'        => 'sm',
+            'md'        => 'md',
+            'lg'        => 'lg',
+            'xl'        => 'xl',
+            'xxl'       => 'xxl',
+            'ultrawide' => 'ultrawide',
+        ],
+        'default_value' => 'md',
+        'conditional_logic' => [
+            [
+                [
+                    'field'    => 'visibility_mode',
+                    'operator' => '!=',
+                    'value'    => 'none',
+                ],
+            ],
+        ],
+        'wrapper' => ['width' => 50],
+    ])
     ->addRepeater('padding_settings', [
         'label' => 'Padding Settings',
         'instructions' => 'Customize padding for different screen sizes.',

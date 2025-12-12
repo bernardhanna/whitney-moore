@@ -1,10 +1,14 @@
 <?php
 // Get ACF fields
-$heading = get_sub_field('heading');
-$heading_tag = get_sub_field('heading_tag');
-$primary_button = get_sub_field('primary_button');
-$secondary_button = get_sub_field('secondary_button');
-$background_color = get_sub_field('background_color');
+$heading              = get_sub_field('heading');
+$heading_tag          = get_sub_field('heading_tag');
+$primary_button       = get_sub_field('primary_button');
+$secondary_button     = get_sub_field('secondary_button');
+$background_color     = get_sub_field('background_color');
+
+// NEW: visibility controls
+$visibility_mode       = get_sub_field('visibility_mode');        // none | hide_below | hide_above
+$visibility_breakpoint = get_sub_field('visibility_breakpoint');  // xxs|xs|mob|sm|md|lg|xl|xxl|ultrawide
 
 // Generate unique section ID
 $section_id = 'cta-' . uniqid();
@@ -14,18 +18,30 @@ $padding_classes = [];
 if (have_rows('padding_settings')) {
     while (have_rows('padding_settings')) {
         the_row();
-        $screen_size = get_sub_field('screen_size');
-        $padding_top = get_sub_field('padding_top');
+        $screen_size    = get_sub_field('screen_size');
+        $padding_top    = get_sub_field('padding_top');
         $padding_bottom = get_sub_field('padding_bottom');
         $padding_classes[] = "{$screen_size}:pt-[{$padding_top}rem]";
         $padding_classes[] = "{$screen_size}:pb-[{$padding_bottom}rem]";
+    }
+}
+
+// Build visibility classes (always appended after base classes to ensure correct override order)
+$visibility_classes = '';
+if ($visibility_mode && $visibility_mode !== 'none' && $visibility_breakpoint) {
+    if ($visibility_mode === 'hide_below') {
+        // Hidden by default; becomes flex at/above breakpoint
+        $visibility_classes = "hidden {$visibility_breakpoint}:flex";
+    } elseif ($visibility_mode === 'hide_above') {
+        // Flex by default; hidden at/above breakpoint
+        $visibility_classes = "{$visibility_breakpoint}:hidden";
     }
 }
 ?>
 
 <section
     id="<?php echo esc_attr($section_id); ?>"
-    class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
+    class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?> <?php echo esc_attr($visibility_classes); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
