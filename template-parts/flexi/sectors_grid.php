@@ -121,7 +121,6 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                         $thumb_id = get_post_thumbnail_id($post_id);
                         $img_alt  = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
                         $img_alt  = $img_alt ?: $title;
-                        $img_title = $thumb_id ? get_the_title($thumb_id) : $title;
 
                         $override_link = get_sub_field('override_link');
                         $item_link     = $override_link && !empty($override_link['url'])
@@ -138,23 +137,22 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                     <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                         <?php
                                         if ($thumb_id) {
-                                            $img_url = wp_get_attachment_image_url($thumb_id, 'large');
-                                            if ($img_url) {
-                                                ?>
-                                                <img
-                                                    src="<?php echo esc_url($img_url); ?>"
-                                                    alt="<?php echo esc_attr($img_alt); ?>"
-                                                    title="<?php echo esc_attr($img_title); ?>"
-                                                    class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]"
-                                                    loading="lazy"
-                                                />
-                                                <?php
-                                            }
+                                            echo wp_get_attachment_image(
+                                                $thumb_id,
+                                                'large',
+                                                false,
+                                                [
+                                                    'alt'     => esc_attr($img_alt),
+                                                    'title'   => esc_attr(get_the_title($thumb_id) ?: $title),
+                                                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
+                                                    'loading' => 'lazy',
+                                                ]
+                                            );
                                         }
                                         ?>
                                     </div>
                                     <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                        <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
+                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></span>
                                     </div>
                                 </a>
                             </article>
@@ -182,7 +180,6 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                             $thumb   = get_post_thumbnail_id($post_id);
                             $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
                             $img_alt = $img_alt ?: $title;
-                            $img_title = $thumb ? get_the_title($thumb) : $title;
 
                             $override_link = get_sub_field('override_link');
                             $item_link     = $override_link && !empty($override_link['url'])
@@ -199,18 +196,17 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
-                                                $img_url = wp_get_attachment_image_url($thumb, 'large');
-                                                if ($img_url) {
-                                                    ?>
-                                                    <img
-                                                        src="<?php echo esc_url($img_url); ?>"
-                                                        alt="<?php echo esc_attr($img_alt); ?>"
-                                                        title="<?php echo esc_attr($img_title); ?>"
-                                                        class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
-                                                        loading="lazy"
-                                                    />
-                                                    <?php
-                                                }
+                                                echo wp_get_attachment_image(
+                                                    $thumb,
+                                                    'large',
+                                                    false,
+                                                    [
+                                                        'alt'     => esc_attr($img_alt),
+                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'loading' => 'lazy',
+                                                    ]
+                                                );
                                             }
                                             ?>
                                         </div>
@@ -236,7 +232,6 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 $thumb   = get_post_thumbnail_id($post_id);
                                 $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
                                 $img_alt = $img_alt ?: $title;
-                                $img_title = $thumb ? get_the_title($thumb) : $title;
 
                                 $override_link = get_sub_field('override_link');
                                 $item_link     = $override_link && !empty($override_link['url'])
@@ -252,18 +247,17 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
-                                                $img_url = wp_get_attachment_image_url($thumb, 'large');
-                                                if ($img_url) {
-                                                    ?>
-                                                    <img
-                                                        src="<?php echo esc_url($img_url); ?>"
-                                                        alt="<?php echo esc_attr($img_alt); ?>"
-                                                        title="<?php echo esc_attr($img_title); ?>"
-                                                        class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
-                                                        loading="lazy"
-                                                    />
-                                                    <?php
-                                                }
+                                                echo wp_get_attachment_image(
+                                                    $thumb,
+                                                    'large',
+                                                    false,
+                                                    [
+                                                        'alt'     => esc_attr($img_alt),
+                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'loading' => 'lazy',
+                                                    ]
+                                                );
                                             }
                                             ?>
                                         </div>
@@ -286,7 +280,6 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 $thumb   = get_post_thumbnail_id($post_id);
                                 $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
                                 $img_alt = $img_alt ?: $title;
-                                $img_title = $thumb ? get_the_title($thumb) : $title;
 
                                 $override_link = get_sub_field('override_link');
                                 $item_link     = $override_link && !empty($override_link['url'])
@@ -302,18 +295,17 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
                                             if ($thumb) {
-                                                $img_url = wp_get_attachment_image_url($thumb, 'large');
-                                                if ($img_url) {
-                                                    ?>
-                                                    <img
-                                                        src="<?php echo esc_url($img_url); ?>"
-                                                        alt="<?php echo esc_attr($img_alt); ?>"
-                                                        title="<?php echo esc_attr($img_title); ?>"
-                                                        class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
-                                                        loading="lazy"
-                                                    />
-                                                    <?php
-                                                }
+                                                echo wp_get_attachment_image(
+                                                    $thumb,
+                                                    'large',
+                                                    false,
+                                                    [
+                                                        'alt'     => esc_attr($img_alt),
+                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'loading' => 'lazy',
+                                                    ]
+                                                );
                                             }
                                             ?>
                                         </div>
