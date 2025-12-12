@@ -94,7 +94,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 
         <header class="flex flex-col justify-center items-center w-full text-center">
             <?php if (!empty($section_heading)) : ?>
-                <<?php echo esc_attr($section_heading_tag); ?> class="text-xs tracking-wide uppercase opacity-80">
+                <<?php echo esc_attr($section_heading_tag); ?> class="text-[18px] tracking-wide uppercase opacity-80">
                     <?php echo esc_html($section_heading); ?>
                 </<?php echo esc_attr($section_heading_tag); ?>>
             <?php endif; ?>
