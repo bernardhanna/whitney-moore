@@ -118,7 +118,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
                         false,
                         [
                             'alt'     => esc_attr($mobile_below_button_image_alt),
-                            'class'   => esc_attr('w-full h-auto object-cover ' . $mobile_below_button_image_radius),
+                            'class'   => esc_attr('w-full h-auto object-cover  tab:hidden' . $mobile_below_button_image_radius),
                             'loading' => 'lazy'
                         ]
                     );
