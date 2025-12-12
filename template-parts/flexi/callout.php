@@ -62,7 +62,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
             <div class="flex flex-col items-center max-w-full tracking-wider text-center lg:w-[581px] max-sm:px-5">
 
                 <!-- Headings Container -->
-                <div class="flex flex-col items-start max-w-full w-[492px]">
+                <div class="flex flex-col items-start w-full max-w-[flex flex-col items-start max-w-[580px]">
 
                     <!-- Section Heading -->
                     <?php if (!empty($section_heading)): ?>
