@@ -10,10 +10,10 @@ $background_color     = get_sub_field('background_color');
 $visibility_mode       = get_sub_field('visibility_mode');        // none | hide_below | hide_above
 $visibility_breakpoint = get_sub_field('visibility_breakpoint');  // xxs|xs|mob|sm|md|lg|xl|xxl|ultrawide
 
-// Generate unique section ID
+// Unique ID
 $section_id = 'cta-' . uniqid();
 
-// Build padding classes
+// Padding classes (unchanged)
 $padding_classes = [];
 if (have_rows('padding_settings')) {
     while (have_rows('padding_settings')) {
@@ -26,22 +26,64 @@ if (have_rows('padding_settings')) {
     }
 }
 
-// Build visibility classes (always appended after base classes to ensure correct override order)
-$visibility_classes = '';
-if ($visibility_mode && $visibility_mode !== 'none' && $visibility_breakpoint) {
-    if ($visibility_mode === 'hide_below') {
-        // Hidden by default; becomes flex at/above breakpoint
-        $visibility_classes = "hidden {$visibility_breakpoint}:flex";
-    } elseif ($visibility_mode === 'hide_above') {
-        // Flex by default; hidden at/above breakpoint
-        $visibility_classes = "{$visibility_breakpoint}:hidden";
+/**
+ * IMPORTANT:
+ * Provide literal class strings so Tailwind can see them.
+ * If you don't actually have some of these breakpoints in tailwind.config.js,
+ * those entries will simply do nothing (but won’t break).
+ */
+$visibility_map = [
+    'xxs' => [
+        'hide_below' => 'hidden xxs:flex',
+        'hide_above' => 'flex xxs:hidden',
+    ],
+    'xs' => [
+        'hide_below' => 'hidden xs:flex',
+        'hide_above' => 'flex xs:hidden',
+    ],
+    'mob' => [
+        'hide_below' => 'hidden mob:flex',
+        'hide_above' => 'flex mob:hidden',
+    ],
+    'sm' => [
+        'hide_below' => 'hidden sm:flex',
+        'hide_above' => 'flex sm:hidden',
+    ],
+    'md' => [
+        'hide_below' => 'hidden md:flex',
+        'hide_above' => 'flex md:hidden',
+    ],
+    'lg' => [
+        'hide_below' => 'hidden lg:flex',
+        'hide_above' => 'flex lg:hidden',
+    ],
+    'xl' => [
+        'hide_below' => 'hidden xl:flex',
+        'hide_above' => 'flex xl:hidden',
+    ],
+    'xxl' => [
+        'hide_below' => 'hidden xxl:flex',
+        'hide_above' => 'flex xxl:hidden',
+    ],
+    'ultrawide' => [
+        'hide_below' => 'hidden ultrawide:flex',
+        'hide_above' => 'flex ultrawide:hidden',
+    ],
+];
+
+// Default display if nothing chosen
+$display_classes = 'flex';
+
+// Choose from map if applicable
+if (!empty($visibility_mode) && $visibility_mode !== 'none' && !empty($visibility_breakpoint)) {
+    if (isset($visibility_map[$visibility_breakpoint][$visibility_mode])) {
+        $display_classes = $visibility_map[$visibility_breakpoint][$visibility_mode];
     }
 }
 ?>
-
 <section
     id="<?php echo esc_attr($section_id); ?>"
-    class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?> <?php echo esc_attr($visibility_classes); ?>"
+    class="relative overflow-hidden <?php echo esc_attr($display_classes); ?> <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
