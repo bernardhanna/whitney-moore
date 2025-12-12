@@ -146,7 +146,7 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 );
                             }
                             ?>
-                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6">
+                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
                                 <div class="flex flex-col gap-2">
                                     <?php if ($cat) : ?>
                                         <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium tracking-[1px]">
@@ -202,7 +202,7 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 );
                             }
                             ?>
-                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6">
+                            <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
                                 <div>
                                     <?php if ($cat) : ?>
                                         <div class="<?php echo esc_attr($text_color_class); ?> text-base font-medium">
