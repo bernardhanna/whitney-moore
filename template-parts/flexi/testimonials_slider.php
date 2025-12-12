@@ -117,7 +117,7 @@ $allowed_svg = [
   <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
 
     <!-- Headings -->
-    <div class="flex flex-col gap-4 items-start w-full">
+    <div class="flex flex-col gap-4 items-start w-full max-w-container">
       <?php if ($subheading) : ?>
         <div class="text-lg font-medium tracking-wide text-black"><?php echo esc_html($subheading); ?></div>
       <?php endif; ?>
@@ -137,7 +137,7 @@ $allowed_svg = [
     </div>
 
     <!-- Slider wrapper provides positioning for arrows -->
-    <div class="relative mt-8 w-full">
+    <div class="relative mt-8 w-full max-w-container">
       <!-- Shell is clipped: hides left strip, allows right overflow -->
       <div class="overflow-visible relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
         <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
