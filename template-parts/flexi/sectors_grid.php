@@ -113,7 +113,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 
             <!-- Simple GRID for mobile/tablet: 1 / 2 / 3 cols -->
             <div class="mt-10 w-full max-md:mt-8 lg:hidden">
-                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2">
                     <?php foreach ($posts_array as $post): ?>
                         <?php
                         $post_id  = $post->ID;
