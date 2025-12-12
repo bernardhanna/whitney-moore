@@ -110,9 +110,9 @@ $secondary_navigation = Navi::make()->build('secondary');
               <div class="flex items-center font-primary">
                 <a
                   href="<?php echo esc_url($item->url); ?>"
-                  class="self-stretch my-auto text-slate-900 font-sans text-sm font-medium  transition
+                  class="self-stretch my-auto transition
                          hover:underline underline-offset-8 decoration-2 hover:decoration-indigo-400 focus:underline focus:decoration-indigo-400
-                         focus:text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded
+                         focus:text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-[#00005e] text-center
                          <?php echo $item->active ? 'active-item' : ''; ?>"
                   role="menuitem"
                   <?php if (!empty($item->children)) : ?>
@@ -159,7 +159,7 @@ $secondary_navigation = Navi::make()->build('secondary');
             <a
               href="<?php echo esc_url($contact_button['url']); ?>"
               target="<?php echo esc_attr($contact_button['target'] ?: '_self'); ?>"
-              class="cta-button btn flex relative gap-2 justify-center items-center px-8 py-3 bg-primary transition-all duration-200 cursor-pointer border-none ease-in-out max-w-[200px] w-fit whitespace-nowrap max-md:gap-1.5 max-md:px-6 max-md:py-2.5 max-sm:gap-1 max-sm:px-5 max-sm:py-2"
+              class="cta-button btn flex relative gap-2 justify-center items-center px-8 py-3 bg-primary transition-all duration-200 cursor-pointer border-none ease-in-out max-w-[200px] w-fit whitespace-nowrap max-md:gap-1.5 max-md:px-6 max-md:py-2.5 max-sm:gap-1 max-sm:px-5 max-sm:py-2 text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-primary-light text-center"
               aria-label="<?php echo esc_attr($contact_button['title']); ?>"
               role="button"
             >
