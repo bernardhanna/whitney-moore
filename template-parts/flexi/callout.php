@@ -77,7 +77,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
                     <!-- Main Heading -->
                     <?php if (!empty($main_heading)): ?>
                         <<?php echo esc_attr($main_heading_tag); ?>
-                            class="mt-2 md:text-5xl font-bold text-primary leading-[52px] max-md:max-w-full sm:text-4xl text-[1.625rem] max-sm:tracking-[1px] max-sm:leading-[2rem]"
+                            class="mt-2 text-[1.625rem] sm:text-4xl md:text-5xl font-bold text-primary leading-[52px] max-md:max-w-full  max-sm:tracking-[1px] max-sm:leading-[2rem]"
                         >
                             <?php echo esc_html($main_heading); ?>
                         </<?php echo esc_attr($main_heading_tag); ?>>
