@@ -49,7 +49,7 @@ if ($right_image_id) {
 >
     <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:py-20 max-w-container max-xxl:px-[1rem]">
         <!-- Two-column layout: left content, right single image -->
-        <div class="flex flex-col gap-10 w-full lg:flex-row lg:gap-12">
+        <div class="flex flex-col-reverse gap-10 w-full lg:flex-row lg:gap-12">
             <!-- Left content -->
             <div class="w-full lg:flex-1">
                 <div
