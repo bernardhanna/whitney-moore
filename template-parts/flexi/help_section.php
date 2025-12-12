@@ -136,13 +136,13 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
     <div class="flex flex-col items-center w-full mx-auto max-w-container py-12  max-xxl:px-[1rem] <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
 
         <div class="flex relative flex-col gap-2 justify-center items-center self-stretch max-sm:px-4 max-sm:py-6">
-            <div class="flex relative gap-8 justify-center items-center w-full max-lg:flex-col max-lg:gap-6 max-lg:items-center max-sm:gap-5">
+            <div class="flex relative gap-8 justify-center items-center w-full max-lg:flex-col max-lg:gap-6 max-lg:items-center max-sm:gap-5 max-w-[837px]">
 
                 <?php if (!empty($heading)) : ?>
                     <header class="flex relative gap-2 justify-center items-center">
                         <<?php echo esc_attr($heading_tag); ?>
                             id="<?php echo esc_attr($section_id); ?>-heading"
-                            class="relative text-3xl font-bold tracking-wider leading-10 max-lg:text-3xl max-lg:leading-9 max-lg:text-center max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
+                            class="relative text-3xl font-bold tracking-wider leading-10 whitespace-nowrap max-lg:text-3xl max-lg:leading-9 max-lg:text-center max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
                         >
                             <?php echo esc_html($heading); ?>
                         </<?php echo esc_attr($heading_tag); ?>>
