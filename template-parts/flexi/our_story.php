@@ -49,15 +49,15 @@ if ($right_image_id) {
 >
     <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:py-20 max-w-container max-xxl:px-[1rem]">
         <!-- Two-column layout: left content, right single image -->
-        <div class="flex flex-col-reverse gap-10 w-full lg:flex-row lg:gap-12">
+        <div class="flex relative flex-col-reverse gap-10 w-full lg:flex-row lg:gap-12">
             <!-- Left content -->
-            <div class="w-full lg:flex-1">
+            <div class="w-full lg:flex-1 max-md:-mt-[10rem] z-30">
                 <div
                     class="max-w-[680px] px-8 py-10 bg-opacity-90 wp_editor"
                     style="background-color: <?php echo esc_attr($content_bg); ?>; color: <?php echo esc_attr($text_color); ?>;"
                 >
                     <?php if (!empty($section_label)) : ?>
-                        <p class="text-sm tracking-wide uppercase opacity-90">
+                        <p class="max-md:text-[1.125rem] text-[1.125rem] tracking-[1px] max-md:tracking-[1px] text-sm  uppercase opacity-90">
                             <?php echo esc_html($section_label); ?>
                         </p>
                     <?php endif; ?>
@@ -65,7 +65,7 @@ if ($right_image_id) {
                     <?php if (!empty($main_heading)) : ?>
                         <<?php echo esc_attr($main_heading_tag); ?>
                             id="<?php echo esc_attr($section_id); ?>-heading"
-                            class="mt-2 text-4xl font-bold leading-tight md:text-5xl"
+                            class="mt-2 max-md:text-[26px] max-md:tracking-[1px] max-md:leading-[3.125rem] text-4xl font-bold leading-tight md:text-5xl"
                             style="color: <?php echo esc_attr($text_color); ?>;"
                         >
                             <?php echo esc_html($main_heading); ?>
@@ -73,7 +73,10 @@ if ($right_image_id) {
                     <?php endif; ?>
 
                     <?php if (!empty($description)) : ?>
-                        <div class="mt-5 text-base leading-7 md:text-lg">
+                        <div class="mt-5 leading-7 md:text-lg max-md
+                        :text-[1.125rem] max-md
+                        :tracking-[1px] max-md
+                        :leading-[1.75rem]">
                             <?php echo wp_kses_post($description); ?>
                         </div>
                     <?php endif; ?>
@@ -82,7 +85,7 @@ if ($right_image_id) {
                         <div class="mt-8">
                             <a
                                 href="<?php echo esc_url($cta_button['url']); ?>"
-                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none bg-white transition-colors text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-50"
+                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none bg-white transition-colors text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-50 max-md:text-[1.125rem] max-md:tracking-[1px] max-md:leading-[1.75rem]"
                                 target="<?php echo esc_attr($cta_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($cta_button['title']); ?>"
                                 title="<?php echo esc_attr($cta_button['title']); ?>"
@@ -95,7 +98,7 @@ if ($right_image_id) {
             </div>
 
             <!-- Right: single image (SVG friendly) -->
-            <div class="flex justify-end items-center w-full lg:flex-1">
+            <div class="flex relative justify-end items-center w-full lg:flex-1">
                 <?php if ($right_image_id) : ?>
                     <?php
                     // Use wp_get_attachment_image so SVGs from media render as <img>. No aspect utilities.

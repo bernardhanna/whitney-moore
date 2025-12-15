@@ -89,7 +89,7 @@ if (!empty($visibility_mode) && $visibility_mode !== 'none' && !empty($visibilit
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
     <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
-        <div class="box-border flex relative flex-col gap-4 items-center py-0 mx-auto my-0 w-full max-w-[1728px] max-lg:px-10 max-lg:py-0 max-sm:px-5 max-sm:py-0">
+        <div class="box-border flex relative flex-col md:gap-4 items-center py-0 mx-auto my-0 w-full max-w-[1728px]  max-lg:py-0  max-sm:py-0">
             <div class="flex relative justify-between items-center w-full max-w-[1568px] max-lg:flex-col max-lg:gap-6 max-lg:items-center">
                 <?php if (!empty($heading)): ?>
                     <div class="relative text-3xl font-bold tracking-wider leading-10 text-center text-primary max-lg:text-center">
