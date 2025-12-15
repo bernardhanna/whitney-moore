@@ -152,7 +152,7 @@ $menu_array = $primary_navigation->toArray();
       <div class="overflow-hidden relative h-full">
         <!-- LEVEL 0: Top-level -->
         <div
-          class="overflow-y-auto absolute inset-0 px-8 py-8 transition-transform duration-300"
+          class="pt-[8rem] overflow-y-auto absolute inset-0 px-8 pb-8 transition-transform duration-300"
           :class="flyLevel === 0 ? 'translate-x-0' : '-translate-x-full'"
         >
           <ul class="space-y-8">
@@ -183,9 +183,9 @@ $menu_array = $primary_navigation->toArray();
                       data-children="<?php echo $data_children; ?>"
                       @click.prevent="openSecondFrom($el)"
                       aria-label="View sub-menu">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="none">
-                        <path d="M4.25 6.875L8.5 11.125L12.75 6.875" stroke="#1D2939" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M10 6L16 12L10 18" stroke="#1D2939" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
                     </button>
                   <?php endif; ?>
                 </div>
@@ -196,7 +196,7 @@ $menu_array = $primary_navigation->toArray();
 
         <!-- LEVEL 1: Second-tier of selected top item -->
         <div
-          class="overflow-y-auto absolute inset-0 px-8 py-8 bg-white transition-transform duration-300"
+          class="pt-[8rem] overflow-y-auto absolute inset-0 px-8 pb-8 bg-white transition-transform duration-300"
           :class="flyLevel === 1 ? 'translate-x-0' : (flyLevel < 1 ? 'translate-x-full' : '-translate-x-full')"
           style="display:block;"
         >
@@ -234,7 +234,7 @@ $menu_array = $primary_navigation->toArray();
 
         <!-- LEVEL 2: Flattened descendants (3rd/4th/5th) -->
         <div
-          class="overflow-y-auto absolute inset-0 px-8 py-8 bg-white transition-transform duration-300"
+          class="pt-[8rem] overflow-y-auto absolute inset-0 px-8 pb-8 bg-white transition-transform duration-300"
           :class="flyLevel === 2 ? 'translate-x-0' : 'translate-x-full'"
           style="display:block;"
         >

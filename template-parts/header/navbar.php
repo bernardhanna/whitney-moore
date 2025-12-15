@@ -75,7 +75,7 @@ $secondary_navigation = Navi::make()->build('secondary');
     <div class="flex flex-col items-start w-full my-auto max-w-[200px] lg:max-w-[20%]">
       <a
         href="<?php echo esc_url(home_url('/')); ?>"
-        class="flex justify-start w-full"
+        class="flex justify-start mx-2 w-full"
         aria-label="<?php echo esc_attr(get_bloginfo('name')); ?> - Go to homepage"
       >
         <?php if ($logo_url) : ?>
@@ -83,6 +83,7 @@ $secondary_navigation = Navi::make()->build('secondary');
             src="<?php echo esc_url($logo_url); ?>"
             alt="<?php echo esc_attr($logo_alt); ?>"
             class="max-w-[200px] h-auto w-auto lg:object-contain"
+            style="z-index:99999999999999;"
           />
         <?php else : ?>
           <span class="text-xl font-bold text-slate-700"><?php echo esc_html(get_bloginfo('name')); ?></span>
