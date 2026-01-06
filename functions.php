@@ -223,6 +223,20 @@ add_action('init', function () {
 }, 20);
 
 /**
+ * TEAM POST FIELDS
+ */
+// Load ACF Team fields (safe include)
+add_action('after_setup_theme', function () {
+    $path = trailingslashit( get_stylesheet_directory() ) . 'acf-fields/register-team-fields.php';
+    if ( file_exists( $path ) ) {
+        require_once $path;
+    } else {
+        // Optional: log instead of fatal error
+        error_log('[ACF] Missing file: ' . $path);
+    }
+});
+
+/**
  * Debug marker to confirm Theme_Forms is loaded
  */
 add_action('wp_footer', function () {
@@ -289,4 +303,25 @@ add_filter('acf/load_field/name=menu_item', function ($field) {
     return $field;
 });
 
+/* ALLOW VCARDS */
+// Allow .vcf uploads site-wide
+add_filter('upload_mimes', function ($mimes) {
+    // Common vCard MIME types
+    $mimes['vcf']   = 'text/x-vcard';
+    $mimes['vcard'] = 'text/x-vcard';
+    // Some servers report vCards as text/vcard or application/vcard
+    $mimes['vct']   = 'text/vcard';
+    return $mimes;
+});
 
+// Help WP validate .vcf correctly (prevents false negatives)
+add_filter('wp_check_filetype_and_ext', function ($wp_check, $file, $filename, $mimes, $real_mime = '' ) {
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    if (in_array(strtolower($ext), ['vcf','vcard'], true)) {
+        $wp_check['ext']  = 'vcf';
+        // Prefer text/x-vcard; some setups use text/vcard or application/vcard
+        $wp_check['type'] = 'text/x-vcard';
+        $wp_check['proper_filename'] = $filename;
+    }
+    return $wp_check;
+}, 10, 5);

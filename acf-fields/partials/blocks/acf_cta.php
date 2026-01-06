@@ -16,7 +16,6 @@ $cta
         ])
         ->addSelect('heading_tag', [
             'label' => 'Heading Tag',
-            'instructions' => 'Select the HTML tag for the heading.',
             'choices' => [
                 'h1' => 'H1', 'h2' => 'H2', 'h3' => 'H3', 'h4' => 'H4', 'h5' => 'H5', 'h6' => 'H6',
                 'p'  => 'Paragraph', 'span' => 'Span',
@@ -42,46 +41,12 @@ $cta
             'instructions' => 'Background color of the CTA section.',
             'default_value' => '#FFFFFF',
         ])
-        ->addColorPicker('text_color', [
-            'label' => 'Text Color',
-            'instructions' => 'Base text color for the section.',
-            'default_value' => '#111111',
-        ])
-        ->addColorPicker('underline_color', [
-            'label' => 'Underline Color',
-            'instructions' => 'Optional underline color for text decoration.',
-        ])
-        ->addColorPicker('border_color', [
-            'label' => 'Default Border Color',
-            'instructions' => 'Used when a button border color is not specified.',
-        ])
-
-        // Primary button colors
-        ->addGroup('primary_button_colors', ['label' => 'Primary Button Colors'])
-            ->addColorPicker('primary_button_bg_color', ['label' => 'Background', 'default_value' => '#111827'])
-            ->addColorPicker('primary_button_text_color', ['label' => 'Text', 'default_value' => '#FFFFFF'])
-            ->addColorPicker('primary_button_border_color', ['label' => 'Border', 'default_value' => '#111827'])
-            ->addColorPicker('primary_button_hover_bg_color', ['label' => 'Hover/Focus Background', 'default_value' => '#1f2937'])
-            ->addColorPicker('primary_button_hover_text_color', ['label' => 'Hover/Focus Text', 'default_value' => '#FFFFFF'])
-            ->addColorPicker('primary_button_hover_border_color', ['label' => 'Hover/Focus Border', 'default_value' => '#1f2937'])
-        ->endGroup()
-
-        // Secondary button colors
-        ->addGroup('secondary_button_colors', ['label' => 'Secondary Button Colors'])
-            ->addColorPicker('secondary_button_bg_color', ['label' => 'Background', 'default_value' => '#FFFFFF'])
-            ->addColorPicker('secondary_button_text_color', ['label' => 'Text', 'default_value' => '#111827'])
-            ->addColorPicker('secondary_button_border_color', ['label' => 'Border', 'default_value' => '#111827'])
-            ->addColorPicker('secondary_button_hover_bg_color', ['label' => 'Hover/Focus Background', 'default_value' => '#111827'])
-            ->addColorPicker('secondary_button_hover_text_color', ['label' => 'Hover/Focus Text', 'default_value' => '#FFFFFF'])
-            ->addColorPicker('secondary_button_hover_border_color', ['label' => 'Hover/Focus Border', 'default_value' => '#111827'])
-        ->endGroup()
 
     // -------------------- Layout --------------------
     ->addTab('Layout', ['label' => 'Layout', 'placement' => 'top'])
         // Section-level visibility
         ->addSelect('visibility_mode', [
             'label' => 'Section Visibility',
-            'instructions' => 'Hide the entire section below or above a breakpoint.',
             'choices' => [
                 'none'       => 'Show on all screens',
                 'hide_below' => 'Hide below breakpoint',
@@ -92,7 +57,6 @@ $cta
         ])
         ->addSelect('visibility_breakpoint', [
             'label' => 'Visibility Breakpoint',
-            'instructions' => 'Breakpoint used for the section-visibility rule.',
             'choices' => [
                 'xxs' => 'xxs','xs' => 'xs','mob' => 'mob','sm' => 'sm','md' => 'md',
                 'lg' => 'lg','xl' => 'xl','xxl' => 'xxl','ultrawide' => 'ultrawide',
@@ -105,7 +69,6 @@ $cta
         // Element-level visibility: Heading
         ->addSelect('heading_visibility_mode', [
             'label' => 'Heading Visibility',
-            'instructions' => 'Show/Hide heading based on a breakpoint.',
             'choices' => [
                 'none'       => 'Show on all screens',
                 'hide_below' => 'Hide below breakpoint',

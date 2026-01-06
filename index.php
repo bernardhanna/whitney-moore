@@ -1,497 +1,506 @@
-<?php get_header(); ?>
 <?php
-$settings = get_field( 'Blog_settings', 'option' ) ?: [];
-
-/* ── background image ───────────────────────────────────────────────── */
-$hero_bg = ! empty( $settings['hero_background_image']['url'] )
-  ? $settings['hero_background_image']
-  : null;
-
-if ( $hero_bg ) {
-  $bg_url         = esc_url( $hero_bg['url'] );
-  $section_style  = "style=\"background-image:url('{$bg_url}');background-size:cover;background-position:center;\"";
-  $fallback_class = '';
-} else {
-  $section_style  = '';
-  $fallback_class = 'bg-primary'; // tailwind class if no image
+if (!defined('ABSPATH')) {
+    exit;
 }
 
-/* ── heading + texts ─────────────────────────────────────────────────── */
-$hero_tag   = $settings['hero_heading_tag']  ?? 'h1';
-$hero_text  = $settings['hero_heading_text'] ?? 'Our Blog';
+get_header();
 
-$sub_text     = $settings['hero_subheading_text'] ?? 'Take a look at what we’ve built';
-$filter_title = $settings['filter_section_title'] ?? 'Filter News';
+/**
+ * Theme options (ACF Options)
+ * Group: blog_settings
+ */
+$blog_settings = get_field('blog_settings', 'option');
+$hero_bg       = !empty($blog_settings['hero_background_image']) ? $blog_settings['hero_background_image'] : null;
+
+$hero_tag      = !empty($blog_settings['hero_heading_tag']) ? $blog_settings['hero_heading_tag'] : 'h1';
+$hero_heading  = !empty($blog_settings['hero_heading_text']) ? $blog_settings['hero_heading_text'] : "What's new";
+$hero_kicker   = !empty($blog_settings['hero_kicker_text']) ? $blog_settings['hero_kicker_text'] : get_bloginfo('name');
+$hero_sub      = !empty($blog_settings['hero_subheading_text']) ? $blog_settings['hero_subheading_text'] : 'Latest and greatest.';
+$hero_body     = !empty($blog_settings['hero_body_text']) ? $blog_settings['hero_body_text'] : '';
+
+$allowed_heading_tags = array('h1','h2','h3','h4','h5','h6','span','p');
+if (!in_array($hero_tag, $allowed_heading_tags, true)) {
+    $hero_tag = 'h1';
+}
+
+// ---------- Filters (category pills + search) ----------
+$blog_cat    = isset($_GET['blog_cat']) ? sanitize_text_field(wp_unslash($_GET['blog_cat'])) : 'all';
+$blog_search = isset($_GET['blog_search']) ? sanitize_text_field(wp_unslash($_GET['blog_search'])) : '';
+
+$paged = (int) get_query_var('paged');
+if ($paged < 1) {
+    $paged = 1;
+}
+
+/**
+ * Define pill categories (labels + slugs).
+ * These should match your WP Category slugs.
+ */
+$filter_pills = array(
+    array('label' => 'All articles',      'slug' => 'all'),
+    array('label' => 'News',              'slug' => 'news'),
+    array('label' => 'Events & Webinar',  'slug' => 'events-webinar'),
+    array('label' => 'Insights',          'slug' => 'insights'),
+    array('label' => 'Press Releases',    'slug' => 'press-releases'),
+);
+
+// Build query args shared by both featured + main query
+$base_query_args = array(
+    'post_type'           => 'post',
+    'post_status'         => 'publish',
+    'ignore_sticky_posts' => true,
+);
+
+if (!empty($blog_search)) {
+    $base_query_args['s'] = $blog_search;
+}
+
+if ($blog_cat !== 'all') {
+    $base_query_args['category_name'] = $blog_cat; // category slug
+}
+
+// ---------- Featured 3 ----------
+$featured_args = $base_query_args;
+$featured_args['posts_per_page'] = 3;
+$featured_args['paged'] = 1;
+
+$featured_query = new WP_Query($featured_args);
+$total_found    = (int) $featured_query->found_posts;
+
+// ---------- Main grid (next posts after featured) ----------
+$posts_per_page  = 15;
+$featured_offset = 3;
+
+$remaining   = max(0, $total_found - $featured_offset);
+$total_pages = (int) ceil($remaining / $posts_per_page);
+
+// Offset: skip the featured 3 always, then paginate the rest
+$offset = $featured_offset + (($paged - 1) * $posts_per_page);
+
+$main_args = $base_query_args;
+$main_args['posts_per_page'] = $posts_per_page;
+$main_args['offset']         = $offset;
+$main_args['no_found_rows']  = true;
+
+$main_query = new WP_Query($main_args);
+
+// Search icon (from your example)
+$search_icon = 'https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/e78553e3c5cc215eba71c71fa3d0d28d7e38d9dd?placeholderIfAbsent=true';
+
+// Hero bg fallback (if no ACF image)
+$hero_bg_url = !empty($hero_bg['url']) ? $hero_bg['url'] : '';
+$hero_bg_id  = !empty($hero_bg['ID']) ? (int) $hero_bg['ID'] : 0;
+$hero_bg_alt = $hero_bg_id ? get_post_meta($hero_bg_id, '_wp_attachment_image_alt', true) : '';
+if (empty($hero_bg_alt)) {
+    $hero_bg_alt = 'Hero background image';
+}
+
+$section_id = 'hero_' . wp_generate_uuid4();
+
+// Helpers
+function _matrix_first_cat_name($post_id) {
+    $terms = get_the_terms($post_id, 'category');
+    if (is_wp_error($terms) || empty($terms)) return '';
+    return $terms[0]->name ?? '';
+}
 ?>
-<style>
-  /* room for the line under each thumb */
-  .testimonial-indicators .indicator-slide{ position:relative; padding-bottom:32px; }
-  /* make the button a positioning context */
-  .testimonial-indicators .testimonial-nav-btn{ position:relative; display:inline-flex; }
-  /* red lead line for the active (center) thumb */
-  .testimonial-indicators .slick-current .testimonial-nav-btn::after{
-    content:"";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:calc(100% + 8px);
-    width:2px;
-    height:26px;
-    background:var(--indicator-ring, #dc2626);
-    border-radius:9999px;
-  }
-</style>
 
-<div class="mt-[5rem] xs:mt-[10rem] w-full">
-  <section class="flex overflow-hidden relative">
-    <div class="flex flex-col items-center mx-auto w-full bg-black">
-      <div class="overflow-hidden relative max-w-[1158px] px-5 w-full hero-background" <?php //echo $section_style; ?>>
+<main class="overflow-hidden w-full min-h-screen site-main">
 
-        <div class="flex z-0 flex-col pt-14 pb-8 w-full max-md:max-w-full">
-
-          <!-- Breadcrumb Navigation -->
-          <nav class="flex gap-2 items-center self-start mb-4" aria-label="Breadcrumb">
-            <div class="pr-2 w-[30px]">
-              <div class="flex w-full min-h-[21px]" aria-hidden="true">
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M9 22V12H15V22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            </div>
-            <ol class="flex gap-2 items-center pt-0.5 min-w-60">
-              <li class="flex gap-2 items-center">
-                <a href="<?php echo esc_url(home_url()); ?>" class="text-sm font-semibold leading-none text-white whitespace-nowrap hover:text-yellow-100 focus:text-yellow-100 focus:outline-2 focus:outline-white focus:outline-offset-2" aria-label="Home">
-                  Home
-                </a>
-                <?php if (!is_front_page()) : ?>
-                  <div class="flex gap-2 items-center pt-0.5 w-4 text-white" aria-hidden="true">
-                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M5.99023 12.2104L9.99023 8.21045L5.99023 4.21045" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                <?php endif; ?>
-              </li>
-
-              <?php
-              // Determine if we're on the main blog archive page (often the "Posts Page")
-              $blog_page_id = get_option('page_for_posts');
-              $is_blog_home = is_home() && !is_front_page();
-
-              // If we are on the blog home (Posts Page) or a category/single post/tag/date/author
-              if ($is_blog_home || is_category() || is_single() || is_tag() || is_date() || is_author()) {
-                // "Resources" trail (optional)
-                $resources_page_id = get_page_by_path('resources');
-                if ($resources_page_id) {
-                  ?>
-                  <li class="flex gap-2 items-center">
-                    <a href="<?php echo esc_url(get_permalink($resources_page_id)); ?>" class="text-sm font-semibold leading-none text-white whitespace-nowrap hover:text-yellow-100 focus:text-yellow-100 focus:outline-2 focus:outline-white focus:outline-offset-2" aria-label="Resources">
-                      Resources
-                    </a>
-                    <?php if (!is_home() && !is_post_type_archive('Blog') && !is_page($resources_page_id->ID)) : ?>
-                      <div class="flex gap-2 items-center pt-0.5 w-4" aria-hidden="true">
-                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5.99023 12.2104L9.99023 8.21045L5.99023 4.21045" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                      </div>
-                    <?php endif; ?>
-                  </li>
-                  <?php
-                }
-
-                // Category breadcrumb for single posts
-                if (is_single()) {
-                  $categories = get_the_category();
-                  if (!empty($categories)) {
-                    $category = $categories[0];
-                    echo '<li class="flex gap-2 items-center">';
-                    echo '<a href="' . esc_url(get_category_link($category->term_id)) . '" class="text-sm font-semibold leading-none text-white whitespace-nowrap hover:text-yellow-100 focus:text-yellow-100 focus:outline-2 focus:outline-white focus:outline-offset-2" aria-label="' . esc_attr($category->name) . '">';
-                    echo esc_html($category->name);
-                    echo '</a>';
-                    echo '<div class="flex gap-2 items-center pt-0.5 w-4" aria-hidden="true">';
-                    echo '<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.99023 12.2104L9.99023 8.21045L5.99023 4.21045" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>';
-                    echo '</div>';
-                    echo '</li>';
-                  }
-                }
-              }
-
-              // Current page/post/archive title
-              echo '<li><span class="text-sm font-semibold leading-none text-white">';
-              if (is_single()) {
-                the_title();
-              } elseif (is_page()) {
-                the_title();
-              } elseif (is_category()) {
-                single_cat_title();
-              } elseif (is_tag()) {
-                single_tag_title();
-              } elseif (is_author()) {
-                the_author();
-              } elseif (is_date()) {
-                if (is_day()) {
-                  echo get_the_date('F j, Y');
-                } elseif (is_month()) {
-                  echo get_the_date('F Y');
-                } elseif (is_year()) {
-                  echo get_the_date('Y');
-                }
-              } elseif (is_search()) {
-                echo 'Search Results for "' . get_search_query() . '"';
-              } elseif (is_404()) {
-                echo 'Page Not Found';
-              } elseif (is_post_type_archive('Blog')) {
-                echo 'Blog';
-              } elseif ($is_blog_home) {
-                echo 'What\'s new at The tyre care';
-              }
-              echo '</span></li>';
-              ?>
-            </ol>
-          </nav>
-
-          <!-- Main Heading Section -->
-          <header class="w-full max-md:max-w-full">
-            <?php
-              // dynamic heading tag
-              printf(
-                '<%1$s class="text-6xl font-bold leading-tight text-white max-md:max-w-full max-md:text-4xl">%2$s</%1$s>',
-                esc_attr($hero_tag),
-                esc_html($hero_text)
-              );
-            ?>
-          </header>
-        </div>
-
-        <!-- Filter and Search Section -->
-        <div class="flex overflow-hidden z-0 flex-wrap gap-6 items-end pb-14 w-full max-md:max-w-full">
-
-          <!-- Filter Section -->
-          <?php
-            $all_cats = get_terms( [
-              'taxonomy'   => 'category',
-              'hide_empty' => true,
-            ] );
-            $current_slug = 'all';
-            if ( is_tax( 'category' ) ) {
-              $queried = get_queried_object();
-              $current_slug = $queried->slug;
-            }
-          ?>
-          <div class="flex-1 pb-2 text-base shrink min-w-60 max-md:max-w-full">
-            <span class="mb-2 font-bold text-white"><?php echo esc_html($filter_title); ?></span>
-            <div
-              role="radiogroup"
-              aria-label="Filter news by category"
-              class="flex flex-wrap gap-4 items-start mt-2 w-full font-medium max-md:max-w-full"
+    <!-- HERO -->
+    <section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative max-sm:flex-col" role="banner" aria-labelledby="<?php echo esc_attr($section_id); ?>-heading">
+        <?php if (!empty($hero_bg_url)) : ?>
+            <img
+                src="<?php echo esc_url($hero_bg_url); ?>"
+                class="object-cover relative inset-0 sm:absolute size-full"
+                alt="<?php echo esc_attr($hero_bg_alt); ?>"
+                aria-hidden="true"
+                decoding="async"
+                fetchpriority="high"
             >
-              <button role="radio"
-                      class="gap-2 px-6 py-2 whitespace-nowrap bg-white rounded-lg hover:text-white hover:bg-primary btn filter-btn focus:outline-none focus:ring-2 focus:ring-offset-2"
-                      data-filter="all"
-                      aria-checked="<?php echo $current_slug === 'all' ? 'true' : 'false'; ?>"
-                      tabindex="<?php echo $current_slug === 'all' ? '0' : '-1'; ?>">
-                All Blog
-              </button>
+        <?php endif; ?>
 
-              <?php foreach ( $all_cats as $cat ) :
-                $slug    = esc_attr( $cat->slug );
-                $name    = esc_html( $cat->name );
-                $checked = ( $slug === $current_slug ) ? 'true' : 'false';
-                $tab     = ( $slug === $current_slug ) ? '0' : '-1';
-              ?>
-                <button
-                  role="radio"
-                  class="gap-2 px-6 py-2 whitespace-nowrap bg-white rounded-lg hover:bg-primary filter-btn hover:bg-teritary hover:border-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
-                  data-filter="<?php echo $slug; ?>"
-                  aria-checked="<?php echo $checked; ?>"
-                  tabindex="<?php echo $tab; ?>"
-                >
-                  <?php echo $name; ?>
-                </button>
-              <?php endforeach; ?>
-            </div>
-          </div>
+        <div class="gap-2 items-center flex justify-end max-w-container mx-auto lg:min-h-[878px] sm:min-h-[600px] md:min-h-[800px] max-sm:py-5 px-5 w-full">
+            <div class="flex relative flex-col justify-center self-stretch p-[2px] my-auto border-solid min-w-60 w-full md:w-[627px] max-w-full" style="border-color:#0902a4;border-width:5px;">
+                <div class="flex flex-col p-16 w-full border-solid max-md:p-5 max-md:max-w-full" style="border-color:#0902a4;border-width:3px;background-color:#ffffff;">
+                    <div class="w-full tracking-wider max-md:max-w-full">
+                        <div class="w-full max-md:max-w-full">
 
-          <!-- Search Section -->
-          <div class="flex items-center w-96 min-w-60">
-            <form class="flex w-full" role="search" aria-label="Search articles">
-              <div class="flex-1 my-auto text-base shrink min-h-14 min-w-60 text-slate-600">
-                <div class="flex-1 w-full">
-                  <div class="flex flex-1 justify-between items-center px-4 py-3 bg-white rounded-l size-full">
-                    <label for="article-search" class="sr-only">Search articles</label>
-                    <input
-                      type="search"
-                      id="article-search"
-                      placeholder="Search articles"
-                      class="flex-1 px-4 py-3 bg-white rounded-l border-none size-full text-slate-600 placeholder-slate-600"
-                      aria-label="Search articles"
-                    />
-                  </div>
-                </div>
-              </div>
+                            <p class="max-md:text-[1rem] text-lg font-medium tracking-[1px]" style="color:#000000;">
+                                <?php echo esc_html($hero_kicker); ?>
+                            </p>
 
-              <button type="submit" class="flex gap-2 justify-center items-center px-6 py-4 bg-primary border-2 border-white rounded-none min-h-14 w-[72px] max-md:px-5 search-btn" aria-label="Search">
-                <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 21.0408L16.65 16.6908M19 11.0408C19 15.459 15.4183 19.0408 11 19.0408C6.58172 19.0408 3 15.459 3 11.0408C3 6.62249 6.58172 3.04077 11 3.04077C15.4183 3.04077 19 6.62249 19 11.0408Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            </form>
-          </div>
-        </div>
+                            <<?php echo esc_attr($hero_tag); ?>
+                                id="<?php echo esc_attr($section_id); ?>-heading"
+                                class="mt-2 text-[68px] font-bold leading-[78px] max-md:max-w-full max-md:text-4xl max-md:leading-[51px] break-words overflow-wrap-anywhere max-mob:text-[2rem] max-mob:tracking-[1px] max-mob:leading-[2.625rem]"
+                                style="color:#0902a4;"
+                            >
+                                <?php echo wp_kses_post($hero_heading); ?>
+                            </<?php echo esc_attr($hero_tag); ?>>
 
-      </div>
-    </div>
-  </section>
+                        </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Filter button functionality
-      const filterButtons = document.querySelectorAll('[data-filter]');
+                        <?php if (!empty($hero_body)) : ?>
+                            <div class="mt-4 text-2xl font-medium max-md:max-w-full wp_editor max-sm:text-[1.125rem] tracking-[1px] leading-[1.625rem]" style="color:#000000;">
+                                <?php echo wp_kses_post($hero_body); ?>
+                            </div>
+                        <?php else : ?>
+                            <div class="mt-4 text-2xl font-medium max-md:max-w-full wp_editor max-sm:text-[1.125rem] tracking-[1px] leading-[1.625rem]" style="color:#000000;">
+                                <p><?php echo esc_html($hero_sub); ?></p>
+                            </div>
+                        <?php endif; ?>
 
-      filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          // Remove active state from all buttons
-          filterButtons.forEach(btn => {
-            btn.setAttribute('aria-pressed', 'false');
-          });
-
-          // Add active state to clicked button
-          this.setAttribute('aria-pressed', 'true');
-
-          // Trigger filter event (can be extended for actual filtering)
-          const filterValue = this.getAttribute('data-filter');
-          const filterEvent = new CustomEvent('newsFilter', {
-            detail: { filter: filterValue }
-          });
-          document.dispatchEvent(filterEvent);
-        });
-      });
-
-      // Search form functionality
-      const searchForm = document.querySelector('form[role="search"]');
-      if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const searchInput = this.querySelector('input[type="search"]');
-          const searchValue = searchInput.value.trim();
-
-          if (searchValue) {
-            const searchEvent = new CustomEvent('newsSearch', {
-              detail: { query: searchValue }
-            });
-            document.dispatchEvent(searchEvent);
-            console.log('Searching for:', searchValue);
-          }
-        });
-      }
-    });
-  </script>
-
-</div>
-
-<section class="flex overflow-hidden relative">
-  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-[1158px] px-5">
-    <div class="flex flex-col gap-8 pt-12 pb-14 w-full bg-white">
-
-      <!-- Heading: Total posts + Clear Filters Button -->
-      <div class="flex justify-between items-center w-full">
-        <span class="text-2xl font-bold leading-7 text-slate-600">
-          <?php echo (int) wp_count_posts()->publish; ?> posts
-        </span>
-        <button
-          type="button"
-          id="clear-filters"
-          class="flex gap-2 items-center px-4 py-2 bg-gray-200 rounded cursor-pointer h-[42px] w-fit whitespace-nowrap hover:bg-hover hover:text-hover hidden"
-          aria-label="Clear filters"
-        >
-          <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M12 4.04102L4 12.041M4 4.04102L12 12.041" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-          <span class="text-sm font-semibold leading-5 text-slate-700">Clear filters</span>
-        </button>
-      </div>
-
-      <!-- Posts Grid -->
-      <div class="grid grid-cols-3 gap-8 max-md:grid-cols-1 max-lg:grid-cols-2">
-        <?php
-        $args = [
-          'posts_per_page' => 12,
-          'paged'          => max( 1, get_query_var( 'paged' ) ),
-        ];
-
-        $query = new WP_Query( $args );
-
-        if ( $query->have_posts() ) :
-          while ( $query->have_posts() ) : $query->the_post();
-
-            // categories for client-side filtering
-            $terms  = get_the_terms( get_the_ID(), 'category' ) ?: [];
-            $cats   = implode( ' ', wp_list_pluck( $terms, 'slug' ) );
-
-            // post basics
-            $post_id       = get_the_ID();
-            $post_url      = get_permalink();
-            $post_title    = get_the_title();
-            $post_date     = get_the_date('j F Y');
-            $post_excerpt  = get_the_excerpt();
-
-            // reading time (same logic as related posts)
-            $content       = get_post_field('post_content', $post_id);
-            $word_count    = str_word_count( wp_strip_all_tags( $content ) );
-            $words_per_min = 200;
-            $minutes       = max( 1, (int) ceil( $word_count / $words_per_min ) );
-            $read_time     = $minutes . ' min' . ( $minutes > 1 ? 's' : '' );
-
-            // featured image + alt
-            $featured_image_id  = get_post_thumbnail_id( $post_id );
-            $featured_image_url = $featured_image_id
-              ? get_the_post_thumbnail_url( $post_id, 'large' )
-              : 'https://via.placeholder.com/425x240?text=No+Image';
-            $featured_image_alt = $featured_image_id
-              ? get_post_meta( $featured_image_id, '_wp_attachment_image_alt', true )
-              : '';
-            if ( empty( $featured_image_alt ) ) {
-              $featured_image_alt = $post_title . ' featured image';
-            }
-            ?>
-              <a
-                href="<?php echo esc_url( $post_url ); ?>"
-                class="block overflow-hidden pb-4 rounded-br-3xl rounded-bl-3xl border-2 border-gray-300 border-solid project-card group border-shape"
-                data-categories="<?php echo esc_attr( $cats ); ?>"
-                aria-label="<?php echo esc_attr( 'Read full article: ' . $post_title ); ?>"
-              >
-                <div class="overflow-hidden relative">
-                  <img
-                    width="425"
-                    height="240"
-                    alt="<?php echo esc_attr( $featured_image_alt ); ?>"
-                    decoding="async"
-                    src="<?php echo esc_url( $featured_image_url ); ?>"
-                    class="object-cover w-full max-w-full transition-transform duration-500 group-hover:scale-105 h-[200px]"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div class="py-4 bg-white">
-                  <div class="px-8 py-2.5 text-sm font-medium leading-5 text-gray-500 opacity-80">
-                    <time datetime="<?php echo esc_attr( get_the_date('c') ); ?>" class="text-sm text-gray-500">
-                      <?php echo esc_html( $post_date ); ?> • Read time: <?php echo esc_html( $read_time ); ?>
-                    </time>
-                  </div>
-
-                  <div class="px-8 mb-3.5">
-                    <!-- h3 kept for search JS (querySelector('h3')) -->
-                    <h3 class="text-2xl font-medium leading-8">
-                      <span class="text-xl font-medium leading-7 transition-colors duration-200 cursor-pointer text-zinc-900 group-hover:text-primary">
-                        <?php echo esc_html( $post_title ); ?>
-                      </span>
-                    </h3>
-                  </div>
-
-                  <div class="px-8 mb-2.5 text-lg leading-7 text-gray-500">
-                    <p><?php echo esc_html( $post_excerpt ); ?></p>
-                  </div>
-
-                  <div class="px-8 mt-2.5 text-left">
-                    <div
-                      class="btn flex gap-2 justify-center items-center px-6 py-4 my-auto text-sm font-semibold leading-none bg-white border-primary border-2 border-solid min-h-[52px] max-md:px-5 transition-colors duration-200 group text-primary hover:text-white hover:bg-primary"
-                      style="width:160px; height:48px;"
-                    >
-                      View More
                     </div>
-                  </div>
                 </div>
-              </a>
-            <?php
-          endwhile;
-          wp_reset_postdata();
-        else :
-          echo '<p>No Blog found.</p>';
-        endif;
-        ?>
-      </div>
-    </div>
-  </div>
-</section>
+            </div>
+        </div>
+    </section>
 
-<div class="flex justify-center items-center py-12 w-full pagination" x-show="activeCategory === 'all'">
-  <?php if ( function_exists('my_custom_pagination') ) { my_custom_pagination(); } ?>
-</div>
+    <!-- FILTERS (Alpine pills + search) -->
+    <section class="flex overflow-hidden relative">
+        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-7xl max-lg:px-5">
+            <form
+                method="get"
+                action="<?php echo esc_url(get_permalink(get_option('page_for_posts')) ?: home_url('/')); ?>"
+                class="w-full"
+                x-data="{
+                    cat: '<?php echo esc_js($blog_cat); ?>',
+                    search: '<?php echo esc_js($blog_search); ?>',
+                    setCat(slug){ this.cat = slug; this.$nextTick(() => this.$root.submit()); }
+                }"
+                aria-label="Article filters and search"
+            >
+                <input type="hidden" name="blog_cat" :value="cat">
+                <input type="hidden" name="paged" value="1">
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const buttons      = document.querySelectorAll('.filter-btn');
-    const cards        = document.querySelectorAll('.project-card');
-    const searchInput  = document.getElementById('article-search');
-    const clearFilters = document.getElementById('clear-filters');
+                <nav class="flex gap-10 justify-between items-start pt-10 w-full max-md:flex-colflex-row max-md:px-5" aria-label="Article filters and search">
 
-    if (!clearFilters) {
-      console.warn('⚠️ #clear-filters button not found');
-      return;
-    }
+                    <!-- Filter Pills -->
+                    <div class="flex flex-wrap gap-4 items-center text-lg font-semibold leading-none text-indigo-800 min-w-60" role="group" aria-label="Article category filters">
+                        <?php foreach ($filter_pills as $pill) : ?>
+                            <?php $is_active = ($blog_cat === $pill['slug']) || ($pill['slug'] === 'all' && $blog_cat === 'all'); ?>
+                            <button
+                                type="button"
+                                class="<?php echo esc_attr($is_active
+                                    ? 'btn flex gap-2 justify-center items-center px-6 py-2.5 text-indigo-800 bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
+                                    : 'btn flex gap-2 justify-center items-center px-6 py-2.5 border border-indigo-800 border-solid rounded-full w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200 max-md:px-5'
+                                ); ?>"
+                                :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
+                                aria-label="<?php echo esc_attr($pill['label']); ?>"
+                                @click="setCat('<?php echo esc_js($pill['slug']); ?>')"
+                            >
+                                <span><?php echo esc_html($pill['label']); ?></span>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
 
-    let activeFilter = 'all';
-    let searchTerm   = '';
+                    <!-- Search -->
+                    <div class="text-base text-black min-w-60 w-[296px]">
+                        <div class="max-w-full w-[296px]">
+                            <div class="w-full">
+                                <div class="flex justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid transition-all duration-200 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2">
+                                    <div class="flex flex-1 gap-2 items-center">
+                                        <label for="article-search" class="sr-only">Search articles</label>
+                                        <input
+                                            type="search"
+                                            id="article-search"
+                                            name="blog_search"
+                                            x-model="search"
+                                            value="<?php echo esc_attr($blog_search); ?>"
+                                            class="flex-1 placeholder-gray-500 text-black bg-transparent border-none outline-none focus:outline-none"
+                                            placeholder="Search article"
+                                            aria-label="Search articles"
+                                            autocomplete="off"
+                                        >
+                                    </div>
 
-    function cardVisible(card) {
-      const cats = (card.getAttribute('data-categories') || '').split(' ').filter(Boolean);
-      const titleEl = card.querySelector('h3');
-      const title   = titleEl ? titleEl.textContent.toLowerCase() : '';
+                                    <button type="submit" class="flex justify-center items-center w-6 h-6 transition-opacity duration-200 btn hover:opacity-70" aria-label="Submit search">
+                                        <img src="<?php echo esc_url($search_icon); ?>" alt="" class="object-contain w-6 h-6" role="presentation">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-      const matchesCategory = (activeFilter === 'all') || cats.includes(activeFilter);
-      const matchesSearch   = (searchTerm === '') || (title.indexOf(searchTerm) !== -1);
+                </nav>
+            </form>
+        </div>
+    </section>
 
-      return matchesCategory && matchesSearch;
-    }
+    <!-- FEATURED 3 -->
+    <section id="blog-cards-9682" class="flex overflow-hidden relative" style="background-color:#FFFFFF;" aria-labelledby="blog-cards-9682-heading">
+        <div class="flex flex-col items-center pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container max-xxl:px-[1rem]">
 
-    function applyFilter() {
-      cards.forEach(card => {
-        card.style.display = cardVisible(card) ? '' : 'none';
-      });
+            <div class="px-4 py-8 w-full md:px-8 lg:px-0">
+                <div class="max-w-[1728px] mx-auto flex flex-col lg:flex-row items-start gap-8">
 
-      const needsClear = (activeFilter !== 'all') || (searchTerm !== '');
-      if (needsClear) {
-        clearFilters.classList.remove('hidden');
-      } else {
-        clearFilters.classList.add('hidden');
-      }
-    }
+                    <?php
+                    $featured_posts = $featured_query->posts;
+                    $featured_left  = array_slice($featured_posts, 0, 2);
+                    $featured_right = array_slice($featured_posts, 2, 1);
+                    ?>
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.setAttribute('aria-pressed','false'));
-        btn.setAttribute('aria-pressed','true');
+                    <!-- LEFT COLUMN (FULL-CARD CLICKABLE) -->
+                    <div class="flex flex-col gap-8 max-lg:w-full lg:flex-1">
+                        <?php foreach ($featured_left as $p) : ?>
+                            <?php
+                            $thumb_id  = get_post_thumbnail_id($p->ID);
+                            $img_alt   = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
+                            if (empty($img_alt)) $img_alt = get_the_title($p->ID);
+                            $permalink = get_permalink($p->ID);
+                            ?>
+                            <article class="relative max-lg:h-[294px] lg:h-[332px] overflow-hidden group">
+                                <a href="<?php echo esc_url($permalink); ?>"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title($p->ID))); ?>">
+                                    <span class="sr-only"><?php echo esc_html(get_the_title($p->ID)); ?></span>
+                                </a>
 
-        activeFilter = btn.getAttribute('data-filter');
-        applyFilter();
-      });
-    });
+                                <?php if ($thumb_id) : ?>
+                                    <?php echo wp_get_attachment_image($thumb_id, 'large', false, [
+                                        'class' => 'absolute inset-0 w-full h-full object-cover',
+                                        'alt'   => esc_attr($img_alt),
+                                        'loading' => 'lazy',
+                                        'decoding' => 'async',
+                                    ]); ?>
+                                <?php endif; ?>
 
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        searchTerm = searchInput.value.trim().toLowerCase();
-        applyFilter();
-      });
-    }
+                                <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
+                                    <div class="flex flex-col gap-2">
+                                        <div class="text-primary text-base font-medium tracking-[1px]">
+                                            <?php
+                                            $cats = get_the_category($p->ID);
+                                            echo !empty($cats) ? esc_html($cats[0]->name) : esc_html__('Uncategorized', 'matrix-starter');
+                                            ?>
+                                        </div>
+                                        <h3 class="text-xl font-semibold leading-6 text-primary">
+                                            <?php echo esc_html(get_the_title($p->ID)); ?>
+                                        </h3>
+                                        <p class="text-lg font-medium text-black">
+                                            <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
+                                        </p>
+                                    </div>
 
-    clearFilters.addEventListener('click', () => {
-      activeFilter = 'all';
-      buttons.forEach(b => {
-        b.setAttribute('aria-pressed', b.getAttribute('data-filter') === 'all' ? 'true' : 'false');
-      });
+                                    <span class="underline pointer-events-none select-none text-black/60 hover:text-black">
+                                        <?php echo esc_html__('Discover', 'matrix-starter'); ?>
+                                    </span>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
 
-      if (searchInput) {
-        searchInput.value = '';
-        searchTerm = '';
-      }
+                    <!-- RIGHT COLUMN (FULL-CARD CLICKABLE) -->
+                    <?php if (!empty($featured_right)) : ?>
+                        <?php $p = $featured_right[0]; ?>
+                        <?php
+                        $thumb_id  = get_post_thumbnail_id($p->ID);
+                        $img_alt   = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
+                        if (empty($img_alt)) $img_alt = get_the_title($p->ID);
+                        $permalink = get_permalink($p->ID);
+                        ?>
+                        <div class="max-lg:w-full lg:flex-1">
+                            <article class="relative max-lg:h-[294px] lg:h-[696px] overflow-hidden group">
+                                <a href="<?php echo esc_url($permalink); ?>"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title($p->ID))); ?>">
+                                    <span class="sr-only"><?php echo esc_html(get_the_title($p->ID)); ?></span>
+                                </a>
 
-      applyFilter();
-    });
+                                <?php if ($thumb_id) : ?>
+                                    <?php echo wp_get_attachment_image($thumb_id, 'large', false, [
+                                        'class' => 'absolute inset-0 w-full h-full object-cover',
+                                        'alt'   => esc_attr($img_alt),
+                                        'loading' => 'lazy',
+                                        'decoding' => 'async',
+                                    ]); ?>
+                                <?php endif; ?>
 
-    applyFilter();
-  });
-</script>
+                                <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
+                                    <div>
+                                        <div class="text-base font-medium text-primary">
+                                            <?php
+                                            $cats = get_the_category($p->ID);
+                                            echo !empty($cats) ? esc_html($cats[0]->name) : esc_html__('Uncategorized', 'matrix-starter');
+                                            ?>
+                                        </div>
+                                        <h3 class="text-xl font-semibold text-primary">
+                                            <?php echo esc_html(get_the_title($p->ID)); ?>
+                                        </h3>
+                                        <p class="text-base font-medium text-black">
+                                            <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
+                                        </p>
+                                    </div>
+
+                                    <span class="underline pointer-events-none select-none text-black/60 hover:text-black">
+                                        <?php echo esc_html__('Read more', 'matrix-starter'); ?>
+                                    </span>
+                                </div>
+                            </article>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CONTINUE LOOP (GRID, FULL-CARD CLICKABLE) -->
+    <section class="flex overflow-hidden relative">
+        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+
+            <div class="w-full max-w-[1728px] mx-auto">
+                <div class="grid grid-cols-3 gap-6 w-full max-lg:grid-cols-2 max-sm:grid-cols-1" role="list">
+
+                    <?php if ($main_query->have_posts()) : ?>
+                        <?php while ($main_query->have_posts()) : $main_query->the_post(); ?>
+                            <?php
+                            $post_id  = get_the_ID();
+                            $thumb_id = get_post_thumbnail_id($post_id);
+                            $img_alt  = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
+                            if (empty($img_alt)) $img_alt = get_the_title($post_id);
+
+                            $cats     = get_the_category($post_id);
+                            $cat_name = !empty($cats) ? $cats[0]->name : __('Uncategorized', 'matrix-starter');
+                            ?>
+                            <article class="overflow-hidden relative group" role="listitem">
+                                <a href="<?php the_permalink(); ?>"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title())); ?>">
+                                    <span class="sr-only"><?php the_title(); ?></span>
+                                </a>
+
+                                <?php if ($thumb_id) : ?>
+                                    <div class="w-full">
+                                        <?php echo wp_get_attachment_image($thumb_id, 'large', false, [
+                                            'class'    => 'w-full h-auto object-cover',
+                                            'alt'      => esc_attr($img_alt),
+                                            'loading'  => 'lazy',
+                                            'decoding' => 'async',
+                                        ]); ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="flex overflow-hidden flex-col px-4 mt-4 w-full">
+                                    <div class="text-lg font-medium tracking-wider" aria-label="Category">
+                                        <?php echo esc_html($cat_name); ?>
+                                    </div>
+
+                                    <h3 class="mt-2 text-2xl font-semibold leading-7 text-indigo-800">
+                                        <?php the_title(); ?>
+                                    </h3>
+
+                                    <time class="mt-2 tracking-wider" datetime="<?php echo esc_attr(get_the_date(DATE_W3C)); ?>">
+                                        <?php echo esc_html(get_the_date('F j, Y') . ' | ' . get_the_time('g:i A')); ?>
+                                    </time>
+
+                                    <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-indigo-800">
+                                        <span class="flex gap-2 items-center text-indigo-800 whitespace-nowrap pointer-events-none select-none">
+                                            <span class="self-stretch my-auto"><?php echo esc_html__('Read more', 'matrix-starter'); ?></span>
+                                            <svg class="object-contain self-stretch my-auto w-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                        <?php endwhile; wp_reset_postdata(); ?>
+                    <?php else : ?>
+                        <p class="w-full text-black/70">No posts found.</p>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+
+            <!-- PAGINATION (15 per page, preserves filters/search) -->
+            <?php if ($total_pages > 1) : ?>
+                <?php
+                $base_args = array(
+                    'blog_cat'    => $blog_cat,
+                    'blog_search' => $blog_search,
+                );
+
+                $current_page = $paged;
+
+                $page_numbers = paginate_links(array(
+                    'total'     => $total_pages,
+                    'current'   => $current_page,
+                    'type'      => 'array',
+                    'prev_next' => false,
+                    'end_size'  => 1,
+                    'mid_size'  => 2,
+                    'base'      => esc_url_raw(add_query_arg(array_merge($base_args, array('paged' => '%#%')))),
+                    'format'    => '',
+                ));
+
+                $prev_page = ($current_page > 1) ? ($current_page - 1) : 0;
+                $next_page = ($current_page < $total_pages) ? ($current_page + 1) : 0;
+
+                $prev_url = $prev_page ? add_query_arg(array_merge($base_args, array('paged' => $prev_page))) : '';
+                $next_url = $next_page ? add_query_arg(array_merge($base_args, array('paged' => $next_page))) : '';
+                ?>
+
+                <nav aria-label="Pagination Navigation" class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
+                    <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
+                        <?php if ($prev_page) : ?>
+                            <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                               href="<?php echo esc_url($prev_url); ?>"
+                               aria-label="Go to previous page">
+                                <span>Previous</span>
+                            </a>
+                        <?php else : ?>
+                            <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Previous page (disabled)">
+                                <span>Previous</span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
+                        <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
+                            <?php foreach ($page_numbers as $link_html) : ?>
+                                <?php
+                                $is_current = (strpos($link_html, 'current') !== false);
+                                $page_num = (int) wp_strip_all_tags($link_html);
+                                preg_match('/href=["\']([^"\']+)["\']/', $link_html, $matches);
+                                $url = !empty($matches[1]) ? $matches[1] : '';
+                                ?>
+
+                                <?php if ($is_current) : ?>
+                                    <span class="flex flex-col justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 border-solid btn"
+                                          aria-current="page">
+                                        <span class="text-indigo-800"><?php echo esc_html((string) $page_num); ?></span>
+                                    </span>
+                                <?php else : ?>
+                                    <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-white hover:bg-opacity-10"
+                                       href="<?php echo esc_url($url); ?>"
+                                       aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>">
+                                        <span class="text-white"><?php echo esc_html((string) $page_num); ?></span>
+                                    </a>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
+                        <?php if ($next_page) : ?>
+                            <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                               href="<?php echo esc_url($next_url); ?>"
+                               aria-label="Go to next page">
+                                <span>Next</span>
+                            </a>
+                        <?php else : ?>
+                            <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Next page (disabled)">
+                                <span>Next</span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </nav>
+            <?php endif; ?>
+
+        </div>
+    </section>
+
+</main>
 
 <?php get_footer(); ?>

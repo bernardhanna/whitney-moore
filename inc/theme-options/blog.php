@@ -10,15 +10,19 @@ $blogFields
     'label' => 'Blog Settings',
   ])
 
-    // — Background Image Upload —
     ->addImage('hero_background_image', [
       'label'         => 'Hero Background Image',
-      'instructions'  => 'Upload a hero background; if blank, we fall back to green.',
+      'instructions'  => 'Upload a hero background image.',
       'return_format' => 'array',
       'preview_size'  => 'medium',
     ])
 
-    // — Hero Heading Tag & Text —
+    ->addText('hero_kicker_text', [
+      'label'        => 'Hero Kicker Text',
+      'instructions' => 'Small text above the hero heading (e.g. WHITNEY MOORE).',
+      'default_value'=> 'WHITNEY MOORE',
+    ])
+
     ->addSelect('hero_heading_tag', [
       'label'        => 'Hero Heading Tag',
       'choices'      => [
@@ -34,18 +38,25 @@ $blogFields
       'default_value'=> 'h1',
       'ui'           => 1,
     ])
+
     ->addText('hero_heading_text', [
       'label'        => 'Hero Heading Text',
-      'default_value'=> "What's new at Tyrecare",
+      'instructions' => 'Main hero heading. You can include <br> for line breaks.',
+      'default_value'=> "Experience.<br>Clarity.<br>Results.",
     ])
 
-    // — Hero Sub-heading —
     ->addText('hero_subheading_text', [
-      'label'        => 'Hero Sub-heading Text',
-      'default_value'=> 'Latest and greatest.',
+      'label'        => 'Hero Sub-heading Text (Fallback)',
+      'instructions' => 'Used if Hero Body Text is empty.',
+      'default_value'=> 'Driven by values since 1882.',
     ])
 
-    // — Filter Section Title —
+    ->addWysiwyg('hero_body_text', [
+      'label'        => 'Hero Body Text',
+      'instructions' => 'Text below the heading (uses wp_editor styling).',
+      'required'     => 0,
+    ])
+
     ->addText('filter_section_title', [
       'label'        => 'Filter Section Title',
       'default_value'=> 'Filter by',

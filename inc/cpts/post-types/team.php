@@ -28,3 +28,58 @@ add_action('init', function () {
         ]
     );
 });
+
+
+register_taxonomy(
+    'team_practice_area',
+    array('team'),
+    array(
+        'labels' => array(
+            'name'          => __('Practice Areas', 'matrix-starter'),
+            'singular_name' => __('Practice Area', 'matrix-starter'),
+        ),
+        'public'            => true,
+        'show_ui'           => true,
+        'show_in_menu'      => true,
+        'show_in_rest'      => true,
+        'hierarchical'      => true,
+        'rewrite'           => array('slug' => 'team-practice-area', 'with_front' => false),
+        'show_admin_column' => true,
+    )
+);
+
+register_taxonomy(
+    'team_sector',
+    array('team'),
+    array(
+        'labels' => array(
+            'name'          => __('Sectors', 'matrix-starter'),
+            'singular_name' => __('Sector', 'matrix-starter'),
+        ),
+        'public'            => true,
+        'show_ui'           => true,
+        'show_in_menu'      => true,
+        'show_in_rest'      => true,
+        'hierarchical'      => true,
+        'rewrite'           => array('slug' => 'team-sector', 'with_front' => false),
+        'show_admin_column' => true,
+    )
+);
+
+register_taxonomy(
+    'team_role',
+    array('team'),
+    array(
+        'labels' => array(
+            'name'          => __('Roles', 'matrix-starter'),
+            'singular_name' => __('Role', 'matrix-starter'),
+        ),
+        'public'            => true,
+        'show_ui'           => true,
+        'show_in_menu'      => true,
+        'show_in_rest'      => true,
+        'hierarchical'      => true,
+        'rewrite'           => array('slug' => 'team-role', 'with_front' => false),
+        'show_admin_column' => true,
+    )
+);

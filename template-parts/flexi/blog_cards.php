@@ -17,7 +17,7 @@ $section_heading_tag = get_sub_field('section_heading_tag') ?: 'h2';
 // Always enforce minimum of 3 posts
 $posts_per_page = max(3, (int) get_sub_field('posts_per_page'));
 
-// CTAs
+// CTAs (text only now; visual only – no inner <a>)
 $small_cta      = get_sub_field('small_cta');
 $small_cta_text = get_sub_field('small_cta_text') ?: 'Discover';
 
@@ -131,7 +131,16 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         $cat     = _matrix_first_cat_name($pid);
                         $date    = get_the_date(get_option('date_format'), $pid);
                     ?>
-                        <article class="flex max-lg:justify-center max-lg:items-center relative max-lg:h-[294px] lg:h-[332px] overflow-hidden group">
+                        <article class="relative max-lg:h-[294px] lg:h-[332px] overflow-hidden group">
+                            <!-- Full-card link (covers entire card) -->
+                            <a
+                                href="<?php echo esc_url($link); ?>"
+                                class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
+                            >
+                                <span class="sr-only"><?php echo esc_html($title); ?></span>
+                            </a>
+
                             <?php
                             if ($image) {
                                 echo wp_get_attachment_image(
@@ -146,6 +155,7 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 );
                             }
                             ?>
+
                             <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
                                 <div class="flex flex-col gap-2">
                                     <?php if ($cat) : ?>
@@ -161,14 +171,13 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     </p>
                                 </div>
 
+                                <!-- Visual CTA text only (no inner link) -->
                                 <?php
-                                $href   = !empty($small_cta['url']) ? esc_url($small_cta['url']) : esc_url($link);
-                                $target = !empty($small_cta['target']) ? ' target="'.esc_attr($small_cta['target']).'" rel="noopener"' : '';
                                 $label  = !empty($small_cta['title']) ? esc_html($small_cta['title']) : esc_html($small_cta_text);
                                 ?>
-                                <a href="<?php echo $href; ?>" class="<?php echo esc_attr($link_color_class); ?> underline"<?php echo $target; ?>>
+                                <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
                                     <?php echo $label; ?>
-                                </a>
+                                </span>
                             </div>
                         </article>
                     <?php endforeach; ?>
@@ -187,7 +196,16 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         $cat     = _matrix_first_cat_name($pid);
                         $date    = get_the_date(get_option('date_format'), $pid);
                         ?>
-                        <article class="flex max-lg:justify-center max-lg:items-center  relative max-lg:h-[294px] lg:h-[696px] overflow-hidden group">
+                        <article class="relative max-lg:h-[294px] lg:h-[696px] overflow-hidden group">
+                            <!-- Full-card link (covers entire card) -->
+                            <a
+                                href="<?php echo esc_url($link); ?>"
+                                class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
+                            >
+                                <span class="sr-only"><?php echo esc_html($title); ?></span>
+                            </a>
+
                             <?php
                             if ($image) {
                                 echo wp_get_attachment_image(
@@ -202,6 +220,7 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 );
                             }
                             ?>
+
                             <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 <?php echo esc_attr("$overlay_blur_class $overlay_bg_class"); ?> p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
                                 <div>
                                     <?php if ($cat) : ?>
@@ -217,14 +236,13 @@ $layout_class  = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     </p>
                                 </div>
 
+                                <!-- Visual CTA text only (no inner link) -->
                                 <?php
-                                $href   = !empty($big_cta['url']) ? esc_url($big_cta['url']) : esc_url($link);
-                                $target = !empty($big_cta['target']) ? ' target="'.esc_attr($big_cta['target']).'" rel="noopener"' : '';
                                 $label  = !empty($big_cta['title']) ? esc_html($big_cta['title']) : esc_html($big_cta_text);
                                 ?>
-                                <a href="<?php echo $href; ?>" class="<?php echo esc_attr($link_color_class); ?> underline"<?php echo $target; ?>>
+                                <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
                                     <?php echo $label; ?>
-                                </a>
+                                </span>
                             </div>
                         </article>
                     </div>
