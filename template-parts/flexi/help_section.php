@@ -127,223 +127,238 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
 // =====================
 ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>"
-    class="flex relative"
-    role="region"
-    aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
-    style="background-color: <?php echo esc_attr($background_color); ?>; color: <?php echo esc_attr($text_color); ?>;"
+  id="<?php echo esc_attr($section_id); ?>"
+  class="flex relative"
+  role="region"
+  aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
+  style="background-color: <?php echo esc_attr($background_color); ?>; color: <?php echo esc_attr($text_color); ?>;"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container py-12  max-xxl:px-[1rem] <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
+<div class="flex flex-col items-center w-full mx-auto max-w-container
+            py-12
+            max-sm:pt-4 max-sm:pb-8
+            max-xxl:px-[1rem]
+            <?php echo esc_attr($border_radius . ' ' . implode(' ', $padding_classes)); ?>">
 
-        <div class="flex relative flex-col gap-2 justify-center items-center self-stretch max-sm:px-4 max-sm:py-6">
-            <div class="flex relative gap-8 justify-center items-center w-full max-lg:flex-col max-lg:gap-6 max-lg:items-center max-sm:gap-5 max-w-[837px]">
 
-                <?php if (!empty($heading)) : ?>
-                    <header class="flex relative gap-2 justify-center items-center">
-                        <<?php echo esc_attr($heading_tag); ?>
-                            id="<?php echo esc_attr($section_id); ?>-heading"
-                            class="relative text-3xl font-bold tracking-wider leading-10 whitespace-nowrap max-lg:text-3xl max-lg:leading-9 max-lg:text-center max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
-                        >
-                            <?php echo esc_html($heading); ?>
-                        </<?php echo esc_attr($heading_tag); ?>>
-                    </header>
-                <?php endif; ?>
+    <div class="flex relative flex-col gap-2 justify-center items-center self-stretch max-sm:px-4 max-sm:py-6">
+      <div class="flex relative gap-8 justify-center items-center w-full max-lg:gap-6 max-lg:items-center max-sm:gap-5 max-md:flex-wrap max-md:justify-start max-w-[837px]">
 
-                <!-- Dropdown wrapper -->
-                <div class="flex relative flex-col items-start self-stretch w-full lg:w-[356px] max-lg:w-full  max-sm:w-full">
-                    <div class="flex relative flex-col gap-1 items-start self-stretch">
-                        <div class="relative w-full">
+        <?php if (!empty($heading)) : ?>
+          <header
+            class="flex relative gap-2 justify-center items-center
+                   max-md:w-full max-md:flex-[0_0_100%] max-md:flex-col max-md:items-start"
+          >
+            <<?php echo esc_attr($heading_tag); ?>
+              id="<?php echo esc_attr($section_id); ?>-heading"
+              class="relative text-3xl font-bold tracking-wider leading-10 whitespace-nowrap
+                     max-lg:text-3xl max-lg:leading-9 max-lg:text-center
+                     max-sm:text-2xl max-sm:tracking-wide max-sm:leading-8"
+            >
+              <?php echo esc_html($heading); ?>
+            </<?php echo esc_attr($heading_tag); ?>>
+          </header>
+        <?php endif; ?>
 
-                            <?php if ($dropdown_ui === 'nice_select') : ?>
-                                <!-- ============= -->
-                                <!-- NICE SELECT  -->
-                                <!-- ============= -->
-                                <label for="<?php echo esc_attr($native_select_id); ?>" class="sr-only">
-                                    <?php echo esc_html($dropdown_placeholder); ?>
-                                </label>
+        <!-- Dropdown wrapper -->
+        <div class="flex relative items-start self-stretch">
+          <div class="flex relative gap-1 items-start self-stretch">
+            <div class="relative">
 
-                                <select
-                                    id="<?php echo esc_attr($native_select_id); ?>"
-                                    class="hidden"  <!-- hidden until transformed; JS will show fallback if lib missing -->
-                                    aria-label="<?php echo esc_attr($dropdown_placeholder); ?>"
-                                >
-                                    <option value="" disabled selected>
-                                        <?php echo esc_html($dropdown_placeholder); ?>
-                                    </option>
-                                    <?php if (!empty($items)) : ?>
-                                        <?php foreach ($items as $it) : ?>
-                                            <option
-                                                value="<?php echo esc_url($it['url']); ?>"
-                                                data-url="<?php echo esc_url($it['url']); ?>"
-                                                title="<?php echo esc_attr($it['title']); ?>"
-                                            >
-                                                <?php echo esc_html($it['title']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </select>
+              <?php if ($dropdown_ui === 'nice_select') : ?>
+                <!-- ============= -->
+                <!-- NICE SELECT  -->
+                <!-- ============= -->
+                <label for="<?php echo esc_attr($native_select_id); ?>" class="sr-only">
+                  <?php echo esc_html($dropdown_placeholder); ?>
+                </label>
 
-                                <!-- Scoped styles to mimic your Tailwind demo when transformed by Nice Select -->
-                                <style>
-                                    /* Scope to this section to avoid global side-effects */
-                                    #<?php echo esc_attr($section_id); ?> .nice-select {
-                                        display: flex !important;
-                                        align-items: center;
-                                        justify-content: space-between;
-                                        width: 100%;
-                                        padding: 0.75rem 1rem; /* py-3 px-4 */
-                                        background-color: #ffffff;
-                                        border: 1px solid #3730a3; /* indigo-800 */
-                                        cursor: pointer;
-                                        transition: background-color .2s;
-                                        line-height: 1.5rem; /* leading-6 */
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select:focus {
-                                        outline: none;
-                                        box-shadow: 0 0 0 2px rgba(79,70,229,.5), 0 0 0 4px #fff; /* ring-2 ring-indigo-600 ring-offset-2 */
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select:hover {
-                                        background-color: #eef2ff; /* indigo-50 */
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .current {
-                                        color: #000; /* text-black */
-                                        font-size: 1rem; /* text-base */
-                                        flex: 1 1 auto;
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .list {
-                                        z-index: 50; /* z-50 */
-                                        width: 100%;
-                                        border: 1px solid #3730a3; /* border indigo-800 */
-                                        border-top: 0;
-                                        box-shadow: 0 10px 15px -3px rgba(0,0,0,.1),
-                                                    0 4px 6px -2px rgba(0,0,0,.05);
-                                        max-height: 15rem; /* max-h-60 */
-                                        overflow-y: auto;
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .option {
-                                        padding: 0.75rem 1rem; /* py-3 px-4 */
-                                        color: #000;
-                                        font-size: 1rem;
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .option:hover,
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .option.focus,
-                                    #<?php echo esc_attr($section_id); ?> .nice-select .option.selected.focus {
-                                        background-color: #eef2ff; /* indigo-50 */
-                                    }
-                                    #<?php echo esc_attr($section_id); ?> .nice-select:after {
-                                        /* Replace default caret with your chevron color/size/positioning */
-                                        border: none;
-                                        content: '';
-                                    }
-                                    /* Add your custom chevron via background to the right if you prefer */
-                                </style>
+                <select
+                  id="<?php echo esc_attr($native_select_id); ?>"
+                  class="hidden"  <!-- hidden until transformed; JS will show fallback if lib missing -->
+                  aria-label="<?php echo esc_attr($dropdown_placeholder); ?>"
+                >
+                  <option value="" disabled selected>
+                    <?php echo esc_html($dropdown_placeholder); ?>
+                  </option>
+                  <?php if (!empty($items)) : ?>
+                    <?php foreach ($items as $it) : ?>
+                      <option
+                        value="<?php echo esc_url($it['url']); ?>"
+                        data-url="<?php echo esc_url($it['url']); ?>"
+                        title="<?php echo esc_attr($it['title']); ?>"
+                      >
+                        <?php echo esc_html($it['title']); ?>
+                      </option>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
+                </select>
 
-                            <?php else : ?>
-                                <!-- ====================== -->
-                                <!-- CUSTOM ARIA LISTBOX UI -->
-                                <!-- ====================== -->
-                                <button
-                                    id="<?php echo esc_attr($dropdown_button_id); ?>"
-                                    type="button"
-                                    class="flex relative justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid transition-colors duration-200 cursor-pointer btn max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2 hover:bg-indigo-50"
-                                    aria-haspopup="listbox"
-                                    aria-expanded="false"
-                                    aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
-                                >
-                                    <div class="flex relative gap-2 items-center">
-                                        <span id="<?php echo esc_attr($dropdown_button_id); ?>-label" class="relative text-base leading-6 text-black">
-                                            <span class="text-base text-black max-lg:text-base max-sm:text-sm js-selected-label">
-                                                <?php echo esc_html($dropdown_placeholder); ?>
-                                            </span>
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <svg
-                                            id="<?php echo esc_attr($chevron_id); ?>"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="transition-transform duration-200 chevron-icon"
-                                            style="width:24px;height:24px;position:relative;flex-shrink:0;"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                d="M6 9L12 15L18 9"
-                                                stroke="#0902A4"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                        </svg>
-                                    </div>
-                                </button>
+                <!-- Scoped styles to mimic your Tailwind demo when transformed by Nice Select -->
+                <style>
+                  /* Scope to this section to avoid global side-effects */
+                  #<?php echo esc_attr($section_id); ?> .nice-select {
+                    display: flex !important;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    padding: 0.75rem 1rem; /* py-3 px-4 */
+                    background-color: #ffffff;
+                    border: 1px solid #3730a3; /* indigo-800 */
+                    cursor: pointer;
+                    transition: background-color .2s;
+                    line-height: 1.5rem; /* leading-6 */
+                    min-height: 48px;
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(79,70,229,.5), 0 0 0 4px #fff; /* ring-2 ring-indigo-600 ring-offset-2 */
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select:hover {
+                    background-color: #eef2ff; /* indigo-50 */
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select .current {
+                    color: #000; /* text-black */
+                    font-size: 1rem; /* text-base */
+                    flex: 1 1 auto;
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select .list {
+                    z-index: 50; /* z-50 */
+                    width: 100%;
+                    border: 1px solid #3730a3; /* border indigo-800 */
+                    border-top: 0;
+                    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1),
+                                0 4px 6px -2px rgba(0,0,0,.05);
+                    max-height: 15rem; /* max-h-60 */
+                    overflow-y: auto;
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select .option {
+                    padding: 0.75rem 1rem; /* py-3 px-4 */
+                    color: #000;
+                    font-size: 1rem;
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select .option:hover,
+                  #<?php echo esc_attr($section_id); ?> .nice-select .option.focus,
+                  #<?php echo esc_attr($section_id); ?> .nice-select .option.selected.focus {
+                    background-color: #eef2ff; /* indigo-50 */
+                  }
+                  #<?php echo esc_attr($section_id); ?> .nice-select:after {
+                    border: none;
+                    content: '';
+                  }
+                </style>
 
-                                <ul
-                                    id="<?php echo esc_attr($listbox_id); ?>"
-                                    role="listbox"
-                                    aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
-                                    class="hidden overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
-                                    tabindex="-1"
-                                >
-                                    <?php if (!empty($items)) : ?>
-                                        <?php foreach ($items as $it) : ?>
-                                            <li
-                                                role="option"
-                                                class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-indigo-50 focus:bg-indigo-50 max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2"
-                                                data-url="<?php echo esc_url($it['url']); ?>"
-                                                tabindex="-1"
-                                            >
-                                                <?php echo esc_html($it['title']); ?>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    <?php else : ?>
-                                        <li class="px-4 py-3 text-sm text-gray-500" aria-disabled="true">No items available.</li>
-                                    <?php endif; ?>
-                                </ul>
-
-                                <div id="<?php echo esc_attr($status_id); ?>" role="status" aria-live="polite" class="sr-only"></div>
-                            <?php endif; ?>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search button (navigates to the selected item) -->
-                <div class="flex relative flex-col gap-2 items-start w-32 max-lg:w-full max-w-full lg:max-w-[200px] max-sm:w-full">
-                    <button
-                        type="button"
-                        class="inline-flex justify-center items-center px-8 py-4 w-full text-lg leading-5 text-center whitespace-nowrap transition-colors duration-300 cursor-pointer max-sm:px-6 max-sm:py-3.5 max-sm:text-base border border-solid <?php echo esc_attr($search_btn_class); ?>"
-                        aria-label="<?php echo esc_attr__('Search', 'matrix-starter'); ?>"
-                        style="background-color: <?php echo esc_attr($button_bg_color); ?>; color: <?php echo esc_attr($button_text_color); ?>; border-color: <?php echo esc_attr($button_border_color); ?>;"
+              <?php else : ?>
+                <!-- ====================== -->
+                <!-- CUSTOM ARIA LISTBOX UI -->
+                <!-- ====================== -->
+                <button
+                  id="<?php echo esc_attr($dropdown_button_id); ?>"
+                  type="button"
+                  class="flex relative justify-between items-center px-4 py-3 w-full min-h-[48px]
+                         bg-white border border-indigo-800 border-solid transition-colors duration-200
+                         cursor-pointer btn
+                         max-lg:px-3.5 max-lg:py-2.5
+                         max-sm:px-3 max-sm:py-2
+                         hover:bg-indigo-50"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
+                >
+                  <div class="flex relative gap-2 items-center">
+                    <span id="<?php echo esc_attr($dropdown_button_id); ?>-label" class="relative text-base leading-6 text-black">
+                      <span class="text-base text-black max-lg:text-base max-sm:text-sm js-selected-label">
+                        <?php echo esc_html($dropdown_placeholder); ?>
+                      </span>
+                    </span>
+                  </div>
+                  <div>
+                    <svg
+                      id="<?php echo esc_attr($chevron_id); ?>"
+                      width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="transition-transform duration-200 chevron-icon"
+                      style="width:24px;height:24px;position:relative;flex-shrink:0;"
+                      aria-hidden="true"
                     >
-                        <span class="relative text-[1.125rem] tracking-[0.01em] leading-[1.125rem] font-primary text-center"><?php echo esc_html__('Search', 'matrix-starter'); ?></span>
-                        <?php if ($enable_icon) : ?>
-                            <svg class="ml-2" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        <?php endif; ?>
-                    </button>
+                      <path
+                        d="M6 9L12 15L18 9"
+                        stroke="#0902A4"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </button>
 
-                    <!-- Hover/Focus state via inline style (colors are dynamic) -->
-                    <style>
-                        .<?php echo esc_attr($search_btn_class); ?>:hover,
-                        .<?php echo esc_attr($search_btn_class); ?>:focus {
-                            background-color: <?php echo esc_attr($button_hover_bg_color); ?> !important;
-                            color: <?php echo esc_attr($button_hover_text_color); ?> !important;
-                            border-color: <?php echo esc_attr($button_hover_border_color); ?> !important;
-                            outline: 2px solid <?php echo esc_attr($button_hover_border_color); ?>;
-                            outline-offset: 2px;
-                        }
-                        .<?php echo esc_attr($search_btn_class); ?>:hover svg path,
-                        .<?php echo esc_attr($search_btn_class); ?>:focus svg path {
-                            stroke: <?php echo esc_attr($button_hover_text_color); ?>;
-                        }
-                    </style>
-                </div>
+                <ul
+                  id="<?php echo esc_attr($listbox_id); ?>"
+                  role="listbox"
+                  aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
+                  class="hidden overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
+                  tabindex="-1"
+                >
+                  <?php if (!empty($items)) : ?>
+                    <?php foreach ($items as $it) : ?>
+                      <li
+                        role="option"
+                        class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-indigo-50 focus:bg-indigo-50 max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2"
+                        data-url="<?php echo esc_url($it['url']); ?>"
+                        tabindex="-1"
+                      >
+                        <?php echo esc_html($it['title']); ?>
+                      </li>
+                    <?php endforeach; ?>
+                  <?php else : ?>
+                    <li class="px-4 py-3 text-sm text-gray-500" aria-disabled="true">No items available.</li>
+                  <?php endif; ?>
+                </ul>
+
+                <div id="<?php echo esc_attr($status_id); ?>" role="status" aria-live="polite" class="sr-only"></div>
+              <?php endif; ?>
 
             </div>
+          </div>
         </div>
+
+        <!-- Search button (navigates to the selected item) -->
+        <div class="flex relative flex-col gap-2 items-start w-32">
+          <button
+            type="button"
+            class="inline-flex justify-center items-center px-8 py-4 w-full text-lg leading-5 text-center whitespace-nowrap transition-colors duration-300 cursor-pointer max-sm:px-6 max-sm:py-3.5 max-sm:text-base border border-solid <?php echo esc_attr($search_btn_class); ?>"
+            aria-label="<?php echo esc_attr__('Search', 'matrix-starter'); ?>"
+            style="background-color: <?php echo esc_attr($button_bg_color); ?>; color: <?php echo esc_attr($button_text_color); ?>; border-color: <?php echo esc_attr($button_border_color); ?>;"
+          >
+            <span class="relative text-[1.125rem] tracking-[0.01em] leading-[1.125rem] font-primary text-center"><?php echo esc_html__('Search', 'matrix-starter'); ?></span>
+            <?php if ($enable_icon) : ?>
+              <svg class="ml-2" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            <?php endif; ?>
+          </button>
+
+          <!-- Hover/Focus state via inline style (colors are dynamic) -->
+          <style>
+            .<?php echo esc_attr($search_btn_class); ?>:hover,
+            .<?php echo esc_attr($search_btn_class); ?>:focus {
+              background-color: <?php echo esc_attr($button_hover_bg_color); ?> !important;
+              color: <?php echo esc_attr($button_hover_text_color); ?> !important;
+              border-color: <?php echo esc_attr($button_hover_border_color); ?> !important;
+              outline: 2px solid <?php echo esc_attr($button_hover_border_color); ?>;
+              outline-offset: 2px;
+            }
+            .<?php echo esc_attr($search_btn_class); ?>:hover svg path,
+            .<?php echo esc_attr($search_btn_class); ?>:focus svg path {
+              stroke: <?php echo esc_attr($button_hover_text_color); ?>;
+            }
+          </style>
+        </div>
+
+      </div>
     </div>
+  </div>
 </section>
+
 
 <script>
 (function() {

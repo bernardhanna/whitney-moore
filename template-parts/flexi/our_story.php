@@ -51,7 +51,7 @@ if ($right_image_id) {
         <!-- Two-column layout: left content, right single image -->
         <div class="flex relative flex-col-reverse gap-10 w-full lg:flex-row lg:gap-12">
             <!-- Left content -->
-            <div class="w-full lg:flex-1 max-md:-mt-[10rem] z-30">
+            <div class="w-full lg:flex-1 max-md:-mt-[8rem] z-30">
                 <div
                     class="max-w-[680px] px-8 py-10 bg-opacity-90 wp_editor"
                     style="background-color: <?php echo esc_attr($content_bg); ?>; color: <?php echo esc_attr($text_color); ?>;"
@@ -98,7 +98,7 @@ if ($right_image_id) {
             </div>
 
             <!-- Right: single image (SVG friendly) -->
-            <div class="flex relative justify-end items-center w-full lg:flex-1">
+            <div class="flex relative justify-end items-center w-full lg:flex-1 pt-[3.75rem]">
                 <?php if ($right_image_id) : ?>
                     <?php
                     // Use wp_get_attachment_image so SVGs from media render as <img>. No aspect utilities.

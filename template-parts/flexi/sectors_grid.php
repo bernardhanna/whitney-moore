@@ -80,7 +80,6 @@ if ($metronet_active) {
 $total      = is_array($posts_array) ? count($posts_array) : 0;
 $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 ?>
-
 <section
     id="<?php echo esc_attr($section_id); ?>"
     class="flex overflow-hidden relative"
@@ -90,7 +89,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
     ?>"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 md:py-12 max-xxl:px-[1rem] <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-10 pb-5 md:py-12 max-xxl:px-[1rem] <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
         <header class="flex flex-col justify-center items-center w-full text-center">
             <?php if (!empty($section_heading)) : ?>

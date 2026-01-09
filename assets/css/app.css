@@ -2633,3 +2633,49 @@ aside .wc-block-product-categories-list-item {
   width: 20px!important;
   height: 20px!important;
 }
+
+@layer components {
+  .panos {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

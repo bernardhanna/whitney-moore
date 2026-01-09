@@ -53,15 +53,20 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
   role="contentinfo"
   aria-label="<?php esc_attr_e('Site footer', 'matrix-starter'); ?>"
 >
-  <div class="flex flex-col gap-12 justify-center items-center w-full mx-auto max-w-container  py-12 max-md:gap-8 max-md:py-8 max-sm:gap-6 max-xxl:px-[1rem] max-sm:py-6 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+  <div class="flex flex-col gap-12 justify-center items-center w-full mx-auto max-w-container py-12 max-md:gap-8 max-md:py-8 max-sm:gap-6 max-xxl:px-[1rem] max-sm:py-6 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
     <div class="h-px w-[100px] bg-[#ffffff85] self-start" aria-hidden="true"></div>
 
     <!-- Top Columns (5) -->
-    <nav class="flex gap-8 items-start self-stretch max-md:flex-wrap max-md:gap-6 max-sm:flex-col max-sm:gap-8" aria-label="<?php esc_attr_e('Footer navigation', 'matrix-starter'); ?>">
+    <nav
+      class="grid grid-cols-2 gap-x-8 gap-y-10 items-start self-stretch
+       max-[480px]:grid-cols-1
+       lg:grid-cols-5"
+      aria-label="<?php esc_attr_e('Footer navigation', 'matrix-starter'); ?>"
+    >
 
       <!-- Column 1 -->
-      <section class="flex flex-col gap-8 items-start self-stretch flex-[1_0_0] max-md:flex-[1_1_calc(50%_-_12px)] max-md:min-w-[250px] max-sm:flex-none max-sm:w-full">
+      <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
         <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col1_heading); ?>
         </h2>
@@ -81,7 +86,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
 
       <!-- Column 2 (menu or Sectors CPT) -->
-      <section class="flex flex-col gap-8 items-start self-stretch flex-[1_0_0] max-md:flex-[1_1_calc(50%_-_12px)] max-md:min-w-[250px] max-sm:flex-none max-sm:w-full">
+      <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
         <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col2_heading); ?>
         </h2>
@@ -117,7 +122,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
 
       <!-- Column 3 (menu or Practice Areas CPT) -->
-      <section class="flex flex-col gap-8 items-start self-stretch flex-[1_0_0] max-md:flex-[1_1_calc(50%_-_12px)] max-md:min-w-[250px] max-sm:flex-none max-sm:w-full">
+      <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
         <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col3_heading); ?>
         </h2>
@@ -153,7 +158,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
 
       <!-- Column 4 (menu or default KI links) -->
-      <section class="flex flex-col gap-8 items-start self-stretch flex-[1_0_0] max-md:flex-[1_1_calc(50%_-_12px)] max-md:min-w-[250px] max-sm:flex-none max-sm:w-full">
+      <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
         <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col4_heading); ?>
         </h2>
@@ -180,7 +185,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
 
       <!-- Column 5: Get in touch -->
-      <section class="flex flex-col gap-8 items-start self-stretch flex-[1_0_0] max-md:flex-[1_1_calc(50%_-_12px)] max-md:min-w-[250px] max-sm:flex-none max-sm:w-full">
+      <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
         <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php esc_html_e('Get in touch', 'matrix-starter'); ?>
         </h2>

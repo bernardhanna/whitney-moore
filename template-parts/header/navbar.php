@@ -82,7 +82,7 @@ $secondary_navigation = Navi::make()->build('secondary');
         <img
           src="<?php echo esc_url($logo_url); ?>"
           alt="<?php echo esc_attr($logo_alt); ?>"
-          class="max-w-[200px] h-auto w-auto lg:object-contain"
+          class="max-w-[85px] sm:max-w-[120px] lg:max-w-[200px] h-auto w-auto lg:object-contain"
           style="z-index:99999999999999;"
         />
       <?php else : ?>

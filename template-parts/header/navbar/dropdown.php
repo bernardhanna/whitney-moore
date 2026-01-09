@@ -16,6 +16,15 @@ if (!$item) {
 }
 
 $sections = $item->children ?? [];
+
+/**
+ * Helper: detect “Practice areas” section by label (case-insensitive).
+ * If labels are translated later, you can adapt this matcher.
+ */
+function mytheme_is_practice_areas_section($label) {
+    $label = trim((string) $label);
+    return mb_strtolower($label) === 'practice areas';
+}
 ?>
 
 <div
@@ -33,15 +42,20 @@ $sections = $item->children ?? [];
   role="menu"
   aria-label="<?php echo esc_attr($item->label); ?> submenu"
 >
-  <div class="max-w-[1400px] mx-auto w-full px-10 py-8">
-    <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+  <div class="mx-auto w-full max-w-[1600px] px-6 xl:px-10 2xl:px-14 py-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-[0.85fr_1.25fr]">
       <?php foreach ($sections as $section): ?>
         <?php
           $s_label  = $section->label ?? '';
           $entries  = $section->children ?? []; // 3rd tier items
+          $is_practice = mytheme_is_practice_areas_section($s_label);
+          $section_classes = $is_practice
+          ? 'w-full bg-[#E2E2E2] p-8'
+          : 'w-full';
+          $header_classes = $is_practice ? 'mb-6' : 'mb-4';
         ?>
-        <section class="w-full">
-          <header class="mb-4">
+        <section class="<?php echo esc_attr($section_classes); ?>">
+          <header class="<?php echo esc_attr($header_classes); ?>">
             <h2 class="text-2xl font-bold leading-tight text-primary">
               <?php echo esc_html($s_label); ?>
             </h2>
@@ -76,7 +90,10 @@ $sections = $item->children ?? [];
                 ?>
 
                 <!-- 3 fixed columns on sm+ to keep rows aligned -->
-                <div class="grid grid-cols-1 gap-y-6 gap-x-12 sm:grid-cols-3">
+                <div class="<?php echo $is_practice
+                  ? 'grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-3'
+                  : 'grid grid-cols-1 gap-y-6 gap-x-12 sm:grid-cols-3'; ?>">
+
                   <!-- COL 1: 3rd tier -->
                   <article class="w-full">
                     <div class="flex gap-3 items-start">
@@ -92,7 +109,7 @@ $sections = $item->children ?? [];
                       <?php endif; ?>
 
                       <div class="min-w-0">
-                        <h3 class="text-base font-semibold text-black whitespace-nowrap">
+                        <h3 class="text-base font-semibold text-black">
                           <a
                             href="<?php echo esc_url($e_url); ?>"
                             class="whitespace-nowrap rounded hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"

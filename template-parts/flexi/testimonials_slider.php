@@ -114,7 +114,7 @@ $allowed_svg = [
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
+  <div class="flex flex-col items-center pt-10 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
 
     <!-- Headings -->
     <div class="flex flex-col gap-4 items-start w-full max-w-container">
@@ -151,12 +151,12 @@ $allowed_svg = [
             $img_alt     = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: $name) : $name;
             $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
           ?>
-            <div class="px-2">
+            <div class="px-4">
               <article class="relative h-[480px] overflow-hidden group">
                 <?php if ($image_id) :
                   echo wp_get_attachment_image($image_id, 'large', false, [
                     'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
-                    'class' => 'absolute inset-0 w-full h-full object-cover', 'loading' => 'lazy',
+                    'class' => 'absolute inset-0 w-full h-full object-cover object-top', 'loading' => 'lazy',
                   ]);
                 endif; ?>
 
@@ -234,8 +234,9 @@ $allowed_svg = [
        Right is negative to allow right-side overflow to show. */
     #<?php echo esc_attr($section_id); ?> [data-slick-shell] {
       clip-path: inset(0 -100vw 0 24px);
-      -webkit-clip-path: inset(0 -100vw 0 24px);
+      -webkit-clip-path: inset(0 -100vw 0 0px);
     }
+
   </style>
 
   <script>
