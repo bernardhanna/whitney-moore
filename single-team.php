@@ -273,109 +273,128 @@ get_header();
                                 </section>
                             <?php endif; ?>
 
+                            
                             <!-- Testimonials (dynamic Slick slider) -->
-                            <?php if ($enable_testimonials && !empty($slides)) : ?>
-                                <section class="flex overflow-hidden relative" aria-label="Client testimonials">
-                                    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
-                                        <div class="pt-6 max-w-[920px]">
-                                            <header>
-                                                <h2 class="text-2xl font-semibold leading-none text-indigo-800 max-md:max-w-full">
-                                                    <?php
-                                                    $default_heading = sprintf('What they say about %s', $member_name);
-                                                    echo esc_html($testimonials_heading ?: $default_heading);
-                                                    ?>
-                                                </h2>
-                                            </header>
+                                <?php if ($enable_testimonials && !empty($slides)) : ?>
+                                  <section class="relative flex w-full overflow-hidden" aria-label="Client testimonials">
+                                    <div class="mx-auto flex w-full min-w-0 max-w-container flex-col items-center pt-5 pb-5 max-lg:px-5">
+                                      <div class="w-full min-w-0 pt-6 max-w-[920px]">
+                                        <header>
+                                          <h2 class="text-2xl font-semibold leading-none text-indigo-800">
+                                            <?php
+                                            $default_heading = sprintf('What they say about %s', $member_name);
+                                            echo esc_html($testimonials_heading ?: $default_heading);
+                                            ?>
+                                          </h2>
+                                        </header>
 
-                                            <article class="flex flex-col py-14 pr-14 pl-20 mt-4 w-full bg-indigo-400 bg-opacity-20 max-md:max-w-full max-md:px-5"
-                                                     role="region"
-                                                     aria-label="Customer testimonials">
+                                        <article
+                                          class="mt-4 flex w-full min-w-0 flex-col bg-indigo-400 bg-opacity-20
+                                                 py-14 px-5 lg:pl-20 lg:pr-14 max-md:py-10"
+                                          role="region"
+                                          aria-label="Customer testimonials"
+                                        >
+                                          <!-- Slider -->
+                                          <div id="<?php echo esc_attr($slider_id); ?>" class="w-full min-w-0">
+                                            <?php foreach ($slides as $slide) : ?>
+                                              <div class="w-full min-w-0">
+                                                <div class="relative w-full min-w-0 text-indigo-800">
+                                                  <?php if (!empty($slide['quote'])) : ?>
+                                                    <blockquote class="relative z-0 w-full min-w-0 text-3xl font-light leading-[52px] max-md:pl-8 max-md:text-2xl max-md:leading-9">
+                                                    <img
+                                                      src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/quotes.svg'); ?>"
+                                                      alt=""
+                                                      aria-hidden="true"
+                                                      class="absolute left-[-30px] top-[-35px]
+                                                             z-0 h-[48px] w-[48px]
+                                                             md:left-[-40px]
+                                                             max-md:top-[-18px]"
+                                                    />
 
-                                                <!-- Slider -->
-                                                <div id="<?php echo esc_attr($slider_id); ?>" class="w-full">
-                                                    <?php foreach ($slides as $slide) : ?>
-                                                        <div class="w-full">
-                                                            <div class="relative w-full text-indigo-800 max-md:max-w-full">
-                                                                <?php if (!empty($slide['quote'])) : ?>
-                                                                    <blockquote class="z-0 text-3xl font-light leading-[52px] max-md:max-w-full">
-                                                                        <span class="absolute -left-10 z-0 text-8xl font-bold leading-none h-[100px] top-[-39px] w-[50px] max-md:text-4xl" aria-hidden="true">"</span>
-                                                                        <?php echo esc_html($slide['quote']); ?>
-                                                                    </blockquote>
-                                                                <?php endif; ?>
-                                                            </div>
-
-                                                            <?php if (!empty($slide['source']) || !empty($slide['year'])) : ?>
-                                                                <footer class="mt-6 w-full text-lg tracking-wider leading-none text-black max-md:max-w-full">
-                                                                    <cite class="not-italic">
-                                                                        <?php if (!empty($slide['source'])) : ?>
-                                                                            <div class="font-semibold max-md:max-w-full"><?php echo esc_html($slide['source']); ?></div>
-                                                                        <?php endif; ?>
-                                                                        <?php if (!empty($slide['year'])) : ?>
-                                                                            <time datetime="<?php echo esc_attr($slide['year']); ?>" class="max-md:max-w-full">
-                                                                                <?php echo esc_html($slide['year']); ?>
-                                                                            </time>
-                                                                        <?php endif; ?>
-                                                                    </cite>
-                                                                </footer>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    <?php endforeach; ?>
+                                                                                                        </span>
+                                                                                                        <?php echo esc_html($slide['quote']); ?>
+                                                    </blockquote>
+                                                  <?php endif; ?>
                                                 </div>
 
-                                                <!-- Arrows -->
-                                                <?php if (count($slides) > 1) : ?>
-                                                    <nav class="flex gap-4 items-center self-start mt-6" aria-label="Testimonial navigation">
-                                                        <button id="<?php echo esc_attr($prev_id); ?>"
-                                                                class="btn carousel-button flex gap-2 justify-center items-center w-10 h-10 rounded-[1000px] w-fit whitespace-nowrap bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700"
-                                                                type="button"
-                                                                aria-label="Previous testimonial">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                                <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                        </button>
-
-                                                        <button id="<?php echo esc_attr($next_id); ?>"
-                                                                class="btn carousel-button flex gap-2 justify-center items-center w-10 h-10 rounded-[1000px] w-fit whitespace-nowrap bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700"
-                                                                type="button"
-                                                                aria-label="Next testimonial">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                        </button>
-                                                    </nav>
+                                                <?php if (!empty($slide['source']) || !empty($slide['year'])) : ?>
+                                                  <footer class="mt-6 w-full min-w-0 text-lg tracking-wider leading-none text-black">
+                                                    <cite class="not-italic">
+                                                      <?php if (!empty($slide['source'])) : ?>
+                                                        <div class="font-semibold"><?php echo esc_html($slide['source']); ?></div>
+                                                      <?php endif; ?>
+                                                      <?php if (!empty($slide['year'])) : ?>
+                                                        <time datetime="<?php echo esc_attr($slide['year']); ?>">
+                                                          <?php echo esc_html($slide['year']); ?>
+                                                        </time>
+                                                      <?php endif; ?>
+                                                    </cite>
+                                                  </footer>
                                                 <?php endif; ?>
-                                            </article>
-                                        </div>
+                                              </div>
+                                            <?php endforeach; ?>
+                                          </div>
+
+                                          <!-- Arrows -->
+                                          <?php if (count($slides) > 1) : ?>
+                                            <nav class="mt-6 flex items-center self-start gap-4" aria-label="Testimonial navigation">
+                                              <button
+                                                id="<?php echo esc_attr($prev_id); ?>"
+                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-indigo-600 p-2 hover:bg-indigo-700 focus:bg-indigo-700"
+                                                type="button"
+                                                aria-label="Previous testimonial"
+                                              >
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                  <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                              </button>
+
+                                              <button
+                                                id="<?php echo esc_attr($next_id); ?>"
+                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-indigo-600 p-2 hover:bg-indigo-700 focus:bg-indigo-700"
+                                                type="button"
+                                                aria-label="Next testimonial"
+                                              >
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                              </button>
+                                            </nav>
+                                          <?php endif; ?>
+                                        </article>
+                                      </div>
                                     </div>
-                                </section>
+                                  </section>
 
-                                <?php if (count($slides) > 1) : ?>
+                                  <?php if (count($slides) > 1) : ?>
                                     <script>
-                                        (function($){
-                                            $(document).ready(function(){
-                                                var $slider = $('#<?php echo esc_js($slider_id); ?>');
-                                                if (!$slider.length || typeof $slider.slick !== 'function') return;
-                                                if ($slider.hasClass('slick-initialized')) return;
+                                      (function($){
+                                        $(document).ready(function(){
+                                          var $slider = $('#<?php echo esc_js($slider_id); ?>');
+                                          if (!$slider.length || typeof $slider.slick !== 'function') return;
+                                          if ($slider.hasClass('slick-initialized')) return;
 
-                                                $slider.slick({
-                                                    slidesToShow: 1,
-                                                    slidesToScroll: 1,
-                                                    infinite: true,
-                                                    arrows: true,
-                                                    prevArrow: $('#<?php echo esc_js($prev_id); ?>'),
-                                                    nextArrow: $('#<?php echo esc_js($next_id); ?>'),
-                                                    dots: false,
-                                                    adaptiveHeight: true,
-                                                    autoplay: false,
-                                                    pauseOnHover: true,
-                                                    pauseOnFocus: true
-                                                });
-                                            });
-                                        })(jQuery);
+                                          $slider.slick({
+                                            slidesToShow: 1,
+                                            slidesToScroll: 1,
+                                            infinite: true,
+                                            arrows: true,
+                                            prevArrow: $('#<?php echo esc_js($prev_id); ?>'),
+                                            nextArrow: $('#<?php echo esc_js($next_id); ?>'),
+                                            dots: false,
+                                            adaptiveHeight: true,
+                                            autoplay: false,
+                                            pauseOnHover: true,
+                                            pauseOnFocus: true
+                                          });
+                                        });
+                                      })(jQuery);
                                     </script>
+                                  <?php endif; ?>
                                 <?php endif; ?>
-                            <?php endif; ?>
-                            <!-- /Testimonials -->
+                                <!-- /Testimonials -->
+
+
 
                         </article>
 
@@ -457,7 +476,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
       </header>
 
       <div class="mt-14 w-full text-xl font-semibold text-zinc-900 max-md:mt-10 max-md:max-w-full">
-        <div class="grid grid-cols-1 gap-6 w-full md:grid-cols-2 lg:grid-cols-3" role="list">
+        <div class="grid grid-cols-1 gap-6 w-full md:grid-cols-2 lg:grid-cols-4" role="list">
           <?php foreach ($sector_terms as $term) :
             $sector_post = $find_sector_post($term);
 
@@ -497,7 +516,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
               );
             }
             ?>
-            <article class="overflow-hidden flex-1 min-h-[320px]" role="listitem">
+            <article class="overflow-hidden flex-1" role="listitem">
               <a href="<?php echo esc_url($card_link); ?>" class="block group">
                 <div class="w-full">
                   <?php echo $img_html; ?>
@@ -522,4 +541,21 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
     }
     ?>
 </main>
+
+
+<style>
+
+.slick-slide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slick-slide.slick-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+</style>
+
 <?php get_footer(); ?>

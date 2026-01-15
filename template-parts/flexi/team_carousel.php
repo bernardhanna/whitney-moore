@@ -168,7 +168,7 @@ if ($source_mode === 'manual') {
     <?php endif; ?>
 
     <?php if (!empty($items)) : ?>
-      <div class="relative mt-8 w-full">
+      <div class="relative mt-8 w-full max-md:mt-0">
 
         <?php if ($enable_slider) : ?>
           <!-- Slider shell with same arrow UI as Testimonials -->
@@ -193,8 +193,8 @@ if ($source_mode === 'manual') {
                     />
 
                     <!-- Overlay card (styled like screenshot) -->
-                    <div class="absolute bottom-6 left-6">
-                      <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw]">
+                    <div class="absolute bottom-6 left-6 right-6">
+                      <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw] w-[-webkit-fill-available]">
                         <?php if ($show_name && !empty($title)) : ?>
                           <div class="text-base font-semibold tracking-normal text-black">
                             <?php echo esc_html($title); ?>

@@ -153,7 +153,7 @@ $base_args = array(
 
         <!-- FILTERS (directly below grid as requested) -->
         <form
-            class="box-border flex justify-between items-start px-20 pt-10 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:px-10 max-md:pt-8 max-md:pb-0 max-sm:px-4 max-sm:pt-5 max-sm:pb-0"
+            class="box-border flex flex-wrap justify-between items-start px-20 pt-10 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:px-10 max-md:pt-8 max-md:pb-0 max-sm:px-4 max-sm:pt-5 max-sm:pb-0"
             method="get"
             action="<?php echo esc_url(get_permalink()); ?>"
             role="search"
@@ -176,7 +176,8 @@ $base_args = array(
             <!-- reset to page 1 on filter submit -->
             <input type="hidden" name="team_page" value="1" />
 
-            <fieldset class="flex gap-8 items-center p-0 m-0 border-0 max-md:flex-col max-md:gap-4 max-sm:gap-3">
+            <fieldset class="flex flex-wrap gap-8 items-center p-0 m-0 border-0 max-md:flex-col max-md:gap-4 max-md:w-full max-sm:gap-3 mb-4 max-md:mb-0">
+
                 <legend class="sr-only">Filter Options</legend>
 
                 <!-- Practice areas -->
@@ -367,7 +368,12 @@ $base_args = array(
         </form>
 
         <!-- GRID -->
-        <div class="grid grid-cols-4 gap-8 mt-10 w-full max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 mx-auto max-w-[1632px]">
+        <div class="grid grid-cols-4 gap-8
+            mt-10 max-md:mt-16 max-sm:mt-20
+            w-full
+            max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1
+            mx-auto max-w-[1632px]">
+
 
             <?php if ($team_query->have_posts()) : ?>
                 <?php while ($team_query->have_posts()) : $team_query->the_post(); ?>
@@ -382,7 +388,7 @@ $base_args = array(
 
                     $bg_style = '';
                     if (!empty($image_url)) {
-                        $bg_style = "background-image: url('" . esc_url($image_url) . "'); background-size: cover; background-position: center;";
+                        $bg_style = "background-image: url('" . esc_url($image_url) . "'); background-size: cover; background-position: top;";
                     } else {
                         $bg_style = "background-color: #e5e7eb;";
                     }

@@ -157,81 +157,104 @@ function _matrix_first_cat_name($post_id) {
     </section>
 
     <!-- FILTERS (Alpine pills + search) -->
-    <section class="flex overflow-hidden relative">
-        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-7xl max-lg:px-5">
-            <form
-                method="get"
-                action="<?php echo esc_url(get_permalink(get_option('page_for_posts')) ?: home_url('/')); ?>"
-                class="w-full"
-                x-data="{
-                    cat: '<?php echo esc_js($blog_cat); ?>',
-                    search: '<?php echo esc_js($blog_search); ?>',
-                    setCat(slug){ this.cat = slug; this.$nextTick(() => this.$root.submit()); }
-                }"
-                aria-label="Article filters and search"
-            >
-                <input type="hidden" name="blog_cat" :value="cat">
-                <input type="hidden" name="paged" value="1">
+    <!-- FILTERS (Alpine pills + search) -->
+<section class="flex overflow-hidden relative">
+  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
 
-                <nav class="flex gap-10 justify-between items-start pt-10 w-full max-md:flex-colflex-row max-md:px-5" aria-label="Article filters and search">
+    <div class="w-full px-0 pt-0 pb-0 md:px-8 md:pt-8 md:pb-0 lg:px-0">
+      <div class="max-w-[1728px] mx-auto">
+        <form
+          method="get"
+          action="<?php echo esc_url(get_permalink(get_option('page_for_posts')) ?: home_url('/')); ?>"
+          class="w-full"
+          x-data="{
+              cat: '<?php echo esc_js($blog_cat); ?>',
+              search: '<?php echo esc_js($blog_search); ?>',
+              setCat(slug){ this.cat = slug; this.$nextTick(() => this.$root.submit()); }
+          }"
+          aria-label="Article filters and search"
+        >
+          <input type="hidden" name="blog_cat" :value="cat">
+          <input type="hidden" name="paged" value="1">
 
-                    <!-- Filter Pills -->
-                    <div class="flex flex-wrap gap-4 items-center text-lg font-semibold leading-none text-indigo-800 min-w-60" role="group" aria-label="Article category filters">
-                        <?php foreach ($filter_pills as $pill) : ?>
-                            <?php $is_active = ($blog_cat === $pill['slug']) || ($pill['slug'] === 'all' && $blog_cat === 'all'); ?>
-                            <button
-                                type="button"
-                                class="<?php echo esc_attr($is_active
-                                    ? 'btn flex gap-2 justify-center items-center px-6 py-2.5 text-indigo-800 bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
-                                    : 'btn flex gap-2 justify-center items-center px-6 py-2.5 border border-indigo-800 border-solid rounded-full w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200 max-md:px-5'
-                                ); ?>"
-                                :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
-                                aria-label="<?php echo esc_attr($pill['label']); ?>"
-                                @click="setCat('<?php echo esc_js($pill['slug']); ?>')"
-                            >
-                                <span><?php echo esc_html($pill['label']); ?></span>
-                            </button>
-                        <?php endforeach; ?>
+          <nav class="flex gap-10 justify-between items-start pt-10 w-full max-md:flex-col"
+               aria-label="Article filters and search">
+
+            <!-- Filter Pills -->
+            <div class="flex flex-wrap gap-4 items-center text-lg font-semibold leading-none text-indigo-800 min-w-60"
+                 role="group" aria-label="Article category filters">
+              <?php foreach ($filter_pills as $pill) : ?>
+                <?php $is_active = ($blog_cat === $pill['slug']) || ($pill['slug'] === 'all' && $blog_cat === 'all'); ?>
+                <button
+                  type="button"
+                  class="<?php echo esc_attr($is_active
+                    ? 'btn flex gap-2 justify-center items-center px-6 py-2.5 text-indigo-800 bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
+                    : 'btn flex gap-2 justify-center items-center px-6 py-2.5 border border-indigo-800 border-solid rounded-full w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200 max-md:px-5'
+                  ); ?>"
+                  :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
+                  aria-label="<?php echo esc_attr($pill['label']); ?>"
+                  @click="setCat('<?php echo esc_js($pill['slug']); ?>')"
+                >
+                  <span><?php echo esc_html($pill['label']); ?></span>
+                </button>
+              <?php endforeach; ?>
+            </div>
+
+            <!-- Search -->
+            <div class="text-base text-black min-w-60 w-[296px]">
+              <div class="max-w-full w-[296px]">
+                <div class="w-full">
+                  <div
+                    class="flex justify-between items-center h-12 px-4 w-full bg-white border border-indigo-800 border-solid
+                           transition-all duration-200
+                           focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2"
+                  >
+                    <div class="flex flex-1 gap-2 items-center">
+                      <label for="article-search" class="sr-only">Search articles</label>
+
+                      <input
+                        type="search"
+                        id="article-search"
+                        name="blog_search"
+                        x-model="search"
+                        value="<?php echo esc_attr($blog_search); ?>"
+                        class="flex-1 h-6 leading-6 placeholder-gray-500 text-black bg-transparent border-none outline-none focus:outline-none"
+                        placeholder="Search article"
+                        aria-label="Search articles"
+                        autocomplete="off"
+                      >
                     </div>
 
-                    <!-- Search -->
-                    <div class="text-base text-black min-w-60 w-[296px]">
-                        <div class="max-w-full w-[296px]">
-                            <div class="w-full">
-                                <div class="flex justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid transition-all duration-200 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2">
-                                    <div class="flex flex-1 gap-2 items-center">
-                                        <label for="article-search" class="sr-only">Search articles</label>
-                                        <input
-                                            type="search"
-                                            id="article-search"
-                                            name="blog_search"
-                                            x-model="search"
-                                            value="<?php echo esc_attr($blog_search); ?>"
-                                            class="flex-1 placeholder-gray-500 text-black bg-transparent border-none outline-none focus:outline-none"
-                                            placeholder="Search article"
-                                            aria-label="Search articles"
-                                            autocomplete="off"
-                                        >
-                                    </div>
+                    <button
+                      type="submit"
+                      class="flex justify-center items-center w-6 h-6 transition-opacity duration-200 hover:opacity-70"
+                      aria-label="Submit search"
+                    >
+                      <img
+                        src="<?php echo esc_url($search_icon); ?>"
+                        alt=""
+                        class="object-contain w-6 h-6"
+                        role="presentation"
+                      >
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </form>
+      </div>
+    </div>
 
-                                    <button type="submit" class="flex justify-center items-center w-6 h-6 transition-opacity duration-200 btn hover:opacity-70" aria-label="Submit search">
-                                        <img src="<?php echo esc_url($search_icon); ?>" alt="" class="object-contain w-6 h-6" role="presentation">
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  </div>
+</section>
 
-                </nav>
-            </form>
-        </div>
-    </section>
 
     <!-- FEATURED 3 -->
     <section id="blog-cards-9682" class="flex overflow-hidden relative" style="background-color:#FFFFFF;" aria-labelledby="blog-cards-9682-heading">
-        <div class="flex flex-col items-center pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container max-xxl:px-[1rem]">
+        <div class="flex flex-col items-center pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container">
 
-            <div class="px-4 py-8 w-full md:px-8 lg:px-0">
+            <div class="px-4 pt-8 pb-0 w-full md:px-8 lg:px-0">
                 <div class="max-w-[1728px] mx-auto flex flex-col lg:flex-row items-start gap-8">
 
                     <?php
@@ -265,7 +288,9 @@ function _matrix_first_cat_name($post_id) {
                                     ]); ?>
                                 <?php endif; ?>
 
-                                <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
+                                <div class="absolute inset-0 m-auto max-lg:w-[80%] max-lg:h-[80%] max-lg:justify-between lg:justify-start lg:inset-auto lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6">
+
+
                                     <div class="flex flex-col gap-2">
                                         <div class="text-primary text-base font-medium tracking-[1px]">
                                             <?php
@@ -315,7 +340,8 @@ function _matrix_first_cat_name($post_id) {
                                     ]); ?>
                                 <?php endif; ?>
 
-                                <div class="absolute lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6 max-lg:h-[80%] max-lg:w-[80%]">
+                                <div class="absolute inset-0 m-auto max-lg:w-[80%] max-lg:h-[80%] max-lg:justify-between lg:justify-start lg:inset-auto lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6">
+
                                     <div>
                                         <div class="text-base font-medium text-primary">
                                             <?php
@@ -346,7 +372,7 @@ function _matrix_first_cat_name($post_id) {
     </section>
 
     <!-- CONTINUE LOOP (GRID, FULL-CARD CLICKABLE) -->
-    <section class="flex overflow-hidden relative">
+    <section class="flex overflow-hidden relative pb-[56px] lg:pb-[72px]">
         <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
 
             <div class="w-full max-w-[1728px] mx-auto">
@@ -413,90 +439,117 @@ function _matrix_first_cat_name($post_id) {
                 </div>
             </div>
 
-            <!-- PAGINATION (15 per page, preserves filters/search) -->
-            <?php if ($total_pages > 1) : ?>
-                <?php
-                $base_args = array(
-                    'blog_cat'    => $blog_cat,
-                    'blog_search' => $blog_search,
-                );
+           <!-- PAGINATION (15 per page, preserves filters/search) -->
+<?php if ($total_pages > 1) : ?>
+    <?php
+    $base_args = array(
+        'blog_cat'    => $blog_cat,
+        'blog_search' => $blog_search,
+    );
 
-                $current_page = $paged;
+    $current_page = $paged;
 
-                $page_numbers = paginate_links(array(
-                    'total'     => $total_pages,
-                    'current'   => $current_page,
-                    'type'      => 'array',
-                    'prev_next' => false,
-                    'end_size'  => 1,
-                    'mid_size'  => 2,
-                    'base'      => esc_url_raw(add_query_arg(array_merge($base_args, array('paged' => '%#%')))),
-                    'format'    => '',
-                ));
+    $page_numbers = paginate_links(array(
+        'total'     => $total_pages,
+        'current'   => $current_page,
+        'type'      => 'array',
+        'prev_next' => false,
+        'end_size'  => 1,
+        'mid_size'  => 2,
+        'base'      => esc_url_raw(add_query_arg(array_merge($base_args, array('paged' => '%#%')))),
+        'format'    => '',
+    ));
 
-                $prev_page = ($current_page > 1) ? ($current_page - 1) : 0;
-                $next_page = ($current_page < $total_pages) ? ($current_page + 1) : 0;
+    $prev_page = ($current_page > 1) ? ($current_page - 1) : 0;
+    $next_page = ($current_page < $total_pages) ? ($current_page + 1) : 0;
 
-                $prev_url = $prev_page ? add_query_arg(array_merge($base_args, array('paged' => $prev_page))) : '';
-                $next_url = $next_page ? add_query_arg(array_merge($base_args, array('paged' => $next_page))) : '';
-                ?>
+    $prev_url = $prev_page ? add_query_arg(array_merge($base_args, array('paged' => $prev_page))) : '';
+    $next_url = $next_page ? add_query_arg(array_merge($base_args, array('paged' => $next_page))) : '';
+    ?>
 
-                <nav aria-label="Pagination Navigation" class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
-                    <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
-                        <?php if ($prev_page) : ?>
-                            <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
-                               href="<?php echo esc_url($prev_url); ?>"
-                               aria-label="Go to previous page">
-                                <span>Previous</span>
-                            </a>
-                        <?php else : ?>
-                            <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Previous page (disabled)">
-                                <span>Previous</span>
-                            </button>
-                        <?php endif; ?>
-                    </div>
+    <nav aria-label="Pagination Navigation"
+         class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
 
-                    <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
-                        <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
-                            <?php foreach ($page_numbers as $link_html) : ?>
-                                <?php
-                                $is_current = (strpos($link_html, 'current') !== false);
-                                $page_num = (int) wp_strip_all_tags($link_html);
-                                preg_match('/href=["\']([^"\']+)["\']/', $link_html, $matches);
-                                $url = !empty($matches[1]) ? $matches[1] : '';
-                                ?>
-
-                                <?php if ($is_current) : ?>
-                                    <span class="flex flex-col justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 border-solid btn"
-                                          aria-current="page">
-                                        <span class="text-indigo-800"><?php echo esc_html((string) $page_num); ?></span>
-                                    </span>
-                                <?php else : ?>
-                                    <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-white hover:bg-opacity-10"
-                                       href="<?php echo esc_url($url); ?>"
-                                       aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>">
-                                        <span class="text-white"><?php echo esc_html((string) $page_num); ?></span>
-                                    </a>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
-                        <?php if ($next_page) : ?>
-                            <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
-                               href="<?php echo esc_url($next_url); ?>"
-                               aria-label="Go to next page">
-                                <span>Next</span>
-                            </a>
-                        <?php else : ?>
-                            <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Next page (disabled)">
-                                <span>Next</span>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </nav>
+        <!-- PREVIOUS -->
+        <div class="flex gap-1 items-center py-1 pr-4 pl-1">
+            <?php if ($prev_page) : ?>
+                <a href="<?php echo esc_url($prev_url); ?>"
+                   class="flex gap-2 items-center text-indigo-800 transition-colors btn hover:text-indigo-600 w-fit"
+                   aria-label="Go to previous page">
+                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M12.5 4.5L7.5 10l5 5.5"
+                              stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Previous</span>
+                </a>
+            <?php else : ?>
+                <button class="flex gap-2 items-center text-gray-400 cursor-not-allowed btn" disabled>
+                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M12.5 4.5L7.5 10l5 5.5"
+                              stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Previous</span>
+                </button>
             <?php endif; ?>
+        </div>
+
+        <!-- PAGE NUMBERS -->
+        <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
+            <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
+                <?php foreach ($page_numbers as $link_html) : ?>
+                    <?php
+                    $is_current = (strpos($link_html, 'current') !== false);
+                    $page_num = (int) wp_strip_all_tags($link_html);
+                    preg_match('/href=["\']([^"\']+)["\']/', $link_html, $matches);
+                    $url = !empty($matches[1]) ? $matches[1] : '';
+                    ?>
+
+                    <?php if ($is_current) : ?>
+                        <span class="flex justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 btn"
+                              aria-current="page">
+                            <?php echo esc_html((string) $page_num); ?>
+                        </span>
+                    <?php else : ?>
+                        <a href="<?php echo esc_url($url); ?>"
+                           class="flex justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-opacity-80"
+                           aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>">
+                            <?php echo esc_html((string) $page_num); ?>
+                        </a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+        <!-- NEXT -->
+        <div class="flex gap-1 items-center py-1 pl-4 pr-1">
+            <?php if ($next_page) : ?>
+                <a href="<?php echo esc_url($next_url); ?>"
+                   class="flex gap-2 items-center text-indigo-800 transition-colors btn hover:text-indigo-600 w-fit"
+                   aria-label="Go to next page">
+                    <span>Next</span>
+                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M7.5 4.5L12.5 10l-5 5.5"
+                              stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            <?php else : ?>
+                <button class="flex gap-2 items-center text-gray-400 cursor-not-allowed btn" disabled>
+                    <span>Next</span>
+                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M7.5 4.5L12.5 10l-5 5.5"
+                              stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            <?php endif; ?>
+        </div>
+
+    </nav>
+<?php endif; ?>
+
 
         </div>
     </section>

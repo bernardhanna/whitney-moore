@@ -139,14 +139,14 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                             </a>
 
                             <?php if ($featured_image_id) : ?>
-                                <div class="w-full">
-                                    <?php echo wp_get_attachment_image($featured_image_id, 'large', false, [
+                                <div class="w-full h-[340px] overflow-hidden">
+                                      <?php echo wp_get_attachment_image($featured_image_id, 'large', false, [
                                         'alt'     => esc_attr($featured_image_alt),
                                         'title'   => esc_attr(get_the_title($featured_image_id)),
-                                        'class'   => 'object-cover w-full h-auto',
+                                        'class'   => 'object-cover w-full h-full block',
                                         'loading' => 'lazy',
                                         'decoding'=> 'async',
-                                    ]); ?>
+                                      ]); ?>
                                 </div>
                             <?php endif; ?>
 

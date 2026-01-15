@@ -1,15 +1,39 @@
 <?php
 // Get ACF fields
-$heading            = get_sub_field('heading');
-$heading_tag        = get_sub_field('heading_tag');
-$profile_image      = get_sub_field('profile_image');
-$button             = get_sub_field('button');
-$background_color   = get_sub_field('background_color');
-$background_image   = get_sub_field('background_image');
+$heading          = get_sub_field('heading');
+$heading_tag      = get_sub_field('heading_tag');
+$profile_image    = get_sub_field('profile_image');
+$button           = get_sub_field('button');
+$background_color = get_sub_field('background_color');
+$background_image = get_sub_field('background_image');
 
+// -------------------------------------------------
+// Make image fields robust (ACF can return ID or Array)
+// -------------------------------------------------
+$profile_image_id = 0;
+if (is_array($profile_image) && !empty($profile_image['ID'])) {
+    $profile_image_id = (int) $profile_image['ID'];
+} elseif (is_numeric($profile_image)) {
+    $profile_image_id = (int) $profile_image;
+}
+
+$background_image_id = 0;
+if (is_array($background_image) && !empty($background_image['ID'])) {
+    $background_image_id = (int) $background_image['ID'];
+} elseif (is_numeric($background_image)) {
+    $background_image_id = (int) $background_image;
+}
+
+// -------------------------------------------------
 // Alts (derive from media where available)
-$profile_image_alt    = $profile_image ? (get_post_meta($profile_image, '_wp_attachment_image_alt', true) ?: 'Profile image') : 'Profile image';
-$background_image_alt = $background_image ? (get_post_meta($background_image, '_wp_attachment_image_alt', true) ?: 'Background decoration') : 'Background decoration';
+// -------------------------------------------------
+$profile_image_alt = $profile_image_id
+    ? (get_post_meta($profile_image_id, '_wp_attachment_image_alt', true) ?: 'Profile image')
+    : 'Profile image';
+
+$background_image_alt = $background_image_id
+    ? (get_post_meta($background_image_id, '_wp_attachment_image_alt', true) ?: 'Background decoration')
+    : 'Background decoration';
 
 // Generate unique section ID
 $section_id = 'cta-two-' . uniqid();
@@ -36,16 +60,17 @@ if (have_rows('padding_settings')) {
 
 // ---- FALLBACKS (do not change design) ----
 
-// Default profile image (only if no image set)
-$default_profile_url = '/wp-content/uploads/2025/12/image-2-1.png';
-$profile_img_src = $profile_image
-    ? wp_get_attachment_image_url($profile_image, 'full')
+// Default profile image (only if no image set) — DYNAMIC (works on local/staging/prod + subfolders)
+$default_profile_url = home_url('/wp-content/uploads/2025/12/image-2-1.png');
+
+$profile_img_src = $profile_image_id
+    ? wp_get_attachment_image_url($profile_image_id, 'full')
     : $default_profile_url;
 
 // Default CTA link (only if empty)
 if (empty($button) || !is_array($button) || empty($button['url']) || empty($button['title'])) {
     $button = [
-        'url'    => '/contact-us/',
+        'url'    => home_url('/contact-us/'),
         'title'  => 'Make an Inquiry',
         'target' => '_self',
     ];
@@ -65,9 +90,9 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <?php if ($background_image): ?>
+    <?php if ($background_image_id): ?>
         <img
-            src="<?php echo esc_url(wp_get_attachment_image_url($background_image, 'full')); ?>"
+            src="<?php echo esc_url(wp_get_attachment_image_url($background_image_id, 'full')); ?>"
             alt="<?php echo esc_attr($background_image_alt); ?>"
             class="object-contain absolute right-0 bottom-0 z-0 shrink-0 self-start h-52 w-[171px]"
             role="presentation"
@@ -111,7 +136,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
             <!-- CTA link OR default -->
             <a
                 href="<?php echo esc_url($button['url']); ?>"
-                class="flex z-0 gap-2 justify-center items-center self-stretch px-8 py-5 my-auto text-xl tracking-wide leading-none text-center text-indigo-800 bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 w-fit whitespace-nowrap btn transition-colors duration-300 hover:bg-indigo-800 hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800"
+                class="flex z-0 gap-2 justify-center items-center self-stretch px-8 py-5 my-auto text-xl tracking-wide leading-none text-center text-indigo-800 bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 w-fit whitespace-nowrap btn transition-colors duration-300 hover:bg-indigo-800 hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800 max-md:w-full"
                 target="<?php echo esc_attr($button['target'] ?? '_self'); ?>"
                 aria-label="<?php echo esc_attr($button['title']); ?>"
             >

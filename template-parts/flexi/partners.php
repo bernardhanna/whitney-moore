@@ -95,7 +95,7 @@ $next_id   = $section_id . '-next';
             </div>
 
             <!-- Arrow controls (positioned like your example) -->
-            <div class="flex relative gap-3 items-center max-md:self-end">
+            <div class="flex relative gap-3 items-center max-md:self-end w-full justify-between sm:w-auto sm:justify-center">
                 <div class="pointer-events-auto">
                     <button
                         id="<?php echo esc_attr($prev_id); ?>"
