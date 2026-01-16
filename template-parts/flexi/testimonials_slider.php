@@ -231,78 +231,67 @@ $allowed_svg = [
       -webkit-clip-path: inset(0 -100vw 0 0px);
     }
 
-    /* --- Overlay logic ---
-       Default: every slide has overlay.
-       JS adds .is-clear to the first 3 visible (desktop), removing overlay.
+    /* --- Opacity dimming ---
+       Default: every slide starts dimmed. JS removes dim from the first 3 visible on desktop.
+       This fades the ENTIRE slide (image + content card).
     */
-    #<?php echo esc_attr($section_id); ?> .t-card { position: relative; }
-    #<?php echo esc_attr($section_id); ?> .t-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 10;
-      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.55) 100%);
-      opacity: .75;
-      transition: opacity .2s ease;
-    }
-    #<?php echo esc_attr($section_id); ?> .is-clear .t-card::after { opacity: 0; }
-    #<?php echo esc_attr($section_id); ?> .slick-slide:hover .t-card::after,
-    #<?php echo esc_attr($section_id); ?> .slick-slide:focus-within .t-card::after { opacity: 0; } /* a11y/hover */
+    #<?php echo esc_attr($section_id); ?> .t-card { opacity: 1; transition: opacity .25s ease; will-change: opacity; }
+    #<?php echo esc_attr($section_id); ?> .is-dim .t-card { opacity: .35; }
   </style>
 
-  <script>
-  jQuery(function($){
-    var $root   = $('#<?php echo esc_js($section_id); ?>');
-    var $track  = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
-    var $prev   = $root.find('.matrix-prev');
-    var $next   = $root.find('.matrix-next');
-    var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
+<script>
+jQuery(function($){
+  var $root   = $('#<?php echo esc_js($section_id); ?>');
+  var $track  = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
+  var $prev   = $root.find('.matrix-prev');
+  var $next   = $root.find('.matrix-next');
+  var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
 
-    function updateOverlays(slick){
-      var $slides  = $(slick.$slides);
-      var $active  = $slides.filter('.slick-active');
+  function updateDimming(slick){
+    // Select ALL slides in the track (real + cloned), not just slick.$slides
+    var $all    = $(slick.$slideTrack).children('.slick-slide');
+    var $active = $all.filter('.slick-active');
+    var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
 
-      // Desktop (>=1280px): keep first 3 clear; everything from the 4th gets overlay
-      // Smaller screens: clear all visible slides (no dimming).
-      var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
-      var clearCount = isDesktop ? 3 : $active.length;
+    // Start with everything dim
+    $all.addClass('is-dim');
 
-      $slides.removeClass('is-clear');
-      $active.slice(0, clearCount).addClass('is-clear');
-    }
+    // Desktop: first 3 visible are clear. Smaller screens: all visible are clear.
+    var clearCount = isDesktop ? 3 : $active.length;
+    $active.slice(0, clearCount).removeClass('is-dim');
+  }
 
-    if (!$track.hasClass('slick-initialized')) {
-      $track.on('init reInit afterChange setPosition', function(e, slick){
-        updateOverlays(slick);
-      });
-
-      $track.slick({
-        slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
-        slidesToScroll: 1,
-        infinite: true,
-        arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
-        prevArrow: $prev,
-        nextArrow: $next,
-        dots: <?php echo $dots_enabled ? 'true' : 'false'; ?>,
-        appendDots: $dots.length ? $dots : undefined,
-        autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
-        autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
-        adaptiveHeight: false,
-        responsive: [
-          { breakpoint: 1280, settings: { slidesToShow: <?php echo (int) $slides_lg; ?> } },
-          { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
-          { breakpoint: 640,  settings: { slidesToShow: <?php echo (int) $slides_sm; ?> } },
-        ]
-      });
-    }
-
-    // Also recalc on resize orientation changes
-    $(window).on('resize orientationchange', function(){
-      if ($track.hasClass('slick-initialized')) {
-        $track.slick('setPosition'); // triggers setPosition event -> updateOverlays
-      }
+  if (!$track.hasClass('slick-initialized')) {
+    $track.on('init reInit afterChange setPosition', function(e, slick){
+      updateDimming(slick);
     });
+
+    $track.slick({
+      slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
+      slidesToScroll: 1,
+      infinite: true,
+      arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
+      prevArrow: $prev,
+      nextArrow: $next,
+      dots: <?php echo $dots_enabled ? 'true' : 'false'; ?>,
+      appendDots: $dots.length ? $dots : undefined,
+      autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
+      autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
+      adaptiveHeight: false,
+      responsive: [
+        { breakpoint: 1280, settings: { slidesToShow: <?php echo (int) $slides_lg; ?> } },
+        { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
+        { breakpoint: 640,  settings: { slidesToShow: <?php echo (int) $slides_sm; ?> } },
+      ]
+    });
+  }
+
+  // Recalc on resize/orientation changes
+  $(window).on('resize orientationchange', function(){
+    if ($track.hasClass('slick-initialized')) {
+      $track.slick('setPosition'); // triggers setPosition -> updateDimming
+    }
   });
-  </script>
+});
+</script>
 </section>
