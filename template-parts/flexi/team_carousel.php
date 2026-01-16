@@ -30,7 +30,7 @@ $order          = get_sub_field('order') ?: 'ASC';
 $show_name      = (int) get_sub_field('show_name') === 1;
 $show_job_title = (int) get_sub_field('show_job_title') === 1;
 
-// Slider toggles (match Testimonials)
+// Slider toggles
 $enable_slider     = (int) get_sub_field('enable_slider') === 1;
 $arrow_enabled     = (int) get_sub_field('arrows') === 1;
 $dots_enabled      = (int) get_sub_field('dots') === 1;
@@ -86,7 +86,6 @@ if ($source_mode === 'manual') {
         }
     }
 } else {
-    // taxonomy mode (default) – if no terms selected => ALL team posts
     $tax_query = [];
     if ($taxonomy_type === 'team_practice_area') {
         $terms = is_array($practice_terms) ? array_filter(array_map('intval', $practice_terms)) : [];
@@ -126,7 +125,6 @@ if ($source_mode === 'manual') {
             $q->the_post();
             $pid       = get_the_ID();
 
-            // FEATURED IMAGE only (as requested)
             $image_id  = get_post_thumbnail_id($pid);
             $img_url   = $image_id ? wp_get_attachment_image_url($image_id, 'large') : $default_profile;
             $img_alt   = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: get_the_title($image_id)) : get_the_title($pid);
@@ -154,7 +152,7 @@ if ($source_mode === 'manual') {
   role="region"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
     <?php if (!empty($heading)) : ?>
       <header class="px-12 pt-14 w-full max-md:px-5">
@@ -171,7 +169,7 @@ if ($source_mode === 'manual') {
       <div class="relative mt-8 w-full max-md:mt-0">
 
         <?php if ($enable_slider) : ?>
-          <!-- Slider shell with same arrow UI as Testimonials -->
+          <!-- Slider shell -->
           <div class="relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
             <div class="matrix-slick" id="<?php echo esc_attr($track_id); ?>" data-slick-root="<?php echo esc_attr($section_id); ?>">
               <?php foreach ($items as $it) :
@@ -182,7 +180,7 @@ if ($source_mode === 'manual') {
                 $permalink = $it['permalink'] ?? '';
               ?>
                 <div class="px-2">
-                  <article class="relative h-[520px] overflow-hidden group">
+                  <article class="relative h-[520px] overflow-hidden group t-card">
                     <!-- Photo -->
                     <img
                       src="<?php echo esc_url($img_url); ?>"
@@ -192,8 +190,8 @@ if ($source_mode === 'manual') {
                       decoding="async"
                     />
 
-                    <!-- Overlay card (styled like screenshot) -->
-                    <div class="absolute bottom-6 left-6 right-6">
+                    <!-- Overlay card -->
+                    <div class="absolute right-6 bottom-6 left-6">
                       <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw] w-[-webkit-fill-available]">
                         <?php if ($show_name && !empty($title)) : ?>
                           <div class="text-base font-semibold tracking-normal text-black">
@@ -223,7 +221,7 @@ if ($source_mode === 'manual') {
             </div>
           </div>
 
-          <!-- Overlaid arrows (same style as Testimonials) -->
+          <!-- Arrows -->
           <?php if ($arrow_enabled): ?>
             <div class="absolute inset-0 pointer-events-none">
               <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
@@ -245,7 +243,7 @@ if ($source_mode === 'manual') {
             <div class="flex gap-4 justify-center items-center mt-6" id="<?php echo esc_attr($dots_id); ?>"></div>
           <?php endif; ?>
 
-          <!-- Slick behavior to peek right & clip left, to match testimonials -->
+          <!-- Peek/clip + opacity dimming -->
           <style>
             #<?php echo esc_attr($section_id); ?> .slick-list { overflow: visible; padding-right: 2rem; }
             @media (min-width:1536px){
@@ -255,6 +253,9 @@ if ($source_mode === 'manual') {
               clip-path: inset(0 -100vw 0 24px);
               -webkit-clip-path: inset(0 -100vw 0 24px);
             }
+            /* Opacity dimming, same behavior as Testimonials */
+            #<?php echo esc_attr($section_id); ?> .t-card { opacity: 1; transition: opacity .25s ease; will-change: opacity; }
+            #<?php echo esc_attr($section_id); ?> .is-dim .t-card { opacity: .35; }
           </style>
 
           <script>
@@ -265,7 +266,23 @@ if ($source_mode === 'manual') {
             var $next  = $root.find('.matrix-next');
             var $dots  = $('#<?php echo esc_js($dots_id); ?>');
 
+            function updateDimming(slick){
+              // All slides (real + clones)
+              var $all    = $(slick.$slideTrack).children('.slick-slide');
+              var $active = $all.filter('.slick-active');
+              var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
+
+              // Dim everything, then clear first N visible
+              $all.addClass('is-dim');
+              var clearCount = isDesktop ? 3 : $active.length;
+              $active.slice(0, clearCount).removeClass('is-dim');
+            }
+
             if (!$track.hasClass('slick-initialized') && typeof $track.slick === 'function') {
+              $track.on('init reInit afterChange setPosition', function(e, slick){
+                updateDimming(slick);
+              });
+
               $track.slick({
                 slidesToShow: <?php echo (int) $slides_xl; ?>,
                 slidesToScroll: 1,
@@ -283,6 +300,13 @@ if ($source_mode === 'manual') {
                   { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
                   { breakpoint: 640,  settings: { slidesToShow: <?php echo (int) $slides_sm; ?> } },
                 ]
+              });
+
+              // Keep it in sync on resize/orientation change
+              $(window).on('resize orientationchange', function(){
+                if ($track.hasClass('slick-initialized')) {
+                  $track.slick('setPosition');
+                }
               });
             }
           });
