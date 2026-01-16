@@ -127,13 +127,13 @@ $slide_count = count($slides);
     class="relative overflow-hidden md:min-h-[450px]"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
 >
-    <div class="relative w-full">
+    <div class="relative w-full mx-auto max-w-[108rem]">
         <div class="absolute inset-y-0 left-0 w-1/2 lg:min-h-[450px] max-lg:relative max-lg:inset-auto max-lg:w-full max-lg:h-[320px]">
             <img
                 src="<?php echo esc_url($background_image_src); ?>"
                 alt="<?php echo esc_attr($background_image_alt); ?>"
                 title="<?php echo esc_attr($background_image_title); ?>"
-                class="h-full w-full object-cover bg-white"
+                class="object-cover w-full h-full bg-white"
                 loading="lazy"
                 decoding="async"
             />
@@ -141,8 +141,8 @@ $slide_count = count($slides);
         <div class="flex flex-col w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
             <div class="flex items-stretch w-full max-lg:flex-col">
 
-                <div class="hidden md:block w-1/2"></div>
-                <div class="flex overflow-hidden flex-col justify-between px-12 py-12 w-full md:w-1/2 bg-white max-md:px-6 max-md:py-10">
+                <div class="hidden w-1/2 md:block"></div>
+                <div class="flex flex-col justify-between px-12 py-12 w-full bg-transparent md:w-1/2 max-md:px-6 max-md:py-10 relative -left-[3rem] ">
 
                     <div id="<?php echo esc_attr($slider_id); ?>" class="w-full" role="region" aria-label="Testimonials">
 
@@ -154,16 +154,13 @@ $slide_count = count($slides);
                                 $year   = isset($slide['attribution_year']) ? $slide['attribution_year'] : '';
                                 ?>
 
-                                <div class="w-full pl-12 max-md:pl-0">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute -top-6 -left-24 pointer-events-none text-[120px] leading-none font-black"
-                                            aria-hidden="true"
-                                            role="presentation"
-                                            style="color: <?php echo esc_attr($quote_text_color); ?>;"
-                                        >
-                                            “
-                                        </div>
+                                <div class="pl-12 w-full max-md:pl-0">
+                                    <div class="relative max-w-[36rem] w-full">
+                                        <svg class="absolute -top-6 -left-24 pointer-events-none text-[120px] leading-none font-black" width="86" height="68" viewBox="0 0 86 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M36.8 1.57356e-05L23.6 48L19.2 30C24.9333 30 29.6 31.6667 33.2 35C36.8 38.3333 38.6 42.9333 38.6 48.8C38.6 54.5334 36.7333 59.2 33 62.8C29.4 66.2667 24.8666 68 19.4 68C13.8 68 9.13329 66.2667 5.39995 62.8C1.79995 59.2 -4.84586e-05 54.5334 -4.84586e-05 48.8C-4.84586e-05 47.0667 0.133285 45.4 0.399952 43.8C0.666618 42.0667 1.19995 40.0667 1.99995 37.8C2.79995 35.5333 3.93328 32.5333 5.39995 28.8L17 1.57356e-05H36.8ZM84 1.57356e-05L70.8 48L66.4 30C72.1333 30 76.8 31.6667 80.4 35C84 38.3333 85.8 42.9333 85.8 48.8C85.8 54.5334 83.9333 59.2 80.2 62.8C76.6 66.2667 72.0666 68 66.6 68C61 68 56.3333 66.2667 52.6 62.8C49 59.2 47.2 54.5334 47.2 48.8C47.2 47.0667 47.3333 45.4 47.6 43.8C47.8666 42.0667 48.4 40.0667 49.2 37.8C50 35.5333 51.1333 32.5333 52.6 28.8L64.2 1.57356e-05H84Z" fill="#0902A4"/>
+                                        </svg>
+
+                                       
 
                                         <?php if (!empty($quote)) : ?>
                                             <blockquote

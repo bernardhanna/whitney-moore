@@ -85,7 +85,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
 
 <section
     id="<?php echo esc_attr($section_id); ?>"
-    class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
+    class="relative flex overflow-hidden  max-w-full w-full <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
@@ -112,7 +112,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
         </svg>
     <?php endif; ?>
 
-    <div class="flex flex-col items-center px-20 py-10 mx-auto w-full max-w-container max-md:px-5">
+    <div class="flex flex-col items-center py-10 mx-auto w-full max-xl:px-5 max-w-[98rem] max-md:px-5">
         <div class="flex z-0 flex-wrap flex-1 gap-8 items-center self-stretch my-auto text-3xl font-bold tracking-wider leading-none text-white shrink basis-16 max-md:max-w-full">
 
             <!-- Profile image OR default -->
@@ -126,7 +126,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
                 <?php if (!empty($heading)): ?>
                     <<?php echo esc_attr($heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-3xl font-bold tracking-wider leading-none text-white max-md:max-w-full"
+                        class="text-[2rem] font-bold leading-10 tracking-[0.0625rem] max-md:text-[1.625rem]"
                     >
                         <?php echo esc_html($heading); ?>
                     </<?php echo esc_attr($heading_tag); ?>>
@@ -135,14 +135,25 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
 
             <!-- CTA link OR default -->
             <a
-                href="<?php echo esc_url($button['url']); ?>"
-                class="flex z-0 gap-2 justify-center items-center self-stretch px-8 py-5 my-auto text-xl tracking-wide leading-none text-center text-primary bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 w-fit whitespace-nowrap btn transition-colors duration-300 hover:bg-primary hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-primary max-md:w-full"
-                target="<?php echo esc_attr($button['target'] ?? '_self'); ?>"
-                aria-label="<?php echo esc_attr($button['title']); ?>"
+            href="<?php echo esc_url($button['url']); ?>"
+            class="group flex z-0 gap-2 justify-center items-center self-stretch w-full px-5 max-w-[259px] py-5 my-auto text-xl font-normal leading-5 tracking-[0.0125rem] text-center text-primary bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5  whitespace-nowrap btn transition-colors duration-300 hover:bg-primary-dark hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-primary max-md:w-full"
+            target="<?php echo esc_attr($button['target'] ?? '_self'); ?>"
+            aria-label="<?php echo esc_attr($button['title']); ?>"
             >
-                <span class="self-stretch my-auto">
-                    <?php echo esc_html($button['title']); ?>
-                </span>
+            <span class="self-stretch my-auto">
+                <?php echo esc_html($button['title']); ?>
+            </span>
+
+            <!-- SVG now inherits current text color -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                class="transition-colors duration-300 fill-current shrink-0">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.84467 2.96967C8.13756 2.67678 8.61244 2.67678 8.90533 2.96967L13.4053 7.46967C13.6982 7.76256 13.6982 8.23744 13.4053 8.53033L8.90533 13.0303C8.61244 13.3232 8.13756 13.3232 7.84467 13.0303C7.55178 12.7374 7.55178 12.2626 7.84467 11.9697L11.8143 8L7.84467 4.03033C7.55178 3.73744 7.55178 3.26256 7.84467 2.96967Z"
+                    fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M2.375 8C2.375 7.58579 2.71079 7.25 3.125 7.25H12.25C12.6642 7.25 13 7.58579 13 8C13 8.41421 12.6642 8.75 12.25 8.75H3.125C2.71079 8.75 2.375 8.41421 2.375 8Z"
+                    fill="currentColor"/>
+            </svg>
             </a>
 
         </div>
