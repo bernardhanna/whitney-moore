@@ -161,7 +161,7 @@ function _matrix_first_cat_name($post_id) {
 <section class="flex overflow-hidden relative">
   <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
 
-    <div class="w-full px-0 pt-0 pb-0 md:px-8 md:pt-8 md:pb-0 lg:px-0">
+    <div class="px-0 pt-0 pb-0 w-full md:px-8 md:pt-8 md:pb-0 lg:px-0">
       <div class="max-w-[1728px] mx-auto">
         <form
           method="get"
@@ -205,9 +205,7 @@ function _matrix_first_cat_name($post_id) {
               <div class="max-w-full w-[296px]">
                 <div class="w-full">
                   <div
-                    class="flex justify-between items-center h-12 px-4 w-full bg-white border border-primary border-solid
-                           transition-all duration-200
-                           focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2"
+                    class="flex justify-between items-center px-4 w-full h-12 bg-white border border-solid transition-all duration-200 border-primary focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2"
                   >
                     <div class="flex flex-1 gap-2 items-center">
                       <label for="article-search" class="sr-only">Search articles</label>
@@ -252,7 +250,7 @@ function _matrix_first_cat_name($post_id) {
 
     <!-- FEATURED 3 -->
     <section id="blog-cards-9682" class="flex overflow-hidden relative" style="background-color:#FFFFFF;" aria-labelledby="blog-cards-9682-heading">
-        <div class="flex flex-col items-center pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container">
+        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:pb-12 max-w-container">
 
             <div class="px-4 pt-8 pb-0 w-full md:px-8 lg:px-0">
                 <div class="max-w-[1728px] mx-auto flex flex-col lg:flex-row items-start gap-8">
@@ -421,7 +419,7 @@ function _matrix_first_cat_name($post_id) {
                                     </time>
 
                                     <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-primary">
-                                        <span class="flex gap-2 items-center text-primary whitespace-nowrap pointer-events-none select-none">
+                                        <span class="flex gap-2 items-center whitespace-nowrap pointer-events-none select-none text-primary">
                                             <span class="self-stretch my-auto"><?php echo esc_html__('Read more', 'matrix-starter'); ?></span>
                                             <svg class="object-contain self-stretch my-auto w-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -474,7 +472,7 @@ function _matrix_first_cat_name($post_id) {
         <div class="flex gap-1 items-center py-1 pr-4 pl-1">
             <?php if ($prev_page) : ?>
                 <a href="<?php echo esc_url($prev_url); ?>"
-                   class="flex gap-2 items-center text-primary transition-colors btn hover:text-indigo-600 w-fit"
+                   class="flex gap-2 items-center transition-colors text-primary btn hover:text-indigo-600 w-fit"
                    aria-label="Go to previous page">
                     <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                         <path d="M12.5 4.5L7.5 10l5 5.5"
@@ -496,7 +494,7 @@ function _matrix_first_cat_name($post_id) {
         </div>
 
         <!-- PAGE NUMBERS -->
-        <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
+        <div class="flex gap-4 items-center text-lg leading-none" role="group" aria-label="Page numbers">
             <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
                 <?php foreach ($page_numbers as $link_html) : ?>
                     <?php
@@ -507,7 +505,7 @@ function _matrix_first_cat_name($post_id) {
                     ?>
 
                     <?php if ($is_current) : ?>
-                        <span class="flex justify-center items-center w-12 h-12 text-primary rounded-full border border-primary btn"
+                        <span class="flex justify-center items-center w-12 h-12 rounded-full border text-primary border-primary btn"
                               aria-current="page">
                             <?php echo esc_html((string) $page_num); ?>
                         </span>
@@ -523,10 +521,10 @@ function _matrix_first_cat_name($post_id) {
         </div>
 
         <!-- NEXT -->
-        <div class="flex gap-1 items-center py-1 pl-4 pr-1">
+        <div class="flex gap-1 items-center py-1 pr-1 pl-4">
             <?php if ($next_page) : ?>
                 <a href="<?php echo esc_url($next_url); ?>"
-                   class="flex gap-2 items-center text-primary transition-colors btn hover:text-indigo-600 w-fit"
+                   class="flex gap-2 items-center transition-colors text-primary btn hover:text-indigo-600 w-fit"
                    aria-label="Go to next page">
                     <span>Next</span>
                     <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">

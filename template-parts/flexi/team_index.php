@@ -176,7 +176,7 @@ $base_args = array(
             <!-- reset to page 1 on filter submit -->
             <input type="hidden" name="team_page" value="1" />
 
-            <fieldset class="flex flex-wrap gap-8 items-center p-0 m-0 border-0 max-md:flex-col max-md:gap-4 max-md:w-full max-sm:gap-3 mb-4 max-md:mb-0">
+            <fieldset class="flex flex-wrap gap-8 items-center p-0 m-0 mb-4 border-0 max-md:flex-col max-md:gap-4 max-md:w-full max-sm:gap-3 max-md:mb-0">
 
                 <legend class="sr-only">Filter Options</legend>
 
@@ -191,7 +191,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="paOpen ? 'true' : 'false'"
                             @click="paOpen=!paOpen; sectorOpen=false; roleOpen=false;"
@@ -205,7 +205,7 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
                             role="listbox"
                             x-show="paOpen"
                             x-transition
@@ -242,7 +242,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="sectorOpen ? 'true' : 'false'"
                             @click="sectorOpen=!sectorOpen; paOpen=false; roleOpen=false;"
@@ -256,7 +256,7 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
                             role="listbox"
                             x-show="sectorOpen"
                             x-transition
@@ -293,7 +293,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="roleOpen ? 'true' : 'false'"
                             @click="roleOpen=!roleOpen; paOpen=false; sectorOpen=false;"
@@ -307,7 +307,7 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
                             role="listbox"
                             x-show="roleOpen"
                             x-transition
@@ -342,7 +342,7 @@ $base_args = array(
                     </label>
 
                     <div class="flex flex-col gap-1 items-start w-full">
-                        <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-primary border-solid max-sm:px-3 max-sm:py-2.5">
+                        <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-solid border-primary max-sm:px-3 max-sm:py-2.5">
                             <div class="flex flex-1 gap-2 items-center">
                                 <input
                                     type="search"
@@ -469,7 +469,7 @@ $base_args = array(
                 <!-- Previous -->
                 <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($prev_page) : ?>
-                        <a class="flex gap-1 items-center text-primary whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-indigo-600 w-fit"
                            href="<?php echo esc_url($prev_url); ?>"
                            aria-label="Go to previous page" title="Go to previous page">
                             <img src="<?php echo esc_url($pagination_prev_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
@@ -484,7 +484,7 @@ $base_args = array(
                 </div>
 
                 <!-- Page numbers -->
-                <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
+                <div class="flex gap-4 items-center text-lg leading-none" role="group" aria-label="Page numbers">
                     <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
                         <?php foreach ($page_numbers as $link_html) : ?>
                             <?php
@@ -496,7 +496,7 @@ $base_args = array(
                             ?>
 
                             <?php if ($is_current) : ?>
-                                <span class="flex flex-col justify-center items-center w-12 h-12 text-primary rounded-full border border-primary border-solid transition-colors btn hover:bg-primary-light"
+                                <span class="flex flex-col justify-center items-center w-12 h-12 rounded-full border border-solid transition-colors text-primary border-primary btn hover:bg-primary-light"
                                       aria-current="page"
                                       aria-label="<?php echo esc_attr('Page ' . $page_num . ', current page'); ?>"
                                       title="<?php echo esc_attr('Current page, page ' . $page_num); ?>">
@@ -517,7 +517,7 @@ $base_args = array(
                 <!-- Next -->
                 <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($next_page) : ?>
-                        <a class="flex gap-1 items-center text-primary whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-indigo-600 w-fit"
                            href="<?php echo esc_url($next_url); ?>"
                            aria-label="Go to next page" title="Go to next page">
                             <span>Next</span>
