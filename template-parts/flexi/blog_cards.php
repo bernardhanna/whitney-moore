@@ -21,7 +21,7 @@ $header_secondary_button = get_sub_field('header_secondary_button');
 // Always enforce minimum of 3 posts
 $posts_per_page = max(3, (int) get_sub_field('posts_per_page'));
 
-// Card CTAs (text only now; visual only – no inner <a>)
+// Card CTAs (visual only – label text)
 $small_cta      = get_sub_field('small_cta');
 $small_cta_text = get_sub_field('small_cta_text') ?: 'Discover';
 
@@ -97,24 +97,11 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
     style="background-color: <?php echo esc_attr($section_bg_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-
     <div class="pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container max-xxl:px-[1rem]">
-
-        <?php
-        /**
-         * Layout requirement:
-         * Mobile: Heading -> Grid -> Buttons (DOM order)
-         * Desktop: Heading (left) + Buttons (right) on same row -> Grid below (full width)
-         *
-         * We implement a grid wrapper:
-         * - mobile: grid-cols-1 (natural DOM order)
-         * - desktop: grid-cols-2 with two rows; grid spans both columns in row 2
-         */
-        ?>
 
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-6">
 
-            <!-- Heading (always first in DOM + top-left on desktop) -->
+            <!-- Heading -->
             <div class="lg:col-start-1 lg:row-start-1">
                 <?php if ($section_heading) : ?>
                     <<?php echo esc_attr($section_heading_tag); ?>
@@ -128,7 +115,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 <?php endif; ?>
             </div>
 
-            <!-- Grid (second in DOM; full width on desktop row 2) -->
+            <!-- Grid -->
             <div class="lg:col-span-2 lg:row-start-2">
                 <div class="flex flex-col gap-4 <?php echo esc_attr($layout_class); ?>">
 
@@ -140,15 +127,16 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
                                 $type    = get_field('post_type_label', $post_id);
-                                $time    = get_field('event_time', $post_id); // optional
+                                $time    = get_field('event_time', $post_id);
                                 $cta_lbl = $small_cta_text;
 
                                 $override_link = (is_array($small_cta) && !empty($small_cta['url'])) ? $small_cta['url'] : $link;
                                 ?>
                                 <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group rounded">
+                                    <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
-                                        class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                        class="absolute inset-0 z-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                         aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
                                     >
                                         <span class="sr-only"><?php echo esc_html($title); ?></span>
@@ -160,14 +148,16 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                             $image,
                                             'large',
                                             false,
-                                            ['class' => 'absolute inset-0 w-full h-full object-cover']
+                                            ['class' => 'absolute inset-0 w-full h-full object-cover', 'alt' => esc_attr($title)]
                                         );
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 transition-colors duration-200 bg-black/10 group-hover:bg-black/20"></div>
+                                    <!-- Tint overlay shouldn't block clicks -->
+                                    <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 rounded">
+                                    <!-- Content card shouldn't block clicks -->
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 rounded pointer-events-none">
                                         <?php if ($type) : ?>
                                             <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
                                                 <?php echo esc_html($type); ?>
@@ -206,15 +196,16 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
                                 $type    = get_field('post_type_label', $post_id);
-                                $time    = get_field('event_time', $post_id); // optional
+                                $time    = get_field('event_time', $post_id);
                                 $cta_lbl = $big_cta_text;
 
                                 $override_link = (is_array($big_cta) && !empty($big_cta['url'])) ? $big_cta['url'] : $link;
                                 ?>
                                 <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group rounded">
+                                    <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
-                                        class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                        class="absolute inset-0 z-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                         aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
                                     >
                                         <span class="sr-only"><?php echo esc_html($title); ?></span>
@@ -226,14 +217,14 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                             $image,
                                             'large',
                                             false,
-                                            ['class' => 'absolute inset-0 w-full h-full object-cover']
+                                            ['class' => 'absolute inset-0 w-full h-full object-cover', 'alt' => esc_attr($title)]
                                         );
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 transition-colors duration-200 bg-black/10 group-hover:bg-black/20"></div>
+                                    <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 rounded">
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 rounded pointer-events-none">
                                         <?php if ($type) : ?>
                                             <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
                                                 <?php echo esc_html($type); ?>
@@ -267,7 +258,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 </div>
             </div>
 
-            <!-- Buttons (third in DOM; top-right on desktop row 1) -->
+            <!-- Header buttons -->
             <?php if ($header_primary_button || $header_secondary_button) : ?>
                 <div class="lg:col-start-2 lg:row-start-1 lg:justify-self-end">
                     <div class="flex flex-col gap-3 w-full lg:w-auto lg:flex-row lg:flex-nowrap lg:gap-4 lg:items-center lg:justify-end">
