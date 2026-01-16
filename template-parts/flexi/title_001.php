@@ -32,7 +32,7 @@ $section_id = 'title_' . uniqid();
                 <?php if (!empty($heading)): ?>
                     <<?php echo esc_attr($heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>_heading"
-                        class="relative w-full text-3xl font-bold tracking-wider leading-10 text-indigo-800 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8"
+                        class="relative w-full text-3xl font-bold tracking-wider leading-10 text-primary max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8"
                     >
                         <?php echo esc_html($heading); ?>
                     </<?php echo esc_attr($heading_tag); ?>>

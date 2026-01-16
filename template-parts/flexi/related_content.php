@@ -95,7 +95,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
     <div class="flex flex-col items-center px-20 pt-20 pb-24 mx-auto w-full max-w-container max-md:px-5">
 
         <?php if (!empty($heading)) : ?>
-            <header class="flex flex-col justify-center items-center w-full text-3xl font-bold tracking-wider leading-none text-center text-indigo-800 max-md:max-w-full">
+            <header class="flex flex-col justify-center items-center w-full text-3xl font-bold tracking-wider leading-none text-center text-primary max-md:max-w-full">
                 <<?php echo esc_attr($heading_tag); ?>
                     id="<?php echo esc_attr($section_id); ?>-heading"
                     class="max-md:max-w-full"
@@ -156,8 +156,8 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                                 </div>
 
                                 <!-- Title is visual only; overlay anchor handles the click -->
-                                <h3 class="mt-2 text-2xl font-semibold leading-7 text-indigo-800">
-                                    <span class="text-indigo-800"><?php echo esc_html($post_title); ?></span>
+                                <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary">
+                                    <span class="text-primary"><?php echo esc_html($post_title); ?></span>
                                 </h3>
 
                                 <time
@@ -169,8 +169,8 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                                 </time>
 
                                 <!-- Read more is non-interactive (overlay link is primary target) -->
-                                <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-indigo-800">
-                                    <span class="flex gap-2 items-center text-indigo-800 whitespace-nowrap pointer-events-none select-none">
+                                <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-primary">
+                                    <span class="flex gap-2 items-center text-primary whitespace-nowrap pointer-events-none select-none">
                                         <span class="self-stretch my-auto">Read more</span>
                                         <svg
                                             class="object-contain self-stretch my-auto w-6 transition-colors duration-200 shrink-0"

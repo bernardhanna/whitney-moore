@@ -225,7 +225,7 @@ get_header();
                                        class="flex relative gap-2 justify-center items-center px-8 py-3 whitespace-nowrap bg-white cursor-pointer btn download-btn w-fit max-md:justify-center max-sm:gap-1.5 max-sm:px-6 max-sm:py-3.5"
                                        aria-label="<?php echo esc_attr(sprintf('Download vCard: %s', $member_name)); ?>"
                                        download>
-                                        <span class="relative text-base font-semibold tracking-normal leading-4 text-center text-indigo-800 max-sm:text-sm max-sm:leading-4">
+                                        <span class="relative text-base font-semibold tracking-normal leading-4 text-center text-primary max-sm:text-sm max-sm:leading-4">
                                             Download vCard
                                         </span>
                                         <div class="flex relative justify-center items-center w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" aria-hidden="true">
@@ -251,7 +251,7 @@ get_header();
 
                             <!-- Main Heading -->
                             <header class="flex relative flex-col gap-1 items-start self-stretch">
-                                <h1 class="relative self-stretch text-5xl font-bold text-indigo-800 leading-[58px] max-md:text-4xl max-md:leading-10 max-sm:text-3xl max-sm:leading-10">
+                                <h1 class="relative self-stretch text-5xl font-bold text-primary leading-[58px] max-md:text-4xl max-md:leading-10 max-sm:text-3xl max-sm:leading-10">
                                     <?php echo esc_html(sprintf('About %s', $member_name)); ?>
                                 </h1>
                             </header>
@@ -264,7 +264,7 @@ get_header();
                             <!-- Education (optional WYSIWYG) -->
                             <?php if (!empty($education)) : ?>
                                 <section class="flex relative flex-col gap-4 items-start self-stretch pt-4">
-                                    <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-indigo-800 max-sm:text-2xl max-sm:leading-8">
+                                    <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-primary max-sm:text-2xl max-sm:leading-8">
                                         Education
                                     </h2>
                                     <div class="relative self-stretch text-lg tracking-wider leading-7 text-black max-sm:text-base max-sm:leading-6 wp_editor">
@@ -280,7 +280,7 @@ get_header();
                                     <div class="mx-auto flex w-full min-w-0 max-w-container flex-col items-center pt-5 pb-5 max-lg:px-5">
                                       <div class="w-full min-w-0 pt-6 max-w-[920px]">
                                         <header>
-                                          <h2 class="text-2xl font-semibold leading-none text-indigo-800">
+                                          <h2 class="text-2xl font-semibold leading-none text-primary">
                                             <?php
                                             $default_heading = sprintf('What they say about %s', $member_name);
                                             echo esc_html($testimonials_heading ?: $default_heading);
@@ -298,7 +298,7 @@ get_header();
                                           <div id="<?php echo esc_attr($slider_id); ?>" class="w-full min-w-0">
                                             <?php foreach ($slides as $slide) : ?>
                                               <div class="w-full min-w-0">
-                                                <div class="relative w-full min-w-0 text-indigo-800">
+                                                <div class="relative w-full min-w-0 text-primary">
                                                   <?php if (!empty($slide['quote'])) : ?>
                                                     <blockquote class="relative z-0 w-full min-w-0 text-3xl font-light leading-[52px] max-md:pl-8 max-md:text-2xl max-md:leading-9">
                                                     <img
@@ -400,7 +400,7 @@ get_header();
 
                         <!-- Right Column - Practice Areas Sidebar -->
                         <aside class="flex relative flex-col gap-6 items-start p-2 w-1/3 max-md:w-full">
-                            <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-indigo-800 max-sm:text-2xl max-sm:leading-8">
+                            <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-primary max-sm:text-2xl max-sm:leading-8">
                                 Practice areas
                             </h2>
                             <nav class="flex relative flex-col gap-3 items-start self-stretch" aria-label="Practice areas">
@@ -409,8 +409,8 @@ get_header();
                                         $term_link = get_term_link($term);
                                         if (is_wp_error($term_link)) { continue; } ?>
                                         <a href="<?php echo esc_url($term_link); ?>"
-                                           class="practice-pill btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-indigo-800 border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap">
-                                            <span class="relative text-lg font-semibold leading-6 text-indigo-800 max-sm:text-base max-sm:leading-6">
+                                           class="practice-pill btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap">
+                                            <span class="relative text-lg font-semibold leading-6 text-primary max-sm:text-base max-sm:leading-6">
                                                 <?php echo esc_html($term->name); ?>
                                             </span>
                                         </a>
@@ -471,7 +471,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
   <section class="flex overflow-hidden relative px-20 pt-20 pb-24 tracking-wider bg-neutral-100 max-md:px-5" role="region" aria-labelledby="sectors-heading">
     <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
 
-      <header class="w-full text-3xl font-bold leading-none text-indigo-800 max-md:max-w-full">
+      <header class="w-full text-3xl font-bold leading-none text-primary max-md:max-w-full">
         <h2 id="sectors-heading">Related Sectors</h2>
       </header>
 

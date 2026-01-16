@@ -74,7 +74,7 @@ if (function_exists('load_hero_templates')) {
               <nav aria-label="<?php esc_attr_e('Breadcrumb', 'matrix-starter'); ?>"
                    class="flex gap-2 items-center self-start text-base font-medium tracking-wider text-black whitespace-nowrap">
                 <a href="<?php echo esc_url($home_url); ?>"
-                   class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800">
+                   class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                   <?php echo esc_html($home_label); ?>
                 </a>
 
@@ -85,7 +85,7 @@ if (function_exists('load_hero_templates')) {
 
                 <?php if (!empty($news_url)) : ?>
                   <a href="<?php echo esc_url($news_url); ?>"
-                     class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800">
+                     class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                     <?php echo esc_html(mb_strtoupper($news_label)); ?>
                   </a>
                 <?php else : ?>
@@ -101,7 +101,7 @@ if (function_exists('load_hero_templates')) {
 
                   <?php if (!empty($cat_url)) : ?>
                     <a href="<?php echo esc_url($cat_url); ?>"
-                       class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800"
+                       class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                        aria-current="page">
                       <?php echo esc_html($cat_name); ?>
                     </a>
@@ -114,7 +114,7 @@ if (function_exists('load_hero_templates')) {
               </nav>
 
               <!-- Title -->
-              <h1 class="mt-4 text-6xl font-bold text-indigo-800 leading-[68px] max-md:max-w-full max-md:text-4xl max-md:leading-[52px]">
+              <h1 class="mt-4 text-6xl font-bold text-primary leading-[68px] max-md:max-w-full max-md:text-4xl max-md:leading-[52px]">
                 <?php the_title(); ?>
               </h1>
 

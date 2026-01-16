@@ -203,7 +203,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                     width: 100%;
                     padding: 0.75rem 1rem; /* py-3 px-4 */
                     background-color: #ffffff;
-                    border: 1px solid #3730a3; /* indigo-800 */
+                    border: 1px solid #3730a3; /* primary */
                     cursor: pointer;
                     transition: background-color .2s;
                     line-height: 1.5rem; /* leading-6 */
@@ -214,7 +214,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                     box-shadow: 0 0 0 2px rgba(79,70,229,.5), 0 0 0 4px #fff; /* ring-2 ring-indigo-600 ring-offset-2 */
                   }
                   #<?php echo esc_attr($section_id); ?> .nice-select:hover {
-                    background-color: #eef2ff; /* indigo-50 */
+                    background-color: #eef2ff; /* primary-light */
                   }
                   #<?php echo esc_attr($section_id); ?> .nice-select .current {
                     color: #000; /* text-black */
@@ -224,7 +224,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                   #<?php echo esc_attr($section_id); ?> .nice-select .list {
                     z-index: 50; /* z-50 */
                     width: 100%;
-                    border: 1px solid #3730a3; /* border indigo-800 */
+                    border: 1px solid #3730a3; /* border primary */
                     border-top: 0;
                     box-shadow: 0 10px 15px -3px rgba(0,0,0,.1),
                                 0 4px 6px -2px rgba(0,0,0,.05);
@@ -239,7 +239,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                   #<?php echo esc_attr($section_id); ?> .nice-select .option:hover,
                   #<?php echo esc_attr($section_id); ?> .nice-select .option.focus,
                   #<?php echo esc_attr($section_id); ?> .nice-select .option.selected.focus {
-                    background-color: #eef2ff; /* indigo-50 */
+                    background-color: #eef2ff; /* primary-light */
                   }
                   #<?php echo esc_attr($section_id); ?> .nice-select:after {
                     border: none;
@@ -255,11 +255,11 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                   id="<?php echo esc_attr($dropdown_button_id); ?>"
                   type="button"
                   class="flex relative justify-between items-center px-4 py-3 w-full min-h-[48px]
-                         bg-white border border-indigo-800 border-solid transition-colors duration-200
+                         bg-white border border-primary border-solid transition-colors duration-200
                          cursor-pointer btn
                          max-lg:px-3.5 max-lg:py-2.5
                          max-sm:px-3 max-sm:py-2
-                         hover:bg-indigo-50"
+                         hover:bg-primary-light"
                   aria-haspopup="listbox"
                   aria-expanded="false"
                   aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
@@ -295,14 +295,14 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
                   id="<?php echo esc_attr($listbox_id); ?>"
                   role="listbox"
                   aria-labelledby="<?php echo esc_attr($dropdown_button_id); ?>-label"
-                  class="hidden overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
+                  class="hidden overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
                   tabindex="-1"
                 >
                   <?php if (!empty($items)) : ?>
                     <?php foreach ($items as $it) : ?>
                       <li
                         role="option"
-                        class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-indigo-50 focus:bg-indigo-50 max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2"
+                        class="px-4 py-3 text-base text-black cursor-pointer dropdown-option hover:bg-primary-light focus:bg-primary-light max-lg:px-3.5 max-lg:py-2.5 max-sm:px-3 max-sm:py-2"
                         data-url="<?php echo esc_url($it['url']); ?>"
                         tabindex="-1"
                       >
@@ -392,7 +392,7 @@ $search_btn_class   = 'search-btn-' . wp_rand(10000, 99999);
       } else {
         // Fallback: show native select with reasonable styles
         sel.classList.remove('hidden');
-        sel.classList.add('w-full','px-4','py-3','bg-white','border','border-indigo-800','cursor-pointer','leading-6','text-base');
+        sel.classList.add('w-full','px-4','py-3','bg-white','border','border-primary','cursor-pointer','leading-6','text-base');
       }
 
       function getSelectedUrl() {

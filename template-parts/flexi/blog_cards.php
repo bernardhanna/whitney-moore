@@ -119,7 +119,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 <?php if ($section_heading) : ?>
                     <<?php echo esc_attr($section_heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-3xl font-bold tracking-wider leading-10 text-indigo-800 max-sm:text-2xl"
+                        class="text-3xl font-bold tracking-wider leading-10 text-primary max-sm:text-2xl"
                     >
                         <?php echo esc_html($section_heading); ?>
                     </<?php echo esc_attr($section_heading_tag); ?>>
@@ -165,7 +165,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-200"></div>
+                                    <div class="absolute inset-0 transition-colors duration-200 bg-black/10 group-hover:bg-black/20"></div>
 
                                     <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 rounded">
                                         <?php if ($type) : ?>
@@ -231,7 +231,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-200"></div>
+                                    <div class="absolute inset-0 transition-colors duration-200 bg-black/10 group-hover:bg-black/20"></div>
 
                                     <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 rounded">
                                         <?php if ($type) : ?>
@@ -274,7 +274,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         <?php if (is_array($header_primary_button) && !empty($header_primary_button['url']) && !empty($header_primary_button['title'])) : ?>
                             <a
                                 href="<?php echo esc_url($header_primary_button['url']); ?>"
-                                class="btn flex justify-center items-center px-8 py-4 h-14 bg-indigo-800 text-white cursor-pointer border-0 w-full lg:w-fit whitespace-nowrap hover:bg-indigo-900 transition-colors duration-200"
+                                class="flex justify-center items-center px-8 py-4 w-full h-14 text-white whitespace-nowrap border-0 transition-colors duration-200 cursor-pointer btn bg-primary lg:w-fit hover:bg-primary-dark"
                                 target="<?php echo esc_attr($header_primary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_primary_button['title']); ?>"
                             >
@@ -287,7 +287,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         <?php if (is_array($header_secondary_button) && !empty($header_secondary_button['url']) && !empty($header_secondary_button['title'])) : ?>
                             <a
                                 href="<?php echo esc_url($header_secondary_button['url']); ?>"
-                                class="btn flex justify-center items-center px-8 py-4 border border-indigo-800 text-indigo-800 border-solid cursor-pointer w-full lg:w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200"
+                                class="flex justify-center items-center px-8 py-4 w-full whitespace-nowrap border border-solid transition-colors duration-200 cursor-pointer btn border-primary text-primary lg:w-fit hover:bg-primary-light hover:text-white"
                                 target="<?php echo esc_attr($header_secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_secondary_button['title']); ?>"
                             >

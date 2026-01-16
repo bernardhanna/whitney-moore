@@ -160,7 +160,7 @@ if ($source_mode === 'manual') {
       <header class="px-12 pt-14 w-full max-md:px-5">
         <<?php echo esc_html($heading_tag); ?>
           id="<?php echo esc_attr($section_id); ?>-heading"
-          class="w-full text-3xl font-bold tracking-wider leading-none text-indigo-800 max-md:max-w-full"
+          class="w-full text-3xl font-bold tracking-wider leading-none text-primary max-md:max-w-full"
         >
           <?php echo esc_html($heading); ?>
         </<?php echo esc_html($heading_tag); ?>>

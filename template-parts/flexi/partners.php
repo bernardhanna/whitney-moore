@@ -89,7 +89,7 @@ $next_id   = $section_id . '-next';
                     </p>
                 <?php endif; ?>
 
-                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-indigo-800 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
+                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-primary max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
                     <?php echo esc_html($heading_text); ?>
                 </<?php echo esc_html($heading_tag); ?>>
             </div>

@@ -98,7 +98,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-indigo-800 leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>
@@ -125,7 +125,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-indigo-800 leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>

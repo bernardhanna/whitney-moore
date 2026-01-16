@@ -209,7 +209,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
+                                        <div class="px-4 py-3">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
                                         </div>
                                     </a>

@@ -161,7 +161,7 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
                         <?php if ($has_primary) : ?>
                             <a
                                 href="<?php echo esc_url($primary_button['url']); ?>"
-                                class="flex gap-2 justify-center items-center px-8 py-5 tracking-wide text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full"
+                                class="flex gap-2 justify-center items-center px-8 py-5 tracking-wide text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full hover:bg-primary-dark"
                                 target="<?php echo esc_attr($primary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($primary_button['title']); ?>"
                             >
@@ -177,7 +177,7 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
                         <?php if ($has_secondary) : ?>
                             <a
                                 href="<?php echo esc_url($secondary_button['url']); ?>"
-                                class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full"
+                                class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:bg-primary-dark transition-opacity duration-200 max-sm:w-full hover:text-white"
                                 target="<?php echo esc_attr($secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($secondary_button['title']); ?>"
                             >
