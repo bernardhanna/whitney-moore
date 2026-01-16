@@ -80,10 +80,10 @@ $secondary_display_classes = $resolve_visibility($secondary_visibility_mode, $se
     <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
         <header class="box-border flex relative justify-between items-center p-2.5 w-full max-md:flex-col max-md:gap-5 max-md:items-center max-md:px-2.5 max-md:py-5 max-sm:px-2.5 max-sm:py-4" role="banner">
             <?php if (!empty($heading)) : ?>
-                <div class="relative text-3xl font-bold tracking-wider leading-10 text-center text-indigo-800 <?php echo esc_attr($heading_display_classes); ?>">
+                <div class="relative text-3xl font-bold tracking-wider leading-10 text-center text-primary <?php echo esc_attr($heading_display_classes); ?>">
                     <<?php echo esc_attr($heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-3xl font-bold text-indigo-800 max-sm:text-2xl"
+                        class="text-3xl font-bold text-primary max-sm:text-2xl"
                     >
                         <?php echo esc_html($heading); ?>
                     </<?php echo esc_attr($heading_tag); ?>>
@@ -94,7 +94,7 @@ $secondary_display_classes = $resolve_visibility($secondary_visibility_mode, $se
                 <?php if (is_array($primary_button) && isset($primary_button['url'], $primary_button['title'])) : ?>
                     <a
                         href="<?php echo esc_url($primary_button['url']); ?>"
-                        class="btn flex relative gap-2 justify-center items-center px-8 py-4 h-14 bg-indigo-800 text-white cursor-pointer border-0 w-fit whitespace-nowrap hover:bg-indigo-900 transition-colors duration-200 <?php echo esc_attr($primary_display_classes); ?>"
+                        class="btn flex relative gap-2 justify-center items-center px-8 py-4 h-14 bg-primary text-white cursor-pointer border-0 w-fit whitespace-nowrap hover:bg-primary-dark transition-colors duration-200 <?php echo esc_attr($primary_display_classes); ?>"
                         target="<?php echo esc_attr(isset($primary_button['target']) ? $primary_button['target'] : '_self'); ?>"
                         aria-label="<?php echo esc_attr($primary_button['title']); ?>"
                     >
@@ -107,7 +107,7 @@ $secondary_display_classes = $resolve_visibility($secondary_visibility_mode, $se
                 <?php if (is_array($secondary_button) && isset($secondary_button['url'], $secondary_button['title'])) : ?>
                     <a
                         href="<?php echo esc_url($secondary_button['url']); ?>"
-                        class="btn flex relative gap-2 justify-center items-center px-8 py-4 border border-indigo-800 text-indigo-800 border-solid cursor-pointer w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200 <?php echo esc_attr($secondary_display_classes); ?>"
+                        class="btn flex relative gap-2 justify-center items-center px-8 py-4 border border-primary text-primary border-solid cursor-pointer w-fit whitespace-nowrap hover:bg-primary-light transition-colors duration-200 <?php echo esc_attr($secondary_display_classes); ?>"
                         target="<?php echo esc_attr(isset($secondary_button['target']) ? $secondary_button['target'] : '_self'); ?>"
                         aria-label="<?php echo esc_attr($secondary_button['title']); ?>"
                     >

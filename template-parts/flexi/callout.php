@@ -98,7 +98,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
             <?php if ($cta_button && is_array($cta_button) && isset($cta_button['url'], $cta_button['title'])): ?>
                 <a
                     href="<?php echo esc_url($cta_button['url']); ?>"
-                    class="flex gap-2 justify-center items-center px-16 py-4 mt-14 text-xl leading-none whitespace-nowrap border border-indigo-800 border-solid transition-colors duration-300 text-primary hover:bg-primary hover:text-white focus:bg-primary focus:text-white max-md:px-5 max-md:mt-10 w-fit btn max-sm:text-[1.25rem] max-sm:leading-[1.25rem]"
+                    class="flex gap-2 justify-center items-center px-16 py-4 mt-14 text-xl leading-none whitespace-nowrap border border-primary border-solid transition-colors duration-300 text-primary hover:bg-primary hover:text-white focus:bg-primary focus:text-white max-md:px-5 max-md:mt-10 w-fit btn max-sm:text-[1.25rem] max-sm:leading-[1.25rem]"
                     target="<?php echo esc_attr($cta_button['target'] ?? '_self'); ?>"
                     aria-label="<?php echo esc_attr($cta_button['title']); ?>"
                 >

@@ -85,7 +85,7 @@ if ($right_image_id) {
                         <div class="mt-8">
                             <a
                                 href="<?php echo esc_url($cta_button['url']); ?>"
-                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none bg-white transition-colors text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-50 max-md:text-[1.125rem] max-md:tracking-[1px] max-md:leading-[1.75rem]"
+                                class="inline-flex justify-center items-center px-8 py-4 text-lg leading-none bg-white transition-colors text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-primary-light max-md:text-[1.125rem] max-md:tracking-[1px] max-md:leading-[1.75rem] hover:text-white"
                                 target="<?php echo esc_attr($cta_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($cta_button['title']); ?>"
                                 title="<?php echo esc_attr($cta_button['title']); ?>"

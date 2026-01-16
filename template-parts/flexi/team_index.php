@@ -191,7 +191,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="paOpen ? 'true' : 'false'"
                             @click="paOpen=!paOpen; sectorOpen=false; roleOpen=false;"
@@ -205,12 +205,12 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
                             role="listbox"
                             x-show="paOpen"
                             x-transition
                         >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
                                 @click="selectPA('all','All practice areas')">
                                 All practice areas
                             </li>
@@ -218,7 +218,7 @@ $base_args = array(
                             <?php if (!empty($practice_area_terms) && !is_wp_error($practice_area_terms)) : ?>
                                 <?php foreach ($practice_area_terms as $term) : ?>
                                     <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
+                                        class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                         role="option"
                                         tabindex="0"
                                         @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
@@ -242,7 +242,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="sectorOpen ? 'true' : 'false'"
                             @click="sectorOpen=!sectorOpen; paOpen=false; roleOpen=false;"
@@ -256,12 +256,12 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
                             role="listbox"
                             x-show="sectorOpen"
                             x-transition
                         >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
                                 @click="selectSector('all','All Sectors')">
                                 All Sectors
                             </li>
@@ -269,7 +269,7 @@ $base_args = array(
                             <?php if (!empty($sector_terms) && !is_wp_error($sector_terms)) : ?>
                                 <?php foreach ($sector_terms as $term) : ?>
                                     <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
+                                        class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                         role="option"
                                         tabindex="0"
                                         @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
@@ -293,7 +293,7 @@ $base_args = array(
                     <div class="flex relative flex-col gap-1 items-start w-full">
                         <button
                             type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
+                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-primary border-solid btn max-sm:px-3 max-sm:py-2.5"
                             aria-haspopup="listbox"
                             :aria-expanded="roleOpen ? 'true' : 'false'"
                             @click="roleOpen=!roleOpen; paOpen=false; sectorOpen=false;"
@@ -307,12 +307,12 @@ $base_args = array(
                         </button>
 
                         <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
+                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-primary shadow-lg"
                             role="listbox"
                             x-show="roleOpen"
                             x-transition
                         >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
                                 @click="selectRole('all','All roles')">
                                 All roles
                             </li>
@@ -320,7 +320,7 @@ $base_args = array(
                             <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
                                 <?php foreach ($role_terms as $term) : ?>
                                     <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
+                                        class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                         role="option"
                                         tabindex="0"
                                         @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
@@ -342,7 +342,7 @@ $base_args = array(
                     </label>
 
                     <div class="flex flex-col gap-1 items-start w-full">
-                        <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid max-sm:px-3 max-sm:py-2.5">
+                        <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-primary border-solid max-sm:px-3 max-sm:py-2.5">
                             <div class="flex flex-1 gap-2 items-center">
                                 <input
                                     type="search"
@@ -415,10 +415,10 @@ $base_args = array(
 
                             <a
                                 href="<?php echo esc_url($permalink); ?>"
-                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                 aria-label="<?php echo esc_attr('Get in touch with ' . $name); ?>"
                             >
-                                <span class="relative text-base tracking-tight leading-6 text-indigo-800">
+                                <span class="relative text-base tracking-tight leading-6 text-primary">
                                     Get in touch
                                 </span>
 
@@ -467,9 +467,9 @@ $base_args = array(
 
             <nav aria-label="Pagination Navigation" class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
                 <!-- Previous -->
-                <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
+                <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($prev_page) : ?>
-                        <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center text-primary whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
                            href="<?php echo esc_url($prev_url); ?>"
                            aria-label="Go to previous page" title="Go to previous page">
                             <img src="<?php echo esc_url($pagination_prev_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
@@ -496,11 +496,11 @@ $base_args = array(
                             ?>
 
                             <?php if ($is_current) : ?>
-                                <span class="flex flex-col justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 border-solid transition-colors btn hover:bg-indigo-50"
+                                <span class="flex flex-col justify-center items-center w-12 h-12 text-primary rounded-full border border-primary border-solid transition-colors btn hover:bg-primary-light"
                                       aria-current="page"
                                       aria-label="<?php echo esc_attr('Page ' . $page_num . ', current page'); ?>"
                                       title="<?php echo esc_attr('Current page, page ' . $page_num); ?>">
-                                    <span class="text-indigo-800"><?php echo esc_html((string) $page_num); ?></span>
+                                    <span class="text-primary"><?php echo esc_html((string) $page_num); ?></span>
                                 </span>
                             <?php else : ?>
                                 <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-white hover:bg-opacity-10"
@@ -515,9 +515,9 @@ $base_args = array(
                 </div>
 
                 <!-- Next -->
-                <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
+                <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($next_page) : ?>
-                        <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center text-primary whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
                            href="<?php echo esc_url($next_url); ?>"
                            aria-label="Go to next page" title="Go to next page">
                             <span>Next</span>

@@ -181,15 +181,15 @@ function _matrix_first_cat_name($post_id) {
                aria-label="Article filters and search">
 
             <!-- Filter Pills -->
-            <div class="flex flex-wrap gap-4 items-center text-lg font-semibold leading-none text-indigo-800 min-w-60"
+            <div class="flex flex-wrap gap-4 items-center text-lg font-semibold leading-none text-primary min-w-60"
                  role="group" aria-label="Article category filters">
               <?php foreach ($filter_pills as $pill) : ?>
                 <?php $is_active = ($blog_cat === $pill['slug']) || ($pill['slug'] === 'all' && $blog_cat === 'all'); ?>
                 <button
                   type="button"
                   class="<?php echo esc_attr($is_active
-                    ? 'btn flex gap-2 justify-center items-center px-6 py-2.5 text-indigo-800 bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
-                    : 'btn flex gap-2 justify-center items-center px-6 py-2.5 border border-indigo-800 border-solid rounded-full w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200 max-md:px-5'
+                    ? 'btn flex gap-2 justify-center items-center px-6 py-2.5 text-primary bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
+                    : 'btn flex gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-full w-fit whitespace-nowrap hover:bg-primary-light transition-colors duration-200 max-md:px-5'
                   ); ?>"
                   :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
                   aria-label="<?php echo esc_attr($pill['label']); ?>"
@@ -205,7 +205,7 @@ function _matrix_first_cat_name($post_id) {
               <div class="max-w-full w-[296px]">
                 <div class="w-full">
                   <div
-                    class="flex justify-between items-center h-12 px-4 w-full bg-white border border-indigo-800 border-solid
+                    class="flex justify-between items-center h-12 px-4 w-full bg-white border border-primary border-solid
                            transition-all duration-200
                            focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2"
                   >
@@ -412,7 +412,7 @@ function _matrix_first_cat_name($post_id) {
                                         <?php echo esc_html($cat_name); ?>
                                     </div>
 
-                                    <h3 class="mt-2 text-2xl font-semibold leading-7 text-indigo-800">
+                                    <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary">
                                         <?php the_title(); ?>
                                     </h3>
 
@@ -420,8 +420,8 @@ function _matrix_first_cat_name($post_id) {
                                         <?php echo esc_html(get_the_date('F j, Y') . ' | ' . get_the_time('g:i A')); ?>
                                     </time>
 
-                                    <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-indigo-800">
-                                        <span class="flex gap-2 items-center text-indigo-800 whitespace-nowrap pointer-events-none select-none">
+                                    <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-primary">
+                                        <span class="flex gap-2 items-center text-primary whitespace-nowrap pointer-events-none select-none">
                                             <span class="self-stretch my-auto"><?php echo esc_html__('Read more', 'matrix-starter'); ?></span>
                                             <svg class="object-contain self-stretch my-auto w-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -474,7 +474,7 @@ function _matrix_first_cat_name($post_id) {
         <div class="flex gap-1 items-center py-1 pr-4 pl-1">
             <?php if ($prev_page) : ?>
                 <a href="<?php echo esc_url($prev_url); ?>"
-                   class="flex gap-2 items-center text-indigo-800 transition-colors btn hover:text-indigo-600 w-fit"
+                   class="flex gap-2 items-center text-primary transition-colors btn hover:text-indigo-600 w-fit"
                    aria-label="Go to previous page">
                     <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                         <path d="M12.5 4.5L7.5 10l5 5.5"
@@ -507,7 +507,7 @@ function _matrix_first_cat_name($post_id) {
                     ?>
 
                     <?php if ($is_current) : ?>
-                        <span class="flex justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 btn"
+                        <span class="flex justify-center items-center w-12 h-12 text-primary rounded-full border border-primary btn"
                               aria-current="page">
                             <?php echo esc_html((string) $page_num); ?>
                         </span>
@@ -526,7 +526,7 @@ function _matrix_first_cat_name($post_id) {
         <div class="flex gap-1 items-center py-1 pl-4 pr-1">
             <?php if ($next_page) : ?>
                 <a href="<?php echo esc_url($next_url); ?>"
-                   class="flex gap-2 items-center text-indigo-800 transition-colors btn hover:text-indigo-600 w-fit"
+                   class="flex gap-2 items-center text-primary transition-colors btn hover:text-indigo-600 w-fit"
                    aria-label="Go to next page">
                     <span>Next</span>
                     <svg class="w-8 h-8" viewBox="0 0 20 20" fill="none" aria-hidden="true">

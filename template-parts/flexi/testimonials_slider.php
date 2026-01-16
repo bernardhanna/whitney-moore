@@ -22,7 +22,7 @@ $dots_enabled     = (bool) get_sub_field('dots');
 $autoplay_enabled = (bool) get_sub_field('autoplay');
 $autoplay_speed   = (int) get_sub_field('autoplay_speed') ?: 5000;
 
-/** Force desktop to 4; keep smaller breakpoints */
+/** Desktop shows 4; smaller breakpoints use ACF values */
 $slides_xl = 4;
 $slides_lg = (int) get_sub_field('slides_lg') ?: 3;
 $slides_md = (int) get_sub_field('slides_md') ?: 2;
@@ -43,7 +43,7 @@ if (have_rows('padding_settings')) {
   }
 }
 
-/** Helper: fetch logo fields from CPT */
+/** Helper: logo fields on CPT */
 function _matrix_t_logo($post_id) {
   $logo_img_id = get_field('logo_image', $post_id);
   $logo_svg    = get_field('logo_svg', $post_id);
@@ -114,10 +114,10 @@ $allowed_svg = [
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center pt-10 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
+  <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
 
     <!-- Headings -->
-    <div class="flex flex-col gap-4 items-start w-full max-w-container">
+    <div class="flex flex-col gap-4 items-start w-full">
       <?php if ($subheading) : ?>
         <div class="text-lg font-medium tracking-wide text-black"><?php echo esc_html($subheading); ?></div>
       <?php endif; ?>
@@ -136,9 +136,8 @@ $allowed_svg = [
       <?php endif; ?>
     </div>
 
-    <!-- Slider wrapper provides positioning for arrows -->
-    <div class="relative mt-8 w-full max-w-container">
-      <!-- Shell is clipped: hides left strip, allows right overflow -->
+    <!-- Slider -->
+    <div class="relative mt-8 w-full">
       <div class="overflow-visible relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
         <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
           <?php foreach ($slides as $s) :
@@ -152,7 +151,7 @@ $allowed_svg = [
             $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
           ?>
             <div class="px-4">
-              <article class="relative h-[480px] overflow-hidden group">
+              <article class="relative h-[480px] overflow-hidden group t-card">
                 <?php if ($image_id) :
                   echo wp_get_attachment_image($image_id, 'large', false, [
                     'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
@@ -160,7 +159,7 @@ $allowed_svg = [
                   ]);
                 endif; ?>
 
-                <div class="absolute right-6 bottom-6 left-6">
+                <div class="absolute right-6 bottom-6 left-6 z-20">
                   <div class="relative backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
                     <div class="flex items-start">
                       <?php
@@ -196,7 +195,6 @@ $allowed_svg = [
         </div>
       </div>
 
-      <!-- Overlaid arrows (outside clipped shell so they don't get cut) -->
       <?php if ($arrow_enabled): ?>
         <div class="absolute inset-0 pointer-events-none">
           <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
@@ -214,29 +212,43 @@ $allowed_svg = [
         </div>
       <?php endif; ?>
 
-      <!-- Dots (optional, below slider) -->
       <?php if ($dots_enabled): ?>
         <div class="flex gap-4 justify-center items-center mt-6" data-slick-dots="<?php echo esc_attr($section_id); ?>"></div>
       <?php endif; ?>
     </div>
   </div>
 
-  <!-- Scoped CSS: allow right peek & hide only left via clip-path -->
   <style>
-    /* Allow the next slide to peek on the right */
+    /* Let next slide peek on the right */
     #<?php echo esc_attr($section_id); ?> .slick-list { overflow: visible; padding-right: 2rem; }
     @media (min-width:1536px){
       #<?php echo esc_attr($section_id); ?> .slick-list { padding-right: 2.5rem; }
     }
 
-    /* Hide ONLY the left side of the shell.
-       inset: top | right | bottom | left
-       Right is negative to allow right-side overflow to show. */
+    /* Hide only the left side via clip-path */
     #<?php echo esc_attr($section_id); ?> [data-slick-shell] {
       clip-path: inset(0 -100vw 0 24px);
       -webkit-clip-path: inset(0 -100vw 0 0px);
     }
 
+    /* --- Overlay logic ---
+       Default: every slide has overlay.
+       JS adds .is-clear to the first 3 visible (desktop), removing overlay.
+    */
+    #<?php echo esc_attr($section_id); ?> .t-card { position: relative; }
+    #<?php echo esc_attr($section_id); ?> .t-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.55) 100%);
+      opacity: .75;
+      transition: opacity .2s ease;
+    }
+    #<?php echo esc_attr($section_id); ?> .is-clear .t-card::after { opacity: 0; }
+    #<?php echo esc_attr($section_id); ?> .slick-slide:hover .t-card::after,
+    #<?php echo esc_attr($section_id); ?> .slick-slide:focus-within .t-card::after { opacity: 0; } /* a11y/hover */
   </style>
 
   <script>
@@ -247,7 +259,24 @@ $allowed_svg = [
     var $next   = $root.find('.matrix-next');
     var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
 
+    function updateOverlays(slick){
+      var $slides  = $(slick.$slides);
+      var $active  = $slides.filter('.slick-active');
+
+      // Desktop (>=1280px): keep first 3 clear; everything from the 4th gets overlay
+      // Smaller screens: clear all visible slides (no dimming).
+      var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
+      var clearCount = isDesktop ? 3 : $active.length;
+
+      $slides.removeClass('is-clear');
+      $active.slice(0, clearCount).addClass('is-clear');
+    }
+
     if (!$track.hasClass('slick-initialized')) {
+      $track.on('init reInit afterChange setPosition', function(e, slick){
+        updateOverlays(slick);
+      });
+
       $track.slick({
         slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
         slidesToScroll: 1,
@@ -267,6 +296,13 @@ $allowed_svg = [
         ]
       });
     }
+
+    // Also recalc on resize orientation changes
+    $(window).on('resize orientationchange', function(){
+      if ($track.hasClass('slick-initialized')) {
+        $track.slick('setPosition'); // triggers setPosition event -> updateOverlays
+      }
+    });
   });
   </script>
 </section>

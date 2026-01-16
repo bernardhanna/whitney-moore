@@ -136,7 +136,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
             <!-- CTA link OR default -->
             <a
                 href="<?php echo esc_url($button['url']); ?>"
-                class="flex z-0 gap-2 justify-center items-center self-stretch px-8 py-5 my-auto text-xl tracking-wide leading-none text-center text-indigo-800 bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 w-fit whitespace-nowrap btn transition-colors duration-300 hover:bg-indigo-800 hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800 max-md:w-full"
+                class="flex z-0 gap-2 justify-center items-center self-stretch px-8 py-5 my-auto text-xl tracking-wide leading-none text-center text-primary bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 w-fit whitespace-nowrap btn transition-colors duration-300 hover:bg-primary hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-primary max-md:w-full"
                 target="<?php echo esc_attr($button['target'] ?? '_self'); ?>"
                 aria-label="<?php echo esc_attr($button['title']); ?>"
             >

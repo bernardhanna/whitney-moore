@@ -120,7 +120,7 @@ if ($form_markup) {
             <div class="flex-1 pt-12 shrink basis-28 min-w-60 max-md:max-w-full">
                 <div class="w-full max-md:max-w-full">
                     <?php if ($heading): ?>
-                        <<?php echo esc_attr($heading_tag); ?> class="text-3xl font-semibold leading-tight text-indigo-800 max-md:max-w-full">
+                        <<?php echo esc_attr($heading_tag); ?> class="text-3xl font-semibold leading-tight text-primary max-md:max-w-full">
                             <?php echo esc_html($heading); ?>
                         </<?php echo esc_attr($heading_tag); ?>>
                     <?php endif; ?>
@@ -141,7 +141,7 @@ if ($form_markup) {
                             <div class="text-lg font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($phone_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-indigo-800 max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-primary max-md:max-w-full">
                                 <?php if ($phone_icon): ?>
                                     <?php echo wp_get_attachment_image($phone_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 self-stretch my-auto w-8 aspect-square',
@@ -153,7 +153,7 @@ if ($form_markup) {
                                          alt="Phone icon" />
                                 <?php endif; ?>
                                 <a href="tel:<?php echo esc_attr(preg_replace('/[^+\d]/', '', $phone_number)); ?>"
-                                   class="flex-1 self-stretch my-auto text-indigo-800 shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2">
+                                   class="flex-1 self-stretch my-auto text-primary shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                                     <?php echo esc_html($phone_number); ?>
                                 </a>
                             </div>
@@ -166,7 +166,7 @@ if ($form_markup) {
                             <div class="text-lg font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($email_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-indigo-800 whitespace-nowrap max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-primary whitespace-nowrap max-md:max-w-full">
                                 <?php if ($email_icon): ?>
                                     <?php echo wp_get_attachment_image($email_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 self-stretch my-auto w-8 aspect-square',
@@ -178,7 +178,7 @@ if ($form_markup) {
                                          alt="Email icon" />
                                 <?php endif; ?>
                                 <a href="mailto:<?php echo esc_attr($email_address); ?>"
-                                   class="flex-1 self-stretch my-auto text-indigo-800 shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2">
+                                   class="flex-1 self-stretch my-auto text-primary shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                                     <?php echo esc_html($email_address); ?>
                                 </a>
                             </div>
@@ -191,7 +191,7 @@ if ($form_markup) {
                             <div class="font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($address_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-start mt-4 w-full leading-6 text-indigo-800 max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-start mt-4 w-full leading-6 text-primary max-md:max-w-full">
                                 <?php if ($address_icon): ?>
                                     <?php echo wp_get_attachment_image($address_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 w-8 aspect-square',
@@ -202,20 +202,20 @@ if ($form_markup) {
                                          class="object-contain w-8 shrink-0 aspect-square"
                                          alt="Location icon" />
                                 <?php endif; ?>
-                                <div class="flex-1 text-indigo-800 shrink basis-0 max-md:max-w-full">
+                                <div class="flex-1 text-primary shrink basis-0 max-md:max-w-full">
                                     <span class="text-black">
                                         <?php echo esc_html($address_text); ?>
                                     </span>
                                     <?php if ($address_link && is_array($address_link) && isset($address_link['url'], $address_link['title'])): ?>
                                         <br />
                                         <a href="<?php echo esc_url($address_link['url']); ?>"
-                                           class="text-indigo-800 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2"
+                                           class="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                                            target="<?php echo esc_attr($address_link['target'] ?? '_self'); ?>">
                                             <?php echo esc_html($address_link['title']); ?>
                                         </a>
                                     <?php elseif ($address_link_text): ?>
                                         <br />
-                                        <span class="text-indigo-800"><?php echo esc_html($address_link_text); ?></span>
+                                        <span class="text-primary"><?php echo esc_html($address_link_text); ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@ if ($form_markup) {
                                     if ($social_url && is_array($social_url) && isset($social_url['url'])):
                                 ?>
                                     <a href="<?php echo esc_url($social_url['url']); ?>"
-                                       class="transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2 hover:opacity-80"
+                                       class="transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:opacity-80"
                                        target="<?php echo esc_attr($social_url['target'] ?? '_blank'); ?>"
                                        aria-label="<?php echo esc_attr($social_label_text); ?>">
                                         <?php if ($social_icon): ?>
@@ -263,7 +263,7 @@ if ($form_markup) {
                  style="background-color: <?php echo esc_attr($form_bg_color); ?>;">
 
                 <?php if ($form_heading): ?>
-                    <<?php echo esc_attr($form_heading_tag); ?> class="text-3xl font-semibold leading-tight text-indigo-800 max-md:max-w-full">
+                    <<?php echo esc_attr($form_heading_tag); ?> class="text-3xl font-semibold leading-tight text-primary max-md:max-w-full">
                         <?php echo esc_html($form_heading); ?>
                     </<?php echo esc_attr($form_heading_tag); ?>>
                 <?php endif; ?>
