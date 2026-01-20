@@ -24,7 +24,7 @@ $address       = get_field('address', 'option');
 $social_icons  = get_field('social_icons', 'option') ?: [];
 $partner_logos = get_field('partner_logos', 'option') ?: [];
 
-$attr_text = get_field('attribution_text', 'option') ?: 'Designed and Developed by';
+$attr_text = get_field('attribution_text', 'option') ?: 'Designed & Developed by';
 $attr_link = get_field('attribution_link', 'option');
 
 $bg  = get_field('footer_bg_color', 'option') ?: '#0902A4';
