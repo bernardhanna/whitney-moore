@@ -72,10 +72,7 @@ if ($image_id) {
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
     <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
-        <div class="flex overflow-hidden gap-10 justify-center items-start
-            flex-wrap max-md:flex-col-reverse
-            w-full px-3 sm:px-0 lg:px-32
-            py-4 sm:py-8 lg:pt-20 lg:pb-20">
+        <div class="flex overflow-hidden flex-wrap gap-10 justify-center items-start px-3 py-4 w-full max-md:flex-col-reverse sm:px-0 lg:px-32 sm:py-8 lg:pt-20 lg:pb-20">
 
 
 
@@ -90,7 +87,7 @@ if ($image_id) {
                 <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="text-lg font-medium tracking-wider text-black">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>
@@ -106,7 +103,7 @@ if ($image_id) {
                     </div>
 
                     <?php if (!empty($content)): ?>
-                        <div class="mt-4 text-lg tracking-wider leading-7 text-black max-md:max-w-full wp_editor">
+                        <div class="mt-4 font-normal text-[18px] leading-[26px] tracking-[1px] text-black max-md:max-w-full wp_editor">
                             <?php echo wp_kses_post($content); ?>
                         </div>
                     <?php endif; ?>
@@ -117,7 +114,7 @@ if ($image_id) {
                 <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="text-lg font-medium tracking-wider text-black">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>

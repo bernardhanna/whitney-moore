@@ -1,7 +1,7 @@
 <?php
 get_header();
 ?>
-<main class="w-full overflow-hidden site-main">
+<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem] md:mt-[7rem]">
     <?php load_hero_templates(); ?>
 
 

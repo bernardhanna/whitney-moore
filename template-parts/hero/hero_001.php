@@ -109,13 +109,13 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
         ?>
     <?php endif; ?>
 
-    <div class="gap-2 items-center flex justify-end max-w-container mx-auto lg:min-h-[878px] sm:min-h-[600px] md:min-h-[800px] max-sm:py-5 px-5 w-full <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="gap-2 items-center flex tab:justify-end max-w-container mx-auto lg:min-h-[878px] sm:min-h-[600px] md:min-h-[800px] max-sm:py-5 px-5 w-full <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
         <div
             class="flex relative flex-col justify-center self-stretch p-[2px] my-auto border-solid min-w-60 w-full md:w-[627px] max-w-full"
             style="<?php echo esc_attr($outer_border_style); ?>"
         >
             <div
-                class="flex flex-col p-16 w-full border-solid max-md:p-5 max-md:max-w-full"
+                class="flex flex-col p-16 w-full bg-white border-solid tab:bg-transparent max-md:p-5 max-md:max-w-full"
                 style="<?php echo esc_attr($inner_border_style . $content_box_style); ?>"
             >
                 <div class="w-full tracking-wider max-md:max-w-full">
@@ -161,14 +161,14 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
                         <?php if ($has_primary) : ?>
                             <a
                                 href="<?php echo esc_url($primary_button['url']); ?>"
-                                class="flex gap-2 justify-center items-center px-8 py-5 tracking-wide text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full hover:bg-primary-dark"
+                                class="flex gap-2 justify-center items-center px-8 py-5  text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full hover:bg-primary-dark text-[20px] leading-[20px] tracking-[0.2px] max-sm:text-[18px] "
                                 target="<?php echo esc_attr($primary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($primary_button['title']); ?>"
                             >
                                 <span class="self-stretch my-auto">
                                     <?php echo esc_html($primary_button['title']); ?>
                                 </span>
-                                <svg class="object-contain self-stretch my-auto w-4 shrink-0" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="object-contain self-stretch my-auto w-4 shrink-0 max-xxs:hidden" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </a>
@@ -177,7 +177,7 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
                         <?php if ($has_secondary) : ?>
                             <a
                                 href="<?php echo esc_url($secondary_button['url']); ?>"
-                                class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:bg-primary-dark transition-opacity duration-200 max-sm:w-full hover:text-white"
+                                class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:bg-primary-dark transition-opacity duration-200 max-sm:w-full hover:text-white text-[20px] leading-[20px] tracking-[0.2px] max-xs:text-[16px] max-xs:leading-[16px] max-xs:tracking-[0.2px max-sm:text-[18px]"
                                 target="<?php echo esc_attr($secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($secondary_button['title']); ?>"
                             >

@@ -180,13 +180,13 @@ $secondary_navigation = Navi::make()->build('secondary');
   <?php endif; ?>
 
   <!-- RIGHT CLUSTER (mobile CTA + hamburger) -->
-  <div class="flex gap-3 items-center lg:hidden">
+  <div class="flex gap-3 justify-end items-center w-full lg:hidden">
     <?php if (!empty($contact_button['url']) && !empty($contact_button['title'])) : ?>
       <!-- Mobile CTA: sits left of hamburger -->
       <a
         href="<?php echo esc_url($contact_button['url']); ?>"
         target="<?php echo esc_attr($contact_button['target'] ?: '_self'); ?>"
-        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded transition-colors duration-200 btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded transition-colors duration-200 w-fit btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary min-w-fit max-xxs:hidden"
         aria-label="<?php echo esc_attr($contact_button['title']); ?>"
         role="button"
       >

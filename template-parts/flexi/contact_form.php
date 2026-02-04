@@ -225,7 +225,7 @@ if ($form_markup) {
                     <!-- Social Media Section -->
                     <?php if (have_rows('social_links')): ?>
                         <div class="flex flex-col mt-10 w-full max-md:max-w-full">
-                            <div class="text-lg font-medium tracking-wider text-black max-md:max-w-full">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-md:max-w-full">
                                 <?php echo esc_html($social_label); ?>
                             </div>
                             <div class="flex gap-4 items-center self-start mt-4">

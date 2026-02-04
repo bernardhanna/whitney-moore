@@ -84,7 +84,7 @@ $next_id   = $section_id . '-next';
         <header class="flex justify-between items-center w-full max-md:flex-col max-md:gap-6 max-md:items-start max-md:mb-6 max-sm:gap-5 max-sm:mb-5">
             <div class="flex flex-col items-start">
                 <?php if (!empty($subheading)) : ?>
-                    <p class="text-lg font-medium tracking-wider text-black max-lg:mb-2 max-md:text-base max-sm:text-sm">
+                    <p class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-lg:mb-2 max-md:text-base max-sm:text-sm">
                         <?php echo esc_html($subheading); ?>
                     </p>
                 <?php endif; ?>

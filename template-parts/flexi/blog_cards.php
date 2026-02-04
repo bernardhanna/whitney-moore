@@ -120,7 +120,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 <div class="flex flex-col gap-4 <?php echo esc_attr($layout_class); ?>">
 
                     <?php if (!empty($left_posts)) : ?>
-                        <div class="flex flex-col gap-4 w-full lg:w-1/2">
+                        <div class="flex flex-col gap-4 justify-between w-full lg:w-1/2">
                             <?php foreach ($left_posts as $post_id) :
                                 $title   = get_the_title($post_id);
                                 $image   = get_post_thumbnail_id($post_id);
@@ -278,7 +278,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         <?php if (is_array($header_secondary_button) && !empty($header_secondary_button['url']) && !empty($header_secondary_button['title'])) : ?>
                             <a
                                 href="<?php echo esc_url($header_secondary_button['url']); ?>"
-                                class="flex justify-center items-center px-8 py-4 w-full whitespace-nowrap border border-solid transition-colors duration-200 cursor-pointer btn border-primary text-primary lg:w-fit hover:bg-primary-light hover:text-white"
+                                class="flex justify-center items-center px-8 py-4 w-full whitespace-nowrap border border-solid transition-colors duration-200 cursor-pointer btn border-primary hover:border-primary-light text-primary lg:w-fit hover:bg-primary-light hover:text-white"
                                 target="<?php echo esc_attr($header_secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_secondary_button['title']); ?>"
                             >
