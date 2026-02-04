@@ -146,11 +146,11 @@ get_header();
                                 <h2 id="expertise-heading" class="relative self-stretch text-2xl font-bold leading-8 text-white max-sm:text-xl max-sm:leading-7">
                                     Expert in
                                 </h2>
-                                <div class="relative self-stretch text-lg leading-8 text-white max-sm:text-base max-sm:leading-7">
+                                <ul class="relative self-stretch text-lg leading-8 text-white max-sm:text-base max-sm:leading-7">
                                     <?php foreach ($sector_terms as $t) : ?>
-                                        <p><?php echo esc_html($t->name); ?></p>
+                                        <li class="list-disc list-inside"><?php echo esc_html($t->name); ?></li>
                                     <?php endforeach; ?>
-                                </div>
+                                </ul>
                             </section>
                         <?php endif; ?>
 
