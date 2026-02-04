@@ -2,7 +2,7 @@
 get_header();
 $enable_breadcrumbs = get_field('enable_breadcrumbs', 'option'); // Returns true/false
 ?>
-<main class="overflow-hidden w-full site-main">
+<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
     <?php load_hero_templates(); ?>
 
 

@@ -89,7 +89,7 @@ $heading_tag = 'h2';
                         <!-- Full-card clickable overlay -->
                         <a
                             href="<?php echo esc_url($permalink); ?>"
-                            class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                            class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                             aria-label="<?php echo esc_attr(sprintf(__('Read: %s', 'matrix-starter'), $title)); ?>"
                             aria-describedby="<?php echo esc_attr($meta_id); ?>"
                         >

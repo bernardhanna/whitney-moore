@@ -131,7 +131,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                             <!-- Full-card clickable overlay (keyboard focusable) -->
                             <a
                                 href="<?php echo esc_url($post_permalink); ?>"
-                                class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                                 aria-label="<?php echo esc_attr(sprintf('Read: %s', $post_title)); ?>"
                                 aria-describedby="<?php echo esc_attr($meta_id); ?>"
                             >

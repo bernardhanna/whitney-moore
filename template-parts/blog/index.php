@@ -34,7 +34,7 @@ $sub_text  = $settings['hero_subheading_text'] ?? 'Latest and greatest.';
 $filter_title = $settings['filter_section_title'] ?? 'Filter by';
 
 ?>
-<div class="mt-[7rem] w-full" x-data="{
+<div class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]" x-data="{
       activeCategory: '<?php echo esc_js($category_slug); ?>',
       setCategory(category) {
           window.location.href = category === 'all' ? '/resources/' : '/category/' + category;

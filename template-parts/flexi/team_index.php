@@ -149,11 +149,11 @@ $base_args = array(
 ?>
 
 <section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
-    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-[1568px] pt-5 pb-5 md:pb-10 lg:pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
         <!-- FILTERS (directly below grid as requested) -->
         <form
-            class="box-border flex flex-wrap justify-between items-start px-20 pt-10 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:px-10 max-md:pt-8 max-md:pb-0 max-sm:px-4 max-sm:pt-5 max-sm:pb-0"
+            class="box-border flex flex-wrap justify-between items-start pt-6 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:pt-8 max-md:pb-0 max-sm:pt-5 max-sm:pb-0 relative xl:left-[1.5rem]"
             method="get"
             action="<?php echo esc_url(get_permalink()); ?>"
             role="search"
@@ -415,7 +415,7 @@ $base_args = array(
 
                             <a
                                 href="<?php echo esc_url($permalink); ?>"
-                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                                 aria-label="<?php echo esc_attr('Get in touch with ' . $name); ?>"
                             >
                                 <span class="relative text-base tracking-tight leading-6 text-primary">
@@ -469,7 +469,7 @@ $base_args = array(
                 <!-- Previous -->
                 <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($prev_page) : ?>
-                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-primary w-fit"
                            href="<?php echo esc_url($prev_url); ?>"
                            aria-label="Go to previous page" title="Go to previous page">
                             <img src="<?php echo esc_url($pagination_prev_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
@@ -496,18 +496,18 @@ $base_args = array(
                             ?>
 
                             <?php if ($is_current) : ?>
-                                <span class="flex flex-col justify-center items-center w-12 h-12 rounded-full border border-solid transition-colors text-primary border-primary btn hover:bg-primary-light"
+                                <span class="flex flex-col justify-center items-center w-12 h-12 rounded-full border border-solid transition-colors text-primary border-primary btn hover:bg-primary-lightBlue hover:border-primary-lightBlue"
                                       aria-current="page"
                                       aria-label="<?php echo esc_attr('Page ' . $page_num . ', current page'); ?>"
                                       title="<?php echo esc_attr('Current page, page ' . $page_num); ?>">
                                     <span class="text-primary"><?php echo esc_html((string) $page_num); ?></span>
                                 </span>
                             <?php else : ?>
-                                <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-white hover:bg-opacity-10"
+                                <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-primary-lightBlue hover:text-primary group"
                                    href="<?php echo esc_url($url); ?>"
                                    aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>"
                                    title="<?php echo esc_attr('Go to page ' . $page_num); ?>">
-                                    <span class="text-white"><?php echo esc_html((string) $page_num); ?></span>
+                                    <span class="text-white group-hover:text-primary"><?php echo esc_html((string) $page_num); ?></span>
                                 </a>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -517,7 +517,7 @@ $base_args = array(
                 <!-- Next -->
                 <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-primary' : 'text-gray-400'; ?>">
                     <?php if ($next_page) : ?>
-                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-indigo-600 w-fit"
+                        <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-primary w-fit"
                            href="<?php echo esc_url($next_url); ?>"
                            aria-label="Go to next page" title="Go to next page">
                             <span>Next</span>

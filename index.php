@@ -105,7 +105,7 @@ function _matrix_first_cat_name($post_id) {
 }
 ?>
 
-<main class="overflow-hidden w-full min-h-screen site-main">
+<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
 
     <!-- HERO -->
     <section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative max-sm:flex-col" role="banner" aria-labelledby="<?php echo esc_attr($section_id); ?>-heading">
@@ -272,7 +272,7 @@ function _matrix_first_cat_name($post_id) {
                             ?>
                             <article class="relative max-lg:h-[294px] lg:h-[332px] overflow-hidden group">
                                 <a href="<?php echo esc_url($permalink); ?>"
-                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                                    aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title($p->ID))); ?>">
                                     <span class="sr-only"><?php echo esc_html(get_the_title($p->ID)); ?></span>
                                 </a>
@@ -324,7 +324,7 @@ function _matrix_first_cat_name($post_id) {
                         <div class="max-lg:w-full lg:flex-1">
                             <article class="relative max-lg:h-[294px] lg:h-[696px] overflow-hidden group">
                                 <a href="<?php echo esc_url($permalink); ?>"
-                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                                    aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title($p->ID))); ?>">
                                     <span class="sr-only"><?php echo esc_html(get_the_title($p->ID)); ?></span>
                                 </a>
@@ -389,7 +389,7 @@ function _matrix_first_cat_name($post_id) {
                             ?>
                             <article class="overflow-hidden relative group" role="listitem">
                                 <a href="<?php the_permalink(); ?>"
-                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                   class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                                    aria-label="<?php echo esc_attr(sprintf('Read: %s', get_the_title())); ?>">
                                     <span class="sr-only"><?php the_title(); ?></span>
                                 </a>

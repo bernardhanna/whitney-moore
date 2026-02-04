@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) exit;
 
 get_header();
 ?>
-<main class="overflow-hidden w-full site-main">
+<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
     <?php
     if (function_exists('load_hero_templates')) {
         load_hero_templates();
@@ -276,8 +276,8 @@ get_header();
                             
                             <!-- Testimonials (dynamic Slick slider) -->
                                 <?php if ($enable_testimonials && !empty($slides)) : ?>
-                                  <section class="relative flex w-full overflow-hidden" aria-label="Client testimonials">
-                                    <div class="mx-auto flex w-full min-w-0 max-w-container flex-col items-center pt-5 pb-5 max-lg:px-5">
+                                  <section class="flex overflow-hidden relative w-full" aria-label="Client testimonials">
+                                    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full min-w-0 max-w-container max-lg:px-5">
                                       <div class="w-full min-w-0 pt-6 max-w-[920px]">
                                         <header>
                                           <h2 class="text-2xl font-semibold leading-none text-primary">
@@ -289,8 +289,7 @@ get_header();
                                         </header>
 
                                         <article
-                                          class="mt-4 flex w-full min-w-0 flex-col bg-indigo-400 bg-opacity-20
-                                                 py-14 px-5 lg:pl-20 lg:pr-14 max-md:py-10"
+                                          class="flex flex-col px-5 py-14 mt-4 w-full min-w-0 bg-indigo-400 bg-opacity-20 lg:pl-20 lg:pr-14 max-md:py-10"
                                           role="region"
                                           aria-label="Customer testimonials"
                                         >
@@ -337,7 +336,7 @@ get_header();
 
                                           <!-- Arrows -->
                                           <?php if (count($slides) > 1) : ?>
-                                            <nav class="mt-6 flex items-center self-start gap-4" aria-label="Testimonial navigation">
+                                            <nav class="flex gap-4 items-center self-start mt-6" aria-label="Testimonial navigation">
                                               <button
                                                 id="<?php echo esc_attr($prev_id); ?>"
                                                 class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-indigo-600 p-2 hover:bg-indigo-700 focus:bg-indigo-700"

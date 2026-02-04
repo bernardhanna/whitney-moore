@@ -51,7 +51,7 @@ if ($image_id) {
         [
             'alt'     => esc_attr($image_alt),
             // NOTE: removed any aspect-[...] utilities per spec; keep responsive sizing
-            'class'   => 'object-contain w-full h-auto max-md:max-w-full',
+            'class'   => 'object-contain w-full h-auto max-md:max-w-full max-w-[696px] max-h-[464px]',
             'loading' => 'lazy',
         ]
     );
@@ -71,20 +71,22 @@ if ($image_id) {
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
-        <div class="flex overflow-hidden flex-wrap gap-10 justify-center items-start px-3 py-4 w-full max-md:flex-col-reverse sm:px-0 lg:px-32 sm:py-8 lg:pt-20 lg:pb-20">
+    <div class="flex flex-col items-center py-4 mx-auto w-full sm:py-8 lg:pt-20 lg:pb-20 max-w-container max-lg:px-5">
+        <div class="grid overflow-hidden gap-10 w-full 
+            grid-cols-1 
+            lg:grid-cols-[45%_50%]">
 
 
 
 
             <?php if ($reverse_layout): ?>
                 <!-- Image first when reversed -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="flex justify-center w-full">
                     <?php echo $image_markup; ?>
                 </div>
 
                 <!-- Text content second when reversed -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
                             <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
@@ -111,7 +113,7 @@ if ($image_id) {
 
             <?php else: ?>
                 <!-- Default layout: Text first, image second -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
                             <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
@@ -136,7 +138,7 @@ if ($image_id) {
                     <?php endif; ?>
                 </div>
 
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="flex justify-center w-full">
                     <?php echo $image_markup; ?>
                 </div>
             <?php endif; ?>
