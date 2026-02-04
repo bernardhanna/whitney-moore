@@ -49,7 +49,7 @@ $heading_tag = 'h2';
 <?php if ($related->have_posts()) : ?>
 <section
     id="<?php echo esc_attr($section_id); ?>"
-    class="flex overflow-hidden relative bg-[#F5F5F5]"
+    class="flex overflow-hidden relative bg-[#F5F5F5] "
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
     <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xl:px-5 max-w-container">

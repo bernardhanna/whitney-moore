@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) exit;
 
 get_header();
 ?>
-<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
+<main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem]">
     <?php
     if (function_exists('load_hero_templates')) {
         load_hero_templates();
@@ -113,9 +113,9 @@ get_header();
 
             <!-- TOP HERO (dynamic) -->
             <section class="flex overflow-hidden relative max-lg:mt-[5rem] mt-[5rem]">
-                <div class="flex relative items-center self-stretch w-full max-lg:flex-col max-xl:min-h-[auto] xl:min-h-[700px] xl:max-h-[700px]">
+                <div class="flex relative items-center self-stretch w-full max-sm:flex-col max-xl:min-h-[auto] xl:min-h-[700px] xl:max-h-[700px]">
                     <!-- Hero Image -->
-                    <div class="relative w-full h-full lg:w-1/2 xl:w-2/3 max-md:w-full">
+                    <div class="relative w-full h-full sm:w-1/2 xxl:w-[61%] max-md:w-full">
                         <img
                             src="<?php echo esc_url($img_src); ?>"
                             alt="<?php echo esc_attr($img_alt); ?>"
@@ -126,7 +126,7 @@ get_header();
                     </div>
 
                     <!-- Content Area -->
-                    <div class="flex relative flex-col gap-8 items-start self-stretch px-20 py-14 flex-[1_0_0] min-h-[700px] bg-gradient-to-br from-[#0902A4] to-[#3600CE] max-md:px-8 max-md:py-10 max-md:min-h-[auto] max-sm:gap-6 max-sm:px-6 max-sm:py-8 w-full lg:w-1/2  xl:w-1/3">
+                    <div class="flex relative flex-col gap-8 items-start self-stretch px-5 xl:px-20 py-14 flex-[1_0_0] min-h-[700px] bg-gradient-to-br from-[#0902A4] to-[#3600CE] max-md:px-8 max-md:py-10 max-md:min-h-[auto] max-sm:gap-6 max-sm:px-6 max-sm:py-8 w-full sm:w-1/2 xxl:w-[39%]">
 
                         <!-- Name and Title -->
                         <header class="flex relative flex-col gap-1 items-start">
@@ -167,7 +167,7 @@ get_header();
                                         <path d="M21.9999 16.92V19.92C22.0011 20.1985 21.944 20.4741 21.8324 20.7293C21.7209 20.9845 21.5572 21.2136 21.352 21.4018C21.1468 21.5901 20.9045 21.7335 20.6407 21.8227C20.3769 21.9119 20.0973 21.945 19.8199 21.92C16.7428 21.5856 13.7869 20.5341 11.1899 18.85C8.77376 17.3146 6.72527 15.2661 5.18993 12.85C3.49991 10.2412 2.44818 7.27097 2.11993 4.17997C2.09494 3.90344 2.12781 3.62474 2.21643 3.3616C2.30506 3.09846 2.4475 2.85666 2.6347 2.6516C2.82189 2.44653 3.04974 2.28268 3.30372 2.1705C3.55771 2.05831 3.83227 2.00024 4.10993 1.99997H7.10993C7.59524 1.9952 8.06572 2.16705 8.43369 2.48351C8.80166 2.79996 9.04201 3.23942 9.10993 3.71997C9.23656 4.68004 9.47138 5.6227 9.80993 6.52997C9.94448 6.8879 9.9736 7.27689 9.89384 7.65086C9.81408 8.02482 9.6288 8.36809 9.35993 8.63998L8.08993 9.90997C9.51349 12.4135 11.5864 14.4864 14.0899 15.91L15.3599 14.64C15.6318 14.3711 15.9751 14.1858 16.3491 14.1061C16.723 14.0263 17.112 14.0554 17.4699 14.19C18.3772 14.5285 19.3199 14.7634 20.2799 14.89C20.7657 14.9585 21.2093 15.2032 21.5265 15.5775C21.8436 15.9518 22.0121 16.4296 21.9999 16.92Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </div>
-                                <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone)); ?>" class="relative text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
+                                <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone)); ?>" class="relative  text-[16px] lg:text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
                                     <?php echo esc_html($phone); ?>
                                 </a>
                             </div>
@@ -180,7 +180,7 @@ get_header();
                                         <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </div>
-                                <a href="mailto:<?php echo esc_attr($email); ?>" class="relative text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
+                                <a href="mailto:<?php echo esc_attr($email); ?>" class="relative  text-[16px] lg:text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
                                     <?php echo esc_html($email); ?>
                                 </a>
                             </div>
@@ -195,7 +195,7 @@ get_header();
                                 </div>
                                 <a href="<?php echo esc_url($twitter_url); ?>"
                                    target="_blank" rel="noopener noreferrer"
-                                   class="relative text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
+                                   class="relative  text-[16px] lg:text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
                                    <?php echo esc_html($display_twitter); ?>
                                 </a>
                             </div>
@@ -212,7 +212,7 @@ get_header();
                                 </div>
                                 <a href="<?php echo esc_url($linkedin_url); ?>"
                                    target="_blank" rel="noopener noreferrer"
-                                   class="relative text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
+                                   class="relative  text-[16px] lg:text-lg leading-8 text-white flex-[1_0_0] max-sm:text-base max-sm:leading-7 contact-link">
                                    <?php echo esc_html($display_linkedin); ?>
                                 </a>
                             </div>
@@ -222,7 +222,7 @@ get_header();
                             <?php if (!empty($vcard_url)) : ?>
                                 <div class="flex relative flex-col gap-2 items-start pt-4 max-sm:pt-3">
                                     <a href="<?php echo esc_url($vcard_url); ?>"
-                                       class="flex relative gap-2 justify-center items-center px-8 py-3 whitespace-nowrap bg-white cursor-pointer btn download-btn w-fit max-md:justify-center max-sm:gap-1.5 max-sm:px-6 max-sm:py-3.5"
+                                       class="flex relative gap-2 justify-center items-center px-8 py-3 whitespace-nowrap bg-white cursor-pointer btn download-btn w-fit max-md:justify-center max-sm:gap-1.5 max-sm:px-6 max-sm:py-3.5 hover:bg-primary-light hover:text-primary"
                                        aria-label="<?php echo esc_attr(sprintf('Download vCard: %s', $member_name)); ?>"
                                        download>
                                         <span class="relative text-base font-semibold tracking-normal leading-4 text-center text-primary max-sm:text-sm max-sm:leading-4">
@@ -289,7 +289,7 @@ get_header();
                                         </header>
 
                                         <article
-                                          class="flex flex-col px-5 py-14 mt-4 w-full min-w-0 bg-indigo-400 bg-opacity-20 lg:pl-20 lg:pr-14 max-md:py-10"
+                                          class="flex flex-col px-5 py-14 mt-4 w-full min-w-0 bg-[#86A8FF]/20 lg:pl-20 lg:pr-14 max-md:py-10"
                                           role="region"
                                           aria-label="Customer testimonials"
                                         >
@@ -339,7 +339,7 @@ get_header();
                                             <nav class="flex gap-4 items-center self-start mt-6" aria-label="Testimonial navigation">
                                               <button
                                                 id="<?php echo esc_attr($prev_id); ?>"
-                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-indigo-600 p-2 hover:bg-indigo-700 focus:bg-indigo-700"
+                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-primary p-2 hover:bg-blue focus:bg-primary"
                                                 type="button"
                                                 aria-label="Previous testimonial"
                                               >
@@ -350,7 +350,7 @@ get_header();
 
                                               <button
                                                 id="<?php echo esc_attr($next_id); ?>"
-                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-indigo-600 p-2 hover:bg-indigo-700 focus:bg-indigo-700"
+                                                class="btn carousel-button flex items-center justify-center rounded-[1000px] bg-primary p-2 hover:bg-blue focus:bg-primary"
                                                 type="button"
                                                 aria-label="Next testimonial"
                                               >
@@ -408,8 +408,8 @@ get_header();
                                         $term_link = get_term_link($term);
                                         if (is_wp_error($term_link)) { continue; } ?>
                                         <a href="<?php echo esc_url($term_link); ?>"
-                                           class="practice-pill btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap">
-                                            <span class="relative text-lg font-semibold leading-6 text-primary max-sm:text-base max-sm:leading-6">
+                                           class="practice-pill btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap hover:bg-primary text-primary hover:text-white">
+                                            <span class="relative text-lg font-semibold leading-6 max-sm:text-base max-sm:leading-6">
                                                 <?php echo esc_html($term->name); ?>
                                             </span>
                                         </a>
@@ -467,8 +467,8 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
 
   $fallback_img = '/wp-content/uploads/2025/12/image-2-1.png'; // change if you prefer
   ?>
-  <section class="flex overflow-hidden relative px-20 pt-20 pb-24 tracking-wider bg-neutral-100 max-md:px-5" role="region" aria-labelledby="sectors-heading">
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+  <section class="flex overflow-hidden relative px-20 pt-20 pb-24 tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
+    <div class="flex flex-col items-center mx-auto w-full max-w-container max-lg:px-5">
 
       <header class="w-full text-3xl font-bold leading-none text-primary max-md:max-w-full">
         <h2 id="sectors-heading">Related Sectors</h2>

@@ -52,7 +52,7 @@ if (function_exists('load_hero_templates')) {
       $intro = has_excerpt() ? get_the_excerpt() : '';
       ?>
 
-      <div class="flex flex-col justify-center self-stretch px-48 pt-20 pb-32 bg-white max-md:px-5 max-md:pb-24">
+      <div class="flex flex-col justify-center self-stretch px-48 pt-20 bg-white max-md:px-5 max-md:pb-24">
         <article class="w-full bg-white shadow-lg max-md:max-w-full max-w-[1360px] mx-auto">
 
           <header>

@@ -4,7 +4,7 @@
 @tailwind variants;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
 html {
- /* max-width: 1920px; */
+  max-width:  1728px;
   @apply font-primary;
   width: 100%;
   margin: auto;
@@ -21,7 +21,7 @@ body {
 @layer components {
   /* ACCESSIBILITY: style every element using .btn */
   .btn {
-    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-highlight-primary;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
   }
 }
 
@@ -938,11 +938,11 @@ body {
 }
 
 .wp_editor h1, .entry-content h1 {
-  @apply text-4xl font-bold;
+  @apply text-4xl font-bold text-primary;
 }
 
 .wp_editor h2, .entry-content h2 {
-  @apply text-3xl font-semibold;
+  @apply text-3xl font-semibold text-primary;
 }
 
 .wp_editor h3, .entry-content h3 {
@@ -950,11 +950,11 @@ body {
 }
 
 .wp_editor h4, .entry-content h4 {
-  @apply text-xl font-medium;
+  @apply text-xl font-medium text-primary;
 }
 
 .wp_editor h5, .entry-content h5 {
-  @apply text-lg font-medium;
+  @apply text-lg font-medium text-primary;
 }
 
 .wp_editor h6, .entry-content h6 {

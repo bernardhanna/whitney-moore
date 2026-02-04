@@ -206,7 +206,7 @@ if ($source_mode === 'manual') {
                         <?php endif; ?>
 
                         <?php if (!empty($permalink)) : ?>
-                          <a href="<?php echo esc_url($permalink); ?>" class="inline-flex gap-2 items-center mt-4 text-indigo-700 hover:opacity-90">
+                          <a href="<?php echo esc_url($permalink); ?>" class="inline-flex gap-2 items-center mt-4 text-primary hover:opacity-90">
                             <span class="text-base leading-5">Get in touch</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -337,7 +337,7 @@ if ($source_mode === 'manual') {
                       </div>
                     <?php endif; ?>
                     <?php if (!empty($it['permalink'])) : ?>
-                      <a href="<?php echo esc_url($it['permalink']); ?>" class="inline-flex gap-2 items-center mt-4 text-indigo-700 hover:opacity-90">
+                      <a href="<?php echo esc_url($it['permalink']); ?>" class="inline-flex gap-2 items-center mt-4 text-primary hover:opacity-90">
                         <span class="text-base leading-5">Get in touch</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                           <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
