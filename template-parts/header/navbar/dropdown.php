@@ -42,8 +42,8 @@ function mytheme_is_practice_areas_section($label) {
   role="menu"
   aria-label="<?php echo esc_attr($item->label); ?> submenu"
 >
-  <div class="mx-auto w-full max-w-[1600px] px-6 xl:px-10 2xl:px-14 py-8">
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-[0.85fr_1.25fr]">
+  <div class="mx-auto w-full max-w-[1600px] px-6 xl:px-10 2xl:px-14 -mt-6 relative">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-[45%_55%] bg-white">
       <?php foreach ($sections as $section): ?>
         <?php
           $s_label  = $section->label ?? '';
@@ -51,7 +51,7 @@ function mytheme_is_practice_areas_section($label) {
           $is_practice = mytheme_is_practice_areas_section($s_label);
           $section_classes = $is_practice
           ? 'w-full bg-[#E2E2E2] p-8'
-          : 'w-full';
+          : 'w-full bg-white p-8';
           $header_classes = $is_practice ? 'mb-6' : 'mb-4';
         ?>
         <section class="<?php echo esc_attr($section_classes); ?>">
