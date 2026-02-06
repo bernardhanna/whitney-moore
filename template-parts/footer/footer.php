@@ -298,7 +298,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
     <?php endif; ?>
 
     <!-- Bottom bar -->
-    <div class="flex flex-col flex-wrap gap-6 justify-center items-center self-stretch" >
+    <div class="flex flex-col flex-wrap gap-6 justify-center items-center self-stretch max-md:items-start" >
       <div class="flex justify-between items-start w-full max-lg:justify-start max-md:flex-col max-md:gap-4 max-md:items-start">
         <nav class="flex relative flex-wrap gap-7 justify-center items-start w-full max-md:gap-4 max-md:justify-center max-sm:flex-col max-sm:gap-3 max-sm:text-center" aria-label="<?php esc_attr_e('Legal and policy links', 'matrix-starter'); ?>">
           <p class="text-sm font-medium">
