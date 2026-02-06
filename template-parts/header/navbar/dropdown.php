@@ -91,8 +91,8 @@ function mytheme_is_practice_areas_section($label) {
 
                 <!-- 3 fixed columns on sm+ to keep rows aligned -->
                 <div class="<?php echo $is_practice
-                  ? 'grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-3'
-                  : 'grid grid-cols-1 gap-y-6 gap-x-12 sm:grid-cols-3'; ?>">
+                  ? 'grid grid-cols-1 gap-y-6 gap-xs-6 sm:grid-cols-3'
+                  : 'grid grid-cols-1  md:grid-cols-2'; ?>">
 
                   <!-- COL 1: 3rd tier -->
                   <article class="w-full">
