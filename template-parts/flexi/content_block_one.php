@@ -71,7 +71,7 @@ if ($image_id) {
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center py-4 mx-auto w-full sm:py-8 lg:pt-20 lg:pb-20 max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center py-4 mx-auto w-full sm:py-8 lg:pt-20 lg:pb-20 max-w-container max-xxl:px-5">
         <div class="grid overflow-hidden gap-10 w-full 
             grid-cols-1 
             lg:grid-cols-[45%_50%]">

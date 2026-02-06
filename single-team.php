@@ -243,7 +243,7 @@ get_header();
 
             <!-- PAGE CONTENT + SIDEBAR -->
             <section class="flex overflow-hidden relative">
-                <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-[1568px] max-lg:px-5">
+                <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-[1568px] max-xxl:px-5">
                     <div class="flex relative gap-20 justify-center items-start self-stretch px-5 pt-20 pb-24 max-lg:flex-col max-md:gap-12 max-md:pb-20 max-sm:gap-8 max-sm:pt-8 max-sm:pb-12">
 
                         <!-- Left Column - Main Content -->
@@ -277,7 +277,7 @@ get_header();
                             <!-- Testimonials (dynamic Slick slider) -->
                                 <?php if ($enable_testimonials && !empty($slides)) : ?>
                                   <section class="flex overflow-hidden relative w-full" aria-label="Client testimonials">
-                                    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full min-w-0 max-w-container max-lg:px-5">
+                                    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full min-w-0 max-w-container max-xxl:px-5">
                                       <div class="w-full min-w-0 pt-6 max-w-[920px]">
                                         <header>
                                           <h2 class="text-2xl font-semibold leading-none text-primary">
@@ -468,7 +468,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
   $fallback_img = '/wp-content/uploads/2025/12/image-2-1.png'; // change if you prefer
   ?>
   <section class="flex overflow-hidden relative px-20 pt-20 pb-24 tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
-    <div class="flex flex-col items-center mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center mx-auto w-full max-w-container max-xxl:px-5">
 
       <header class="w-full text-3xl font-bold leading-none text-primary max-md:max-w-full">
         <h2 id="sectors-heading">Related Sectors</h2>

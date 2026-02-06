@@ -77,7 +77,7 @@ $secondary_display_classes = $resolve_visibility($secondary_visibility_mode, $se
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
 >
-    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-xxl:px-5 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
         <header class="box-border flex relative justify-between items-center p-2.5 w-full max-md:flex-col max-md:gap-5 max-md:items-center max-md:px-2.5 max-md:py-5 max-sm:px-2.5 max-sm:py-4" role="banner">
             <?php if (!empty($heading)) : ?>
                 <div class="relative text-3xl font-bold tracking-wider leading-10 text-center text-primary <?php echo esc_attr($heading_display_classes); ?>">

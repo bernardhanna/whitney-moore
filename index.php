@@ -84,9 +84,6 @@ $main_args['no_found_rows']  = true;
 
 $main_query = new WP_Query($main_args);
 
-// Search icon (from your example)
-$search_icon = 'https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/e78553e3c5cc215eba71c71fa3d0d28d7e38d9dd?placeholderIfAbsent=true';
-
 // Hero bg fallback (if no ACF image)
 $hero_bg_url = !empty($hero_bg['url']) ? $hero_bg['url'] : '';
 $hero_bg_id  = !empty($hero_bg['ID']) ? (int) $hero_bg['ID'] : 0;
@@ -161,7 +158,7 @@ function _matrix_first_cat_name($post_id) {
 <section class="flex overflow-hidden relative">
   <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-[1rem]">
 
-    <div class="px-0 pt-0 pb-0 w-full md:px-8 md:pt-8 md:pb-0 lg:px-0">
+    <div class="px-0 pt-0 pb-0 w-full md:pt-8 md:pb-0">
       <div class="max-w-[1728px] mx-auto">
         <form
           method="get"
@@ -177,7 +174,7 @@ function _matrix_first_cat_name($post_id) {
           <input type="hidden" name="blog_cat" :value="cat">
           <input type="hidden" name="paged" value="1">
 
-          <nav class="flex gap-10 justify-between items-start pt-10 w-full max-md:flex-col"
+          <nav class="flex gap-10 justify-between items-start pt-10 w-full max-lg:flex-col"
                aria-label="Article filters and search">
 
             <!-- Filter Pills -->
@@ -201,8 +198,8 @@ function _matrix_first_cat_name($post_id) {
             </div>
 
             <!-- Search -->
-            <div class="text-base text-black min-w-60 w-[296px]">
-              <div class="max-w-full w-[296px]">
+            <div class="text-base text-black w-full lg:min-w-60 lg:w-[296px]">
+              <div class="w-full lg:max-w-[296px]">
                 <div class="w-full">
                   <div
                     class="flex justify-between items-center px-4 w-full h-12 bg-white border border-solid transition-all duration-200 border-primary focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2"
@@ -228,12 +225,9 @@ function _matrix_first_cat_name($post_id) {
                       class="flex justify-center items-center w-6 h-6 transition-opacity duration-200 hover:opacity-70"
                       aria-label="Submit search"
                     >
-                      <img
-                        src="<?php echo esc_url($search_icon); ?>"
-                        alt=""
-                        class="object-contain w-6 h-6"
-                        role="presentation"
-                      >
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M19 19L14.65 14.65M17 9C17 13.4183 13.4183 17 9 17C4.58172 17 1 13.4183 1 9C1 4.58172 4.58172 1 9 1C13.4183 1 17 4.58172 17 9Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                     </button>
                   </div>
                 </div>
@@ -250,10 +244,10 @@ function _matrix_first_cat_name($post_id) {
 
     <!-- FEATURED 3 -->
     <section id="blog-cards-9682" class="flex overflow-hidden relative" style="background-color:#FFFFFF;" aria-labelledby="blog-cards-9682-heading">
-        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:pb-12 max-w-container">
+        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:pb-12 max-w-container max-xxl:px-5">
 
-            <div class="px-4 pt-8 pb-0 w-full md:px-8 lg:px-0">
-                <div class="max-w-[1728px] mx-auto flex flex-col lg:flex-row items-start gap-8">
+            <div class="pt-8 pb-0 w-full">
+                <div class="flex flex-col gap-8 items-start mx-auto max-w-container lg:flex-row">
 
                     <?php
                     $featured_posts = $featured_query->posts;
@@ -371,7 +365,7 @@ function _matrix_first_cat_name($post_id) {
 
     <!-- CONTINUE LOOP (GRID, FULL-CARD CLICKABLE) -->
     <section class="flex overflow-hidden relative pb-[56px] lg:pb-[72px]">
-        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+        <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-5">
 
             <div class="w-full max-w-[1728px] mx-auto">
                 <div class="grid grid-cols-3 gap-6 w-full max-lg:grid-cols-2 max-sm:grid-cols-1" role="list">

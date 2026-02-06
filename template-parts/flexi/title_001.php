@@ -26,7 +26,7 @@ $section_id = 'title_' . uniqid();
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>_heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-xxl:px-5">
         <div class="box-border flex relative flex-col gap-8 items-center px-20 pt-20 pb-1 mx-auto my-0 w-full max-w-[1723px] max-md:px-10 max-md:pt-12 max-md:pb-1 max-md:max-w-[991px] max-sm:px-5 max-sm:pt-8 max-sm:pb-1 max-sm:max-w-screen-sm">
             <div class="flex relative flex-col gap-4 items-start self-stretch w-full">
                 <?php if (!empty($heading)): ?>

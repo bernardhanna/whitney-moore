@@ -8,7 +8,7 @@ get_header();
 <main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
     <?php load_hero_templates(); ?>
         <section class="flex overflow-hidden relative">
-            <div class="flex flex-col items-center w-full py-5 mx-auto max-w-[1085px] max-lg:px-5">
+            <div class="flex flex-col items-center w-full py-5 mx-auto max-w-[1085px] max-xxl:px-5">
                 <div class="flex flex-col gap-10 mt-10 w-full md:flex-row">
                     <div class="w-full">
                         <h2 class="text-2xl font-semibold text-secondary">Pages</h2>

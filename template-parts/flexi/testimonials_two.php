@@ -138,7 +138,7 @@ $slide_count = count($slides);
                 decoding="async"
             />
         </div>
-        <div class="flex flex-col w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+        <div class="flex flex-col w-full mx-auto max-w-container pt-5 pb-5 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
             <div class="flex items-stretch w-full max-lg:flex-col">
 
                 <div class="hidden w-1/2 md:block"></div>

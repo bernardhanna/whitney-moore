@@ -152,7 +152,7 @@ if ($source_mode === 'manual') {
   role="region"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
     <?php if (!empty($heading)) : ?>
       <header class="px-12 pt-14 w-full max-md:px-5">
