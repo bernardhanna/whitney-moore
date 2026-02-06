@@ -149,11 +149,11 @@ $base_args = array(
 ?>
 
 <section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
-    <div class="flex flex-col items-center w-full mx-auto max-w-[1568px] pt-5 pb-5 md:pb-10 lg:pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+    <div class="flex flex-col items-center w-full mx-auto max-w-[1568px] pt-5 pb-5 md:pb-10 lg:pb-20 max-xl:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
         <!-- FILTERS (directly below grid as requested) -->
         <form
-            class="box-border flex flex-wrap justify-between items-start pt-6 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:pt-8 max-md:pb-0 max-sm:pt-5 max-sm:pb-0 relative xl:left-[1.5rem]"
+            class="box-border flex flex-wrap justify-between items-start pt-6 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:pt-8 max-md:pb-0 max-sm:pt-5 max-sm:pb-0 relative xxl:left-[1.5rem]"
             method="get"
             action="<?php echo esc_url(get_permalink()); ?>"
             role="search"

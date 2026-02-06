@@ -112,7 +112,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
         </svg>
     <?php endif; ?>
 
-    <div class="flex flex-col items-center py-10 mx-auto w-full max-xl:px-5 max-w-[98rem] max-md:px-5">
+    <div class="flex flex-col items-center py-10 mx-auto w-full max-xxl:px-5 max-w-[98rem] max-md:px-5">
         <div class="flex z-0 flex-wrap flex-1 gap-8 items-center self-stretch my-auto text-3xl font-bold tracking-wider leading-none text-white shrink basis-16 max-md:max-w-full">
 
             <!-- Profile image OR default -->

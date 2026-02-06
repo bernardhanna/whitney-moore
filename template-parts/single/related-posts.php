@@ -52,7 +52,7 @@ $heading_tag = 'h2';
     class="flex overflow-hidden relative bg-[#F5F5F5] "
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xl:px-5 max-w-container">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container">
 
         <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full">
             <<?php echo esc_attr($heading_tag); ?>

@@ -92,7 +92,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xl:px-5 max-w-container">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container">
 
         <?php if (!empty($heading)) : ?>
             <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full max-md:text-[1.625rem] max-md:font-bold max-md:leading-8 max-md:tracking-[0.0625rem]">

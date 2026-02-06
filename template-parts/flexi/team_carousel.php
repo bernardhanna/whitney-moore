@@ -223,7 +223,7 @@ if ($source_mode === 'manual') {
 
           <!-- Arrows -->
           <?php if ($arrow_enabled): ?>
-            <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute inset-0 pointer-events-none xxl:left-[2rem]">
               <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
                 <button type="button" aria-label="<?php esc_attr_e('Previous team', 'matrix-starter'); ?>"
                   class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">

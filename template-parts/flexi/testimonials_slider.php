@@ -114,7 +114,7 @@ $allowed_svg = [
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center py-10 mx-auto w-full lg:py-20 max-w-container max-lg:px-5">
+  <div class="flex flex-col items-center py-10 mx-auto w-full lg:py-20 max-w-container max-xxl:px-5">
 
     <!-- Headings -->
     <div class="flex flex-col gap-4 items-start w-full">
@@ -196,7 +196,7 @@ $allowed_svg = [
       </div>
 
       <?php if ($arrow_enabled): ?>
-        <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute inset-0 pointer-events-none -left-[1rem] md:-left-[1rem] xxl:-left-[2.5rem] xl:-left-[1.5rem]">
           <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
             <button type="button" aria-label="<?php esc_attr_e('Previous testimonials', 'matrix-starter'); ?>"
               class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">
