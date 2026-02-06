@@ -123,7 +123,7 @@ module.exports = {
       sm: '640px',
       md: '768px',
       tab: '993px', 
-      ipad: '1084px',
+      ipad: '1099px',
       lg: '1100px',
       xl: '1280px',
       xxl: '1600px',

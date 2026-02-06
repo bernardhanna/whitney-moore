@@ -119,14 +119,14 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
             <img
                 src="<?php echo esc_url($profile_img_src); ?>"
                 alt="<?php echo esc_attr($profile_image_alt); ?>"
-                class="object-contain self-stretch my-auto w-32 rounded-full shrink-0 aspect-square"
+                class="object-contain self-stretch my-auto max-w-[72px] w-32 rounded-full shrink-0 aspect-square"
             />
 
             <div class="flex-1 self-stretch my-auto shrink basis-0 max-md:max-w-full">
                 <?php if (!empty($heading)): ?>
                     <<?php echo esc_attr($heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-[2rem] font-bold leading-10 tracking-[0.0625rem] max-md:text-[1.625rem]"
+                        class="text-[2rem] font-bold leading-10 tracking-[0.0625rem] max-md:text-[1.625rem] max-md:text-[26px] max-md:font-bold max-md:leading-[32px] max-md:tracking-[1px]"
                     >
                         <?php echo esc_html($heading); ?>
                     </<?php echo esc_attr($heading_tag); ?>>
@@ -136,11 +136,11 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
             <!-- CTA link OR default -->
             <a
             href="<?php echo esc_url($button['url']); ?>"
-            class="group flex z-0 gap-2 justify-center items-center self-stretch w-full px-5 max-w-[259px] py-5 my-auto text-xl font-normal leading-5 tracking-[0.0125rem] text-center text-primary bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5  whitespace-nowrap btn transition-colors duration-300 hover:bg-primary-dark hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-primary max-md:w-full"
+            class="group flex z-0 gap-2 justify-center items-center self-stretch w-full px-5 lg:max-w-[259px] sm:py-5 my-auto text-xl font-normal leading-5 tracking-[0.0125rem] text-center text-primary bg-white shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5  whitespace-nowrap btn transition-colors duration-300 hover:bg-primary-dark hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-primary max-md:w-full max-md:h-[48px] "
             target="<?php echo esc_attr($button['target'] ?? '_self'); ?>"
             aria-label="<?php echo esc_attr($button['title']); ?>"
             >
-            <span class="self-stretch my-auto">
+            <span class="self-stretch my-auto max-md:text-[18px] max-md:font-medium max-md:leading-[16px] max-md:tracking-[0.18px]">
                 <?php echo esc_html($button['title']); ?>
             </span>
 
