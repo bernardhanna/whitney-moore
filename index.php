@@ -399,12 +399,12 @@ function _matrix_first_cat_name($post_id) {
                                     </div>
                                 <?php endif; ?>
 
-                                <div class="flex overflow-hidden flex-col px-4 mt-4 w-full">
-                                    <div class="text-lg font-medium tracking-wider" aria-label="Category">
+                                <div class="flex overflow-hidden flex-col px-4 mt-4 w-full max-sm:px-0">
+                                    <div class="text-lg font-medium tracking-wider max-sm:text-[14px]" aria-label="Category">
                                         <?php echo esc_html($cat_name); ?>
                                     </div>
 
-                                    <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary">
+                                    <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary max-sm:text-[22px]">
                                         <?php the_title(); ?>
                                     </h3>
 

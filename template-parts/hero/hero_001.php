@@ -101,7 +101,7 @@ $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($sectio
         <?php
         echo wp_get_attachment_image($background_image, 'full', false, [
             'alt'           => esc_attr($background_image_alt),
-            'class'         => 'object-cover relative sm:absolute inset-0 size-full',
+            'class'         => 'object-cover relative sm:absolute inset-0 size-full max-sm:min-h-[340px]',
             'aria-hidden'   => 'true',
             'decoding'      => 'async',
             'fetchpriority' => 'high',

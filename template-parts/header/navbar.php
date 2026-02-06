@@ -67,7 +67,7 @@ $secondary_navigation = Navi::make()->build('secondary');
   <?php get_template_part('template-parts/header/topbar'); ?>
 
 <nav
-  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 h-[107px] max-w-[1400px]"
+  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 md:h-[107px] max-w-[1400px]"
   role="navigation"
   aria-label="Main navigation"
 >

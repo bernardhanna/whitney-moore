@@ -89,13 +89,13 @@ $next_id   = $section_id . '-next';
                     </p>
                 <?php endif; ?>
 
-                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-primary max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
+                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-primary max-sm:text-2xl max-sm:leading-8">
                     <?php echo esc_html($heading_text); ?>
                 </<?php echo esc_html($heading_tag); ?>>
             </div>
 
             <!-- Arrow controls (positioned like your example) -->
-            <div class="flex relative gap-3 justify-between items-center mr-6 w-full max-md:self-end sm:w-auto sm:justify-center">
+            <div class="flex relative gap-3 justify-between items-center mr-6 w-full max-md:hidden max-md:self-end sm:w-auto sm:justify-center">
                 <div class="pointer-events-auto">
                     <button
                         id="<?php echo esc_attr($prev_id); ?>"
@@ -173,6 +173,34 @@ $next_id   = $section_id . '-next';
             </div>
         </div>
 
+        <div class="flex hidden relative gap-3 items-center p-4 mx-auto mr-6 w-full max-lg:justify-between max-md:self-end lg:w-auto max-md:flex">
+                <div class="pointer-events-auto">
+                    <button
+                        id="<?php echo esc_attr($prev_id); ?>"
+                        type="button"
+                        aria-label="Previous partners"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-prev hover:opacity-90"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="pointer-events-auto">
+                    <button
+                        id="<?php echo esc_attr($next_id); ?>"
+                        type="button"
+                        aria-label="Next partners"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-next hover:opacity-90"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
     </div>
 
     <style>
@@ -221,6 +249,12 @@ $next_id   = $section_id . '-next';
                             breakpoint: 640,
                             settings: {
                                 slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 580,
+                            settings: {
+                                slidesToShow: 1
                             }
                         }
                     ]

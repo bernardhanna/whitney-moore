@@ -74,7 +74,7 @@ if ($image_id) {
     <div class="flex flex-col items-center py-4 mx-auto w-full sm:py-8 lg:pt-20 lg:pb-20 max-w-container max-xxl:px-5">
         <div class="grid overflow-hidden gap-10 w-full 
             grid-cols-1 
-            lg:grid-cols-[45%_50%]">
+            lg:grid-cols-[45%_50%] max-lg:flex max-lg:flex-col-reverse">
 
 
 
@@ -89,7 +89,7 @@ if ($image_id) {
                 <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
+                            <div class="max-sm:text-base max-sm:font-medium max-sm:leading-[16px] max-sm:tracking-[0.18px] font-medium text-[18px] leading-normal tracking-[1px] text-black">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>
@@ -97,7 +97,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-lg:text-4xl max-md:leading-[54px] max-sm:text-[26px] max-sm:font-bold max-sm:leading-[32px] max-sm:tracking-[1px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>
@@ -116,7 +116,7 @@ if ($image_id) {
                 <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-sm:text-base max-sm:font-medium max-sm:leading-[16px] max-sm:tracking-[0.18px]">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>
@@ -124,7 +124,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px] max-sm:text-[26px] max-sm:font-bold max-sm:leading-[32px] max-sm:tracking-[1px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>

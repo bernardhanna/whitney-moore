@@ -119,14 +119,14 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
             <img
                 src="<?php echo esc_url($profile_img_src); ?>"
                 alt="<?php echo esc_attr($profile_image_alt); ?>"
-                class="object-contain self-stretch my-auto max-w-[72px] w-32 rounded-full shrink-0 aspect-square"
+                class="object-contain self-stretch my-auto max-sm:max-w-[72px] w-32 rounded-full shrink-0 aspect-square"
             />
 
             <div class="flex-1 self-stretch my-auto shrink basis-0 max-md:max-w-full">
                 <?php if (!empty($heading)): ?>
                     <<?php echo esc_attr($heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-[2rem] font-bold leading-10 tracking-[0.0625rem] max-md:text-[1.625rem] max-md:text-[26px] max-md:font-bold max-md:leading-[32px] max-md:tracking-[1px]"
+                        class="text-[2rem] font-bold leading-10 tracking-[0.0625rem] max-lg:text-[1.625rem] max-md:text-[26px] max-md:font-bold max-md:leading-[32px] max-md:tracking-[1px]"
                     >
                         <?php echo esc_html($heading); ?>
                     </<?php echo esc_attr($heading_tag); ?>>

@@ -92,13 +92,13 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container max-sm:py-10">
 
         <?php if (!empty($heading)) : ?>
             <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full max-md:text-[1.625rem] max-md:font-bold max-md:leading-8 max-md:tracking-[0.0625rem]">
                 <<?php echo esc_attr($heading_tag); ?>
                     id="<?php echo esc_attr($section_id); ?>-heading"
-                    class="max-md:max-w-full text-[2rem] font-bold leading-[2.5rem] tracking-[0.0625rem]"
+                    class="max-md:text-[26px] max-md:font-bold max-md:leading-[32px] max-md:tracking-[1px] w-full text-[2rem] font-bold leading-[2.5rem] tracking-[0.0625rem]"
                 >
                     <?php echo esc_html($heading); ?>
                 </<?php echo esc_attr($heading_tag); ?>>
@@ -107,7 +107,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
 
         <?php if ($articles_query->have_posts()) : ?>
             <div class="mt-14 w-full text-base text-black max-md:mt-10 max-md:max-w-full">
-                <div class="grid grid-cols-3 gap-6 w-full max-lg:grid-cols-2 max-sm:grid-cols-1" role="list">
+                <div class="grid grid-cols-3 gap-6 w-full  max-sm:grid-cols-1" role="list">
                     <?php while ($articles_query->have_posts()) : $articles_query->the_post(); ?>
                         <?php
                         $post_id = get_the_ID();
@@ -139,7 +139,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                             </a>
 
                             <?php if ($featured_image_id) : ?>
-                                <div class="w-full h-[340px] overflow-hidden">
+                                <div class="w-full h-[340px] max-md:h-[240px] overflow-hidden">
                                       <?php echo wp_get_attachment_image($featured_image_id, 'large', false, [
                                         'alt'     => esc_attr($featured_image_alt),
                                         'title'   => esc_attr(get_the_title($featured_image_id)),
@@ -150,13 +150,13 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
                                 </div>
                             <?php endif; ?>
 
-                            <div class="flex overflow-hidden flex-col px-4 mt-4 w-full">
-                                <div class="text-lg font-medium tracking-wider" aria-label="Category">
+                            <div class="flex overflow-hidden flex-col px-4 mt-4 w-full max-sm:px-0">
+                                <div class="text-lg font-medium tracking-wider max-sm:text-[14px]" aria-label="Category">
                                     <?php echo esc_html($category_name); ?>
                                 </div>
 
                                 <!-- Title is visual only; overlay anchor handles the click -->
-                                <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary">
+                                <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary max-sm:text-[22px]">
                                     <span class="text-primary"><?php echo esc_html($post_title); ?></span>
                                 </h3>
 

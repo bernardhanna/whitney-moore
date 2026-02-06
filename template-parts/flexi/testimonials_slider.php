@@ -159,7 +159,7 @@ $allowed_svg = [
                   ]);
                 endif; ?>
 
-                <div class="absolute right-6 bottom-6 left-6 z-20">
+                <div class="relative z-20">
                   <div class="relative backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
                     <div class="flex items-start">
                       <?php

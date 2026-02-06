@@ -1073,13 +1073,13 @@ body {
 .hamburger.is-active .hamburger-inner,
 .hamburger.is-active .hamburger-inner:after,
 .hamburger.is-active .hamburger-inner:before {
-  @apply bg-primary;
+  background: rgba(0, 0, 0, 0.70);
 }
 
 .hamburger-inner,
 .hamburger-inner:after,
 .hamburger-inner:before {
-  @apply bg-primary;
+  background: rgba(0, 0, 0, 0.70);
 }
 
 

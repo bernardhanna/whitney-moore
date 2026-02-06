@@ -180,7 +180,7 @@ if ($source_mode === 'manual') {
                 $permalink = $it['permalink'] ?? '';
               ?>
                 <div class="px-2">
-                  <article class="relative h-[520px] overflow-hidden group t-card">
+                  <article class="relative h-[520px] overflow-hidden group t-card flex items-end p-4 pl-8">
                     <!-- Photo -->
                     <img
                       src="<?php echo esc_url($img_url); ?>"
@@ -191,7 +191,7 @@ if ($source_mode === 'manual') {
                     />
 
                     <!-- Overlay card -->
-                    <div class="absolute right-6 bottom-6 left-6">
+                    <div class="relative">
                       <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw] w-[-webkit-fill-available]">
                         <?php if ($show_name && !empty($title)) : ?>
                           <div class="text-base font-semibold tracking-normal text-black">
