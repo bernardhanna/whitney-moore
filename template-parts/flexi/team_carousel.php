@@ -152,7 +152,7 @@ if ($source_mode === 'manual') {
   role="region"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
+  <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
     <?php if (!empty($heading)) : ?>
       <header class="px-12 pt-14 w-full max-md:px-5">
@@ -170,7 +170,7 @@ if ($source_mode === 'manual') {
 
         <?php if ($enable_slider) : ?>
           <!-- Slider shell -->
-          <div class="relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
+          <div class="relative w-full lg:left-5" data-slick-shell="<?php echo esc_attr($section_id); ?>">
             <div class="matrix-slick" id="<?php echo esc_attr($track_id); ?>" data-slick-root="<?php echo esc_attr($section_id); ?>">
               <?php foreach ($items as $it) :
                 $img_url   = $it['img_url'] ?? $default_profile;
@@ -180,19 +180,19 @@ if ($source_mode === 'manual') {
                 $permalink = $it['permalink'] ?? '';
               ?>
                 <div class="px-2">
-                  <article class="relative h-[520px] overflow-hidden group t-card flex items-end p-4 pl-8">
+                  <article class="relative h-[520px] overflow-hidden group t-card">
                     <!-- Photo -->
                     <img
                       src="<?php echo esc_url($img_url); ?>"
                       alt="<?php echo esc_attr($img_alt); ?>"
-                      class="object-cover absolute inset-0 w-full h-full"
+                      class="object-cover relative inset-0 w-full h-full"
                       loading="lazy"
                       decoding="async"
                     />
 
                     <!-- Overlay card -->
-                    <div class="relative">
-                      <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw] w-[-webkit-fill-available]">
+                    <div class="absolute bottom-0 w-full max-w-[95%] mb-4 pl-5 pr-2">
+                      <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-full">
                         <?php if ($show_name && !empty($title)) : ?>
                           <div class="text-base font-semibold tracking-normal text-black">
                             <?php echo esc_html($title); ?>
@@ -223,7 +223,7 @@ if ($source_mode === 'manual') {
 
           <!-- Arrows -->
           <?php if ($arrow_enabled): ?>
-            <div class="absolute inset-0 pointer-events-none xxl:left-[2rem]">
+            <div class="absolute inset-0 pointer-events-none max-md:hidden max-md:relative">
               <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
                 <button type="button" aria-label="<?php esc_attr_e('Previous team', 'matrix-starter'); ?>"
                   class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">
@@ -245,13 +245,9 @@ if ($source_mode === 'manual') {
 
           <!-- Peek/clip + opacity dimming -->
           <style>
-            #<?php echo esc_attr($section_id); ?> .slick-list { overflow: visible; padding-right: 2rem; }
-            @media (min-width:1536px){
-              #<?php echo esc_attr($section_id); ?> .slick-list { padding-right: 2.5rem; }
-            }
             #<?php echo esc_attr($section_id); ?> [data-slick-shell] {
-              clip-path: inset(0 -100vw 0 24px);
-              -webkit-clip-path: inset(0 -100vw 0 24px);
+              clip-path: inset(0 -100vw 0 14px);
+              -webkit-clip-path: inset(0 -100vw 0 14px);
             }
             /* Opacity dimming, same behavior as Testimonials */
             #<?php echo esc_attr($section_id); ?> .t-card { opacity: 1; transition: opacity .25s ease; will-change: opacity; }
