@@ -85,7 +85,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
     <!-- Top Columns (5) -->
     <nav
-      class="grid grid-cols-2 gap-x-8 gap-y-10 items-start self-stretch
+      class="grid grid-cols-2 px-4 lg:gap-x-8 gap-y-10 items-start self-stretch
        max-[480px]:grid-cols-1
        lg:grid-cols-5"
       aria-label="<?php esc_attr_e('Footer navigation', 'matrix-starter'); ?>"
@@ -304,17 +304,67 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
           <p class="text-sm font-medium">
             <?php echo esc_html( sprintf('© %s Whitney Moore. All rights reserved', date('Y')) ); ?>
           </p>
-          <?php
-          wp_nav_menu([
-            'theme_location' => 'copyright',
-            'container'      => false,
-            'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
-            'fallback_cb'    => false,
-            'depth'          => 1,
-            'link_before'    => '<span class="text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-gray-200">',
-            'link_after'     => '</span>',
-          ]);
-          ?>
+<?php
+// ---------- Copyright menu as <select> on mob and below ----------
+$locations = get_nav_menu_locations();
+$menu_id   = isset($locations['copyright']) ? (int) $locations['copyright'] : 0;
+$menu_items = $menu_id ? wp_get_nav_menu_items($menu_id) : [];
+
+$current_url = home_url(add_query_arg([], $wp->request ?? ''));
+?>
+
+<!-- Desktop / tablet links (shows above 575px) -->
+<div class="max-mob:hidden">
+  <?php
+  wp_nav_menu([
+    'theme_location' => 'copyright',
+    'container'      => false,
+    'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
+    'fallback_cb'    => false,
+    'depth'          => 1,
+    'link_before'    => '<span class="text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-gray-200">',
+    'link_after'     => '</span>',
+  ]);
+  ?>
+</div>
+
+<!-- Mobile dropdown (shows at 575px and below) -->
+<?php if (!empty($menu_items)) : ?>
+  <div class="hidden w-full max-mob:block">
+    <label for="footer-copyright-select" class="sr-only">
+      <?php esc_html_e('Footer links', 'matrix-starter'); ?>
+    </label>
+
+    <select
+      id="footer-copyright-select"
+      class="w-full js-nice-select"
+      data-placeholder="<?php echo esc_attr__('More links', 'matrix-starter'); ?>"
+    >
+      <option value=""><?php esc_html_e('More links', 'matrix-starter'); ?></option>
+
+      <?php foreach ($menu_items as $mi) :
+        // depth 1 only (top-level)
+        if ((int) $mi->menu_item_parent !== 0) {
+          continue;
+        }
+
+        $url   = !empty($mi->url) ? $mi->url : '';
+        $label = !empty($mi->title) ? $mi->title : '';
+
+        if (!$url || !$label) {
+          continue;
+        }
+
+        // mark selected if current page
+        $is_selected = (trailingslashit($current_url) === trailingslashit($url)) || untrailingslashit($current_url) === untrailingslashit($url);
+        ?>
+        <option value="<?php echo esc_url($url); ?>" <?php selected($is_selected); ?>>
+          <?php echo esc_html(wp_specialchars_decode($label, ENT_QUOTES)); ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+<?php endif; ?>
         </nav>
 
         <?php
@@ -337,5 +387,47 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
   </div>
 </footer>
+<script>
+  (function () {
+    const mq = window.matchMedia('(max-width: 575px)');
 
+    function initNiceSelect() {
+      const selects = document.querySelectorAll('select.js-nice-select');
+
+      selects.forEach((select) => {
+        // redirect on change
+        if (!select.dataset.bound) {
+          select.addEventListener('change', (e) => {
+            const url = e.target.value;
+            if (url) window.location.href = url;
+          });
+          select.dataset.bound = '1';
+        }
+
+        // init niceSelect if available and not already initialized
+        if (window.jQuery && typeof jQuery(select).niceSelect === 'function') {
+          const $select = jQuery(select);
+
+          if (mq.matches) {
+            if (!$select.next('.nice-select').length) {
+              $select.niceSelect();
+            } else {
+              $select.niceSelect('update');
+            }
+          } else {
+            // optional: destroy when leaving mob
+            if ($select.next('.nice-select').length && typeof $select.niceSelect === 'function') {
+              // Many Nice Select builds don't support destroy; if yours does, uncomment:
+              // $select.niceSelect('destroy');
+            }
+          }
+        }
+      });
+    }
+
+    // run once and on breakpoint changes
+    initNiceSelect();
+    mq.addEventListener ? mq.addEventListener('change', initNiceSelect) : mq.addListener(initNiceSelect);
+  })();
+</script>
 <?php wp_footer(); ?>

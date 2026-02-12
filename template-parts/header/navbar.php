@@ -67,7 +67,7 @@ $secondary_navigation = Navi::make()->build('secondary');
   <?php get_template_part('template-parts/header/topbar'); ?>
 
 <nav
-  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 md:h-[107px] max-w-[1400px]"
+  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 h-[67px] md:h-[107px] max-w-[1400px]"
   role="navigation"
   aria-label="Main navigation"
 >
@@ -186,7 +186,7 @@ $secondary_navigation = Navi::make()->build('secondary');
       <a
         href="<?php echo esc_url($contact_button['url']); ?>"
         target="<?php echo esc_attr($contact_button['target'] ?: '_self'); ?>"
-        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded transition-colors duration-200 w-fit btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary min-w-fit max-xxs:hidden"
+        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded-none transition-colors duration-200 w-fit btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary min-w-fit max-xxs:hidden"
         aria-label="<?php echo esc_attr($contact_button['title']); ?>"
         role="button"
       >
