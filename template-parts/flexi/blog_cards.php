@@ -132,7 +132,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 
                                 $override_link = (is_array($small_cta) && !empty($small_cta['url'])) ? $small_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group rounded">
+                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group ">
                                     <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
@@ -157,7 +157,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
                                     <!-- Content card shouldn't block clicks -->
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 rounded pointer-events-none">
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5  pointer-events-none">
                                         <?php if ($type) : ?>
                                             <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
                                                 <?php echo esc_html($type); ?>
@@ -201,7 +201,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 
                                 $override_link = (is_array($big_cta) && !empty($big_cta['url'])) ? $big_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group rounded">
+                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group ">
                                     <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
@@ -224,7 +224,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 
                                     <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 rounded pointer-events-none">
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6  pointer-events-none">
                                         <?php if ($type) : ?>
                                             <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
                                                 <?php echo esc_html($type); ?>
