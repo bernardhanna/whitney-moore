@@ -290,10 +290,10 @@ function _matrix_first_cat_name($post_id) {
                                             echo !empty($cats) ? esc_html($cats[0]->name) : esc_html__('Uncategorized', 'matrix-starter');
                                             ?>
                                         </div>
-                                        <h3 class="text-xl font-semibold leading-6 text-primary">
+                                        <h3 class="text-[20px] font-semibold leading-6 text-primary">
                                             <?php echo esc_html(get_the_title($p->ID)); ?>
                                         </h3>
-                                        <p class="text-lg font-medium text-black">
+                                        <p class="text-[16px] font-medium text-black">
                                             <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
                                         </p>
                                     </div>
@@ -335,16 +335,16 @@ function _matrix_first_cat_name($post_id) {
                                 <div class="absolute inset-0 m-auto max-lg:w-[80%] max-lg:h-[80%] max-lg:justify-between lg:justify-start lg:inset-auto lg:bottom-6 lg:left-6 lg:right-6 backdrop-blur-[15px] bg-[#ffffff85] p-6 flex flex-col gap-6">
 
                                     <div>
-                                        <div class="text-base font-medium text-primary">
+                                        <div class="text-[16px] uppercase font-medium text-primary">
                                             <?php
                                             $cats = get_the_category($p->ID);
                                             echo !empty($cats) ? esc_html($cats[0]->name) : esc_html__('Uncategorized', 'matrix-starter');
                                             ?>
                                         </div>
-                                        <h3 class="text-xl font-semibold text-primary">
+                                        <h3 class="text-[20px] font-semibold text-primary">
                                             <?php echo esc_html(get_the_title($p->ID)); ?>
                                         </h3>
-                                        <p class="text-base font-medium text-black">
+                                        <p class="text-[16px] font-medium text-black">
                                             <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
                                         </p>
                                     </div>
