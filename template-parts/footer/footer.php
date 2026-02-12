@@ -242,9 +242,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
           <?php if ($address): ?>
             <div class="flex gap-2 items-start">
               <span aria-hidden="true" class="flex-shrink-0 mt-0.5">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-<path d="M8 4.66667V2H1.33333V14H14.6667V4.66667H8ZM4 12.6667H2.66667V11.3333H4V12.6667ZM4 10H2.66667V8.66667H4V10ZM4 7.33333H2.66667V6H4V7.33333ZM4 4.66667H2.66667V3.33333H4V4.66667ZM6.66667 12.6667H5.33333V11.3333H6.66667V12.6667ZM6.66667 10H5.33333V8.66667H6.66667V10ZM6.66667 7.33333H5.33333V6H6.66667V7.33333ZM6.66667 4.66667H5.33333V3.33333H6.66667V4.66667ZM13.3333 12.6667H8V11.3333H9.33333V10H8V8.66667H9.33333V7.33333H8V6H13.3333V12.6667ZM12 7.33333H10.6667V8.66667H12V7.33333ZM12 10H10.6667V11.3333H12V10Z" fill="white"/>
-</svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 4.66667V2H1.33333V14H14.6667V4.66667H8ZM4 12.6667H2.66667V11.3333H4V12.6667ZM4 10H2.66667V8.66667H4V10ZM4 7.33333H2.66667V6H4V7.33333ZM4 4.66667H2.66667V3.33333H4V4.66667ZM6.66667 12.6667H5.33333V11.3333H6.66667V12.6667ZM6.66667 10H5.33333V8.66667H6.66667V10ZM6.66667 7.33333H5.33333V6H6.66667V7.33333ZM6.66667 4.66667H5.33333V3.33333H6.66667V4.66667ZM13.3333 12.6667H8V11.3333H9.33333V10H8V8.66667H9.33333V7.33333H8V6H13.3333V12.6667ZM12 7.33333H10.6667V8.66667H12V7.33333ZM12 10H10.6667V11.3333H12V10Z" fill="white"/>
+                </svg>
               </span>
               <address class="text-base not-italic font-light">
                 <?php echo wp_kses_post($address); ?>
@@ -315,7 +315,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
             $list_id    = $dd_id . '-list';
             $status_id  = $dd_id . '-status';
 
-            $placeholder = 'More links';
+            $placeholder = 'Legal links';
 
             // Build a flat array of top-level items
             $dd_items = [];
