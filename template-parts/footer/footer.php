@@ -339,7 +339,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
             ?>
 
             <!-- Desktop / tablet links (above 575px) -->
-            <div class="max-mob:hidden">
+            <div class="max-ipad:hidden">
               <?php
               wp_nav_menu([
                 'theme_location' => 'copyright',
@@ -355,7 +355,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
                   <!-- Mobile dropdown (575px and below) -->
                   <?php if (!empty($dd_items)) : ?>
-                    <div class="hidden w-full max-mob:block">
+                    <div class="hidden w-full max-ipad:block">
                       <div class="relative w-full" id="<?php echo esc_attr($dd_id); ?>">
                         <button
                           id="<?php echo esc_attr($btn_id); ?>"
