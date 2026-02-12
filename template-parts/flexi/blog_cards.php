@@ -184,7 +184,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                         </h3>
 
                                         <?php if ($date) : ?>
-                                            <p class="mt-2 text-sm <?php echo esc_attr($date_color_class); ?>">
+                                            <p class="mt-2 text-[18px] font-medium <?php echo esc_attr($date_color_class); ?>">
                                                 <?php echo esc_html($date); ?>
                                                 <?php if (!empty($time)) : ?>
                                                     <span class="mx-1">|</span><?php echo esc_html($time); ?>
@@ -193,7 +193,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                         <?php endif; ?>
 
                                         <div class="mt-4">
-                                            <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
+                                            <span class="<?php echo esc_attr($link_color_class); ?> text-[16px] underline pointer-events-none select-none">
                                                 <?php echo esc_html($cta_lbl); ?>
                                             </span>
                                         </div>
@@ -248,12 +248,12 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                             </div>
                                         <?php endif; ?>
 
-                                        <h3 class="mt-2 text-xl font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
+                                        <h3 class="mt-2 text-[20px] font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
                                             <?php echo esc_html($title); ?>
                                         </h3>
 
                                         <?php if ($date) : ?>
-                                            <p class="mt-2 text-sm <?php echo esc_attr($date_color_class); ?>">
+                                            <p class="mt-2 text-[18px] font-medium <?php echo esc_attr($date_color_class); ?>">
                                                 <?php echo esc_html($date); ?>
                                                 <?php if (!empty($time)) : ?>
                                                     <span class="mx-1">|</span><?php echo esc_html($time); ?>
@@ -262,7 +262,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                         <?php endif; ?>
 
                                         <div class="mt-4">
-                                            <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
+                                            <span class="<?php echo esc_attr($link_color_class); ?> text-[16px] underline pointer-events-none select-none">
                                                 <?php echo esc_html($cta_lbl); ?>
                                             </span>
                                         </div>
@@ -286,7 +286,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 target="<?php echo esc_attr($header_primary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_primary_button['title']); ?>"
                             >
-                                <span class="text-xl tracking-wide leading-5 text-center max-md:text-lg max-sm:text-base max-sm:leading-5">
+                                <span class="text-[20px] tracking-wide leading-5 text-center max-md:text-lg max-sm:text-base max-sm:leading-5">
                                     <?php echo esc_html($header_primary_button['title']); ?>
                                 </span>
                             </a>
@@ -299,7 +299,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 target="<?php echo esc_attr($header_secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_secondary_button['title']); ?>"
                             >
-                                <span class="text-xl leading-5 max-md:text-lg max-sm:text-base max-sm:leading-5">
+                                <span class="text-[20px] leading-5 max-md:text-lg max-sm:text-base max-sm:leading-5">
                                     <?php echo esc_html($header_secondary_button['title']); ?>
                                 </span>
                             </a>

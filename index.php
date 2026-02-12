@@ -293,12 +293,12 @@ function _matrix_first_cat_name($post_id) {
                                         <h3 class="text-[20px] font-semibold leading-6 text-primary">
                                             <?php echo esc_html(get_the_title($p->ID)); ?>
                                         </h3>
-                                        <p class="text-[16px] font-medium text-black">
+                                        <p class="text-[18px] font-medium text-black">
                                             <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
                                         </p>
                                     </div>
 
-                                    <span class="underline pointer-events-none select-none text-black/60 hover:text-black">
+                                    <span class="text-[16px] underline pointer-events-none select-none text-black/60 hover:text-black">
                                         <?php echo esc_html__('Discover', 'matrix-starter'); ?>
                                     </span>
                                 </div>
@@ -344,12 +344,12 @@ function _matrix_first_cat_name($post_id) {
                                         <h3 class="text-[20px] font-semibold text-primary">
                                             <?php echo esc_html(get_the_title($p->ID)); ?>
                                         </h3>
-                                        <p class="text-[16px] font-medium text-black">
+                                        <p class="text-[18px] font-medium text-black">
                                             <?php echo esc_html(get_the_date('F j, Y', $p->ID)); ?>
                                         </p>
                                     </div>
 
-                                    <span class="underline pointer-events-none select-none text-black/60 hover:text-black">
+                                    <span class="text-[16px] underline pointer-events-none select-none text-black/60 hover:text-black">
                                         <?php echo esc_html__('Read more', 'matrix-starter'); ?>
                                     </span>
                                 </div>
