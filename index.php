@@ -284,7 +284,7 @@ function _matrix_first_cat_name($post_id) {
 
 
                                     <div class="flex flex-col gap-2">
-                                        <div class="text-primary text-base font-medium tracking-[1px]">
+                                        <div class="text-primary uppercase text-[16px] font-medium tracking-[1px]">
                                             <?php
                                             $cats = get_the_category($p->ID);
                                             echo !empty($cats) ? esc_html($cats[0]->name) : esc_html__('Uncategorized', 'matrix-starter');

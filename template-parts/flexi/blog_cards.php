@@ -39,7 +39,7 @@ $date_color_class   = get_sub_field('date_color_class') ?: 'text-black';
 $link_color_class   = get_sub_field('link_color_class') ?: 'text-black/60 hover:text-black';
 
 // Category style (matches your spec)
-$category_class = 'text-[16px] uppercase font-medium tracking-[1px] text-[#0902A4]';
+$category_class = 'text-[16px]';
 
 // ---------------------------------
 // Layout: Responsive padding (Tailwind classes)
@@ -174,7 +174,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     <!-- Content card shouldn't block clicks -->
                                     <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 pointer-events-none">
                                         <?php if (!empty($cat_name)) : ?>
-                                            <div class="text-[#0902A4] <?php echo esc_attr($category_class); ?>">
+                                            <div class=" uppercase font-medium tracking-[1px] text-primary <?php echo esc_attr($category_class); ?>">
                                                 <?php echo esc_html($cat_name); ?>
                                             </div>
                                         <?php endif; ?>
