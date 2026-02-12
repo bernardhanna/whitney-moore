@@ -418,7 +418,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
        </div>
       </div>
       <div class="flex xxl:hidden">
-          <div class="flex text-sm font-medium xxl:whitespace-nowrap">
+          <div class="text-sm font-medium xxl:whitespace-nowrap">
             <?php echo esc_html($attr_text); ?>
             <?php if ($attr_url): ?>
               <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
