@@ -38,6 +38,9 @@ $text_color_class   = get_sub_field('text_color_class') ?: 'text-primary';
 $date_color_class   = get_sub_field('date_color_class') ?: 'text-black';
 $link_color_class   = get_sub_field('link_color_class') ?: 'text-black/60 hover:text-black';
 
+// Category style (matches your spec)
+$category_class = 'text-[16px] uppercase font-medium tracking-[1px] text-[#0902A4]';
+
 // ---------------------------------
 // Layout: Responsive padding (Tailwind classes)
 // ---------------------------------
@@ -57,12 +60,22 @@ if (have_rows('padding_settings')) {
 }
 
 // ---------------------------------
+// Helpers
+// ---------------------------------
+function matrix_first_cat_name($post_id): string {
+    $cats = get_the_category($post_id);
+    if (empty($cats) || is_wp_error($cats)) return '';
+    return (string) ($cats[0]->name ?? '');
+}
+
+// ---------------------------------
 // Query
 // ---------------------------------
 $query = new WP_Query([
-    'post_type'      => 'post',
-    'posts_per_page' => $posts_per_page,
-    'post_status'    => 'publish',
+    'post_type'           => 'post',
+    'posts_per_page'      => $posts_per_page,
+    'post_status'         => 'publish',
+    'ignore_sticky_posts' => true,
 ]);
 
 $left_posts  = [];
@@ -126,13 +139,15 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 $image   = get_post_thumbnail_id($post_id);
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
-                                $type    = get_field('post_type_label', $post_id);
-                                $time    = get_field('event_time', $post_id);
+                                $time    = get_field('event_time', $post_id); // optional, keep if you need it
                                 $cta_lbl = $small_cta_text;
+
+                                // CATEGORY (WP category name)
+                                $cat_name = matrix_first_cat_name($post_id);
 
                                 $override_link = (is_array($small_cta) && !empty($small_cta['url'])) ? $small_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group ">
+                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group">
                                     <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
@@ -157,11 +172,11 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
                                     <!-- Content card shouldn't block clicks -->
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5  pointer-events-none">
-                                        <?php if ($type) : ?>
-                                            <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
-                                                <?php echo esc_html($type); ?>
-                                            </p>
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 pointer-events-none">
+                                        <?php if (!empty($cat_name)) : ?>
+                                            <div class="<?php echo esc_attr($category_class); ?>">
+                                                <?php echo esc_html($cat_name); ?>
+                                            </div>
                                         <?php endif; ?>
 
                                         <h3 class="mt-2 text-lg font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
@@ -195,13 +210,15 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 $image   = get_post_thumbnail_id($post_id);
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
-                                $type    = get_field('post_type_label', $post_id);
-                                $time    = get_field('event_time', $post_id);
+                                $time    = get_field('event_time', $post_id); // optional
                                 $cta_lbl = $big_cta_text;
+
+                                // CATEGORY (WP category name)
+                                $cat_name = matrix_first_cat_name($post_id);
 
                                 $override_link = (is_array($big_cta) && !empty($big_cta['url'])) ? $big_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group ">
+                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group">
                                     <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
@@ -224,11 +241,11 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 
                                     <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6  pointer-events-none">
-                                        <?php if ($type) : ?>
-                                            <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
-                                                <?php echo esc_html($type); ?>
-                                            </p>
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 pointer-events-none">
+                                        <?php if (!empty($cat_name)) : ?>
+                                            <div class="<?php echo esc_attr($category_class); ?>">
+                                                <?php echo esc_html($cat_name); ?>
+                                            </div>
                                         <?php endif; ?>
 
                                         <h3 class="mt-2 text-xl font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
