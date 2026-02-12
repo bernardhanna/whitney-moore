@@ -174,12 +174,12 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                     <!-- Content card shouldn't block clicks -->
                                     <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 pointer-events-none">
                                         <?php if (!empty($cat_name)) : ?>
-                                            <div class="<?php echo esc_attr($category_class); ?>">
+                                            <div class="text-[#0902A4] <?php echo esc_attr($category_class); ?>">
                                                 <?php echo esc_html($cat_name); ?>
                                             </div>
                                         <?php endif; ?>
 
-                                        <h3 class="mt-2 text-lg font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
+                                        <h3 class="mt-2 text-[20px] font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
                                             <?php echo esc_html($title); ?>
                                         </h3>
 
