@@ -151,7 +151,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         ?>
                                     </div>
                                     <div class="px-4 py-3" style="<?php echo $underline_color ?>">
-                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></span>
+                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block max-md:text-[18px] max-md:not-italic max-md:font-semibold max-md:leading-[24px] max-md:tracking-[2px] max-md:whitespace-pre-wrap max-md:text-[#0902A4]"><?php echo esc_html($title); ?></span>
                                     </div>
                                 </a>
                             </article>
