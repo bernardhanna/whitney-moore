@@ -70,16 +70,21 @@ $menu_array = $primary_navigation->toArray();
   // Minimal recursive encoder for a Navi item -> plain array (label, url, children[])
   if (!function_exists('matrix_encode_menu_subtree')) {
     function matrix_encode_menu_subtree($node) {
+      $label_raw = isset($node->label) ? (string) $node->label : '';
+      $label     = wp_specialchars_decode($label_raw, ENT_QUOTES);
+
       $out = [
-        'label'    => isset($node->label) ? (string) $node->label : '',
-        'url'      => isset($node->url)   ? (string) $node->url   : '',
+        'label'    => $label,
+        'url'      => isset($node->url) ? (string) $node->url : '',
         'children' => [],
       ];
+
       if (!empty($node->children) && is_iterable($node->children)) {
         foreach ($node->children as $child) {
           $out['children'][] = matrix_encode_menu_subtree($child);
         }
       }
+
       return $out;
     }
   }
@@ -173,7 +178,10 @@ $menu_array = $primary_navigation->toArray();
                   <a
                     href="<?php echo esc_url($item->url); ?>"
                     class="text-lg font-normal leading-7 text-secondary-800">
-                    <?php echo esc_html($item->label); ?>
+                  <?php
+                    $label = wp_specialchars_decode((string) $item->label, ENT_QUOTES);
+                    echo esc_html($label);
+                    ?>
                   </a>
 
                   <?php if (!empty($item->children)) : ?>
