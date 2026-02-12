@@ -151,7 +151,7 @@ $allowed_svg = [
             $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
           ?>
             <div class="px-4">
-              <article class="relative h-[480px] overflow-hidden group t-card">
+              <article class="relative h-[480px] overflow-hidden group t-card flex justify-end items-end p-4">
                 <?php if ($image_id) :
                   echo wp_get_attachment_image($image_id, 'large', false, [
                     'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
