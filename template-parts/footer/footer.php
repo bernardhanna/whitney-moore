@@ -406,7 +406,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
         $attr_tgt = (is_array($attr_link) && !empty($attr_link['target'])) ? $attr_link['target'] : '_self';
         $attr_lbl = (is_array($attr_link) && !empty($attr_link['title'])) ? $attr_link['title'] : 'Matrix Internet';
         ?>
-       <div class="flex xxxl:hidden">
+       <div class="flex max-xxl:hidden">
           <div class="flex text-sm font-medium xxl:whitespace-nowrap">
             <?php echo esc_html($attr_text); ?>
             <?php if ($attr_url): ?>
@@ -417,8 +417,8 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
           </div>
        </div>
       </div>
-      <div class="max-xxxl:hidden">
-          <div class="flex text-sm font-medium xxl:whitespace-nowrap max-xxxl:hidden">
+      <div class="flex xxl:hidden">
+          <div class="flex text-sm font-medium xxl:whitespace-nowrap">
             <?php echo esc_html($attr_text); ?>
             <?php if ($attr_url): ?>
               <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
