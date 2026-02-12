@@ -541,47 +541,53 @@ $base_args = array(
                     }
                     ?>
 
+                    <a
+                    href="<?php echo esc_url($permalink); ?>"
+                    class="block team-card group"
+                    aria-label="<?php echo esc_attr('View profile for ' . $name); ?>"
+                    >
                     <article
-                        class="team-card flex relative flex-col justify-end items-center px-6 pt-80 pb-6 w-full h-[480px]"
+                        class="flex relative flex-col justify-end items-center px-6 pt-80 pb-6 w-full h-[480px]"
                         role="img"
                         aria-label="<?php echo esc_attr('Team member ' . $name); ?>"
                         style="<?php echo esc_attr($bg_style); ?>"
                     >
                         <div class="flex absolute left-6 flex-col gap-6 justify-center items-start p-6 bg-white border border-solid shadow-lg border-white border-opacity-20 h-[138px] top-[318px] w-[calc(100%_-_48px)]">
-                            <div class="flex relative flex-col items-start self-stretch">
-                                <h3 class="relative self-stretch text-base font-bold tracking-tight leading-6 text-neutral-900">
-                                    <?php echo esc_html($name); ?>
-                                </h3>
+                        <div class="flex relative flex-col items-start self-stretch">
+                            <h3 class="relative self-stretch text-base font-bold tracking-tight leading-6 text-neutral-900">
+                            <?php echo esc_html($name); ?>
+                            </h3>
 
-                                <?php if (!empty($role)) : ?>
-                                    <p class="relative self-stretch text-sm tracking-normal leading-5 text-black text-opacity-60">
-                                        <?php echo esc_html($role); ?>
-                                    </p>
-                                <?php endif; ?>
-                            </div>
+                            <?php if (!empty($role)) : ?>
+                            <p class="relative self-stretch text-sm tracking-normal leading-5 text-black text-opacity-60">
+                                <?php echo esc_html($role); ?>
+                            </p>
+                            <?php endif; ?>
+                        </div>
 
-                            <a
-                                href="<?php echo esc_url($permalink); ?>"
-                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                aria-label="<?php echo esc_attr('Get in touch with ' . $name); ?>"
-                            >
-                                <span class="relative text-base tracking-tight leading-6 text-primary">
-                                    Get in touch
-                                </span>
+                        <span
+                            class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 w-fit group-hover:text-primary-dark focus:outline-none"
+                            aria-hidden="true"
+                        >
+                            <span class="relative text-base tracking-tight leading-6 text-primary">
+                            Get in touch
+                            </span>
 
-                                <div class="flex relative justify-center items-center w-6 h-6" aria-hidden="true">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path
-                                            d="M5 12H19M19 12L12 5M19 12L12 19"
-                                            stroke="#0902A4"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </div>
-                            </a>
+                            <span class="flex relative justify-center items-center w-6 h-6" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path
+                                d="M5 12H19M19 12L12 5M19 12L12 19"
+                                stroke="#0902A4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                />
+                            </svg>
+                            </span>
+                        </span>
                         </div>
                     </article>
+                    </a>
+
 
                 <?php endwhile; ?>
                 <?php wp_reset_postdata(); ?>

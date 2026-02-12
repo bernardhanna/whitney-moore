@@ -304,67 +304,101 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
           <p class="text-sm font-medium">
             <?php echo esc_html( sprintf('© %s Whitney Moore. All rights reserved', date('Y')) ); ?>
           </p>
-<?php
-// ---------- Copyright menu as <select> on mob and below ----------
-$locations = get_nav_menu_locations();
-$menu_id   = isset($locations['copyright']) ? (int) $locations['copyright'] : 0;
-$menu_items = $menu_id ? wp_get_nav_menu_items($menu_id) : [];
+            <?php
+            // Build items for dropdown (depth 1)
+            $locations  = get_nav_menu_locations();
+            $menu_id    = isset($locations['copyright']) ? (int) $locations['copyright'] : 0;
+            $menu_items = $menu_id ? wp_get_nav_menu_items($menu_id) : [];
 
-$current_url = home_url(add_query_arg([], $wp->request ?? ''));
-?>
+            $dd_id      = 'footer-copyright-dd-' . wp_rand(1000, 9999);
+            $btn_id     = $dd_id . '-btn';
+            $list_id    = $dd_id . '-list';
+            $status_id  = $dd_id . '-status';
 
-<!-- Desktop / tablet links (shows above 575px) -->
-<div class="max-mob:hidden">
-  <?php
-  wp_nav_menu([
-    'theme_location' => 'copyright',
-    'container'      => false,
-    'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
-    'fallback_cb'    => false,
-    'depth'          => 1,
-    'link_before'    => '<span class="text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-gray-200">',
-    'link_after'     => '</span>',
-  ]);
-  ?>
-</div>
+            $placeholder = 'More links';
 
-<!-- Mobile dropdown (shows at 575px and below) -->
-<?php if (!empty($menu_items)) : ?>
-  <div class="hidden w-full max-mob:block">
-    <label for="footer-copyright-select" class="sr-only">
-      <?php esc_html_e('Footer links', 'matrix-starter'); ?>
-    </label>
+            // Build a flat array of top-level items
+            $dd_items = [];
+            if (!empty($menu_items)) {
+              foreach ($menu_items as $mi) {
+                if ((int) $mi->menu_item_parent !== 0) {
+                  continue;
+                }
+                $url   = !empty($mi->url) ? $mi->url : '';
+                $label = !empty($mi->title) ? $mi->title : '';
+                if (!$url || !$label) {
+                  continue;
+                }
 
-    <select
-      id="footer-copyright-select"
-      class="w-full js-nice-select"
-      data-placeholder="<?php echo esc_attr__('More links', 'matrix-starter'); ?>"
-    >
-      <option value=""><?php esc_html_e('More links', 'matrix-starter'); ?></option>
+                $dd_items[] = [
+                  'url'   => $url,
+                  'label' => wp_specialchars_decode((string) $label, ENT_QUOTES),
+                ];
+              }
+            }
+            ?>
 
-      <?php foreach ($menu_items as $mi) :
-        // depth 1 only (top-level)
-        if ((int) $mi->menu_item_parent !== 0) {
-          continue;
-        }
+            <!-- Desktop / tablet links (above 575px) -->
+            <div class="max-mob:hidden">
+              <?php
+              wp_nav_menu([
+                'theme_location' => 'copyright',
+                'container'      => false,
+                'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
+                'fallback_cb'    => false,
+                'depth'          => 1,
+                'link_before'    => '<span class="text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-gray-200">',
+                'link_after'     => '</span>',
+              ]);
+              ?>
+            </div>
 
-        $url   = !empty($mi->url) ? $mi->url : '';
-        $label = !empty($mi->title) ? $mi->title : '';
+                  <!-- Mobile dropdown (575px and below) -->
+                  <?php if (!empty($dd_items)) : ?>
+                    <div class="hidden w-full max-mob:block">
+                      <div class="relative w-full" id="<?php echo esc_attr($dd_id); ?>">
+                        <button
+                          id="<?php echo esc_attr($btn_id); ?>"
+                          type="button"
+                          class="flex justify-between items-center px-4 py-3 w-full min-h-[48px]
+                                bg-white/10 border border-white/40 text-white
+                                transition-colors duration-200 hover:bg-white/15"
+                          aria-haspopup="listbox"
+                          aria-expanded="false"
+                          aria-controls="<?php echo esc_attr($list_id); ?>"
+                        >
+                          <span class="text-sm font-medium js-dd-label"><?php echo esc_html($placeholder); ?></span>
 
-        if (!$url || !$label) {
-          continue;
-        }
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                              class="transition-transform duration-200 js-dd-chevron">
+                            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
 
-        // mark selected if current page
-        $is_selected = (trailingslashit($current_url) === trailingslashit($url)) || untrailingslashit($current_url) === untrailingslashit($url);
-        ?>
-        <option value="<?php echo esc_url($url); ?>" <?php selected($is_selected); ?>>
-          <?php echo esc_html(wp_specialchars_decode($label, ENT_QUOTES)); ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-  </div>
-<?php endif; ?>
+                        <!-- Opens UPWARD to avoid footer overflow -->
+                        <ul
+                          id="<?php echo esc_attr($list_id); ?>"
+                          role="listbox"
+                          tabindex="-1"
+                          class="hidden overflow-y-auto absolute left-0 bottom-full z-50 mb-2 w-full max-h-60 text-black bg-white border shadow-lg border-white/40"
+                          aria-labelledby="<?php echo esc_attr($btn_id); ?>"
+                        >
+                          <?php foreach ($dd_items as $it) : ?>
+                            <li
+                              role="option"
+                              tabindex="-1"
+                              data-url="<?php echo esc_url($it['url']); ?>"
+                              class="px-4 py-3 text-sm cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+                            >
+                              <?php echo esc_html($it['label']); ?>
+                            </li>
+                          <?php endforeach; ?>
+                        </ul>
+
+                        <div id="<?php echo esc_attr($status_id); ?>" class="sr-only" role="status" aria-live="polite"></div>
+                      </div>
+                    </div>
+                  <?php endif; ?>
         </nav>
 
         <?php
@@ -372,62 +406,148 @@ $current_url = home_url(add_query_arg([], $wp->request ?? ''));
         $attr_tgt = (is_array($attr_link) && !empty($attr_link['target'])) ? $attr_link['target'] : '_self';
         $attr_lbl = (is_array($attr_link) && !empty($attr_link['title'])) ? $attr_link['title'] : 'Matrix Internet';
         ?>
+       <div class="flex xxxl:hidden">
+          <div class="flex text-sm font-medium xxl:whitespace-nowrap">
+            <?php echo esc_html($attr_text); ?>
+            <?php if ($attr_url): ?>
+              <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
+            <?php else: ?>
+              <span class="underline">Matrix Internet</span>
+            <?php endif; ?>
+          </div>
+       </div>
       </div>
-      <div>
-        <div class="text-sm font-medium xxl:whitespace-nowrap">
-          <?php echo esc_html($attr_text); ?>
-          <?php if ($attr_url): ?>
-            <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
-          <?php else: ?>
-            <span class="underline">Matrix Internet</span>
-          <?php endif; ?>
-        </div>
-        </div>
+      <div class="max-xxxl:hidden">
+          <div class="flex text-sm font-medium xxl:whitespace-nowrap max-xxxl:hidden">
+            <?php echo esc_html($attr_text); ?>
+            <?php if ($attr_url): ?>
+              <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
+            <?php else: ?>
+              <span class="underline">Matrix Internet</span>
+            <?php endif; ?>
+          </div>
+       </div>
     </div>
 
   </div>
 </footer>
-<script>
-  (function () {
-    const mq = window.matchMedia('(max-width: 575px)');
 
-    function initNiceSelect() {
-      const selects = document.querySelectorAll('select.js-nice-select');
-
-      selects.forEach((select) => {
-        // redirect on change
-        if (!select.dataset.bound) {
-          select.addEventListener('change', (e) => {
-            const url = e.target.value;
-            if (url) window.location.href = url;
-          });
-          select.dataset.bound = '1';
-        }
-
-        // init niceSelect if available and not already initialized
-        if (window.jQuery && typeof jQuery(select).niceSelect === 'function') {
-          const $select = jQuery(select);
-
-          if (mq.matches) {
-            if (!$select.next('.nice-select').length) {
-              $select.niceSelect();
-            } else {
-              $select.niceSelect('update');
-            }
-          } else {
-            // optional: destroy when leaving mob
-            if ($select.next('.nice-select').length && typeof $select.niceSelect === 'function') {
-              // Many Nice Select builds don't support destroy; if yours does, uncomment:
-              // $select.niceSelect('destroy');
-            }
-          }
-        }
-      });
-    }
-
-    // run once and on breakpoint changes
-    initNiceSelect();
-    mq.addEventListener ? mq.addEventListener('change', initNiceSelect) : mq.addListener(initNiceSelect);
-  })();
-</script>
 <?php wp_footer(); ?>
+<script>
+(function () {
+  const root = document.getElementById(<?php echo wp_json_encode($dd_id); ?>);
+  if (!root) return;
+
+  const btn     = root.querySelector('#' + <?php echo wp_json_encode($btn_id); ?>);
+  const list    = root.querySelector('#' + <?php echo wp_json_encode($list_id); ?>);
+  const labelEl = root.querySelector('.js-dd-label');
+  const chev    = root.querySelector('.js-dd-chevron');
+  const status  = root.querySelector('#' + <?php echo wp_json_encode($status_id); ?>);
+
+  if (!btn || !list) return;
+
+  let isOpen = false;
+  let focusIndex = -1;
+
+  function options() {
+    return list.querySelectorAll('[role="option"]');
+  }
+
+  function open() {
+    isOpen = true;
+    btn.setAttribute('aria-expanded', 'true');
+    list.classList.remove('hidden');
+    if (chev) chev.style.transform = 'rotate(180deg)';
+    if (status) status.textContent = 'Options expanded.';
+
+    const opts = options();
+    focusIndex = opts.length ? 0 : -1;
+    if (opts.length) opts[0].focus();
+  }
+
+  function close() {
+    isOpen = false;
+    btn.setAttribute('aria-expanded', 'false');
+    list.classList.add('hidden');
+    if (chev) chev.style.transform = 'rotate(0deg)';
+    if (status) status.textContent = 'Options collapsed.';
+    btn.focus();
+  }
+
+  function toggle() {
+    isOpen ? close() : open();
+  }
+
+  function selectEl(el) {
+    const url = el?.dataset?.url || '';
+    const text = (el?.textContent || '').trim();
+
+    if (labelEl && text) labelEl.textContent = text;
+    if (status && text) status.textContent = text + ' selected.';
+    close();
+
+    if (url) window.location.assign(url);
+  }
+
+  // Toggle click
+  btn.addEventListener('click', function () {
+    toggle();
+  });
+
+  // Button keyboard
+  btn.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      open();
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      open();
+    }
+  });
+
+  // Click option
+  list.addEventListener('click', function (e) {
+    const opt = e.target.closest('[role="option"]');
+    if (opt) selectEl(opt);
+  });
+
+  // List keyboard nav
+  list.addEventListener('keydown', function (e) {
+    const opts = options();
+    if (!opts.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusIndex = Math.min(opts.length - 1, focusIndex + 1);
+      opts[focusIndex].focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusIndex = Math.max(0, focusIndex - 1);
+      opts[focusIndex].focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      focusIndex = 0;
+      opts[0].focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      focusIndex = opts.length - 1;
+      opts[focusIndex].focus();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      selectEl(opts[focusIndex]);
+    } else if (e.key === 'Tab') {
+      close();
+    }
+  });
+
+  // Click-away
+  document.addEventListener('click', function (e) {
+    if (!isOpen) return;
+    if (!root.contains(e.target)) close();
+  });
+})();
+</script>

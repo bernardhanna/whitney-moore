@@ -92,7 +92,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container max-sm:py-10">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-[1568px] max-sm:py-10">
 
         <?php if (!empty($heading)) : ?>
             <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full max-md:text-[1.625rem] max-md:font-bold max-md:leading-8 max-md:tracking-[0.0625rem]">
@@ -107,7 +107,7 @@ $section_id = 'related-content-' . wp_rand(1000, 9999);
 
         <?php if ($articles_query->have_posts()) : ?>
             <div class="mt-14 w-full text-base text-black max-md:mt-10 max-md:max-w-full">
-                <div class="grid grid-cols-3 gap-6 w-full  max-sm:grid-cols-1" role="list">
+                <div class="grid grid-cols-3 gap-6 w-full max-sm:grid-cols-1" role="list">
                     <?php while ($articles_query->have_posts()) : $articles_query->the_post(); ?>
                         <?php
                         $post_id = get_the_ID();

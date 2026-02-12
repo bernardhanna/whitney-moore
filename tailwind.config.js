@@ -95,6 +95,7 @@ module.exports = {
         'lg': '1200px',
         'xl': '1280px',
         'xxl': '1440px',
+        'xxxl': '1568px',
         'ultrawide': '1920px',
       },
       borderRadius: {

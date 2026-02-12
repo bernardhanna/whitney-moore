@@ -4,7 +4,9 @@
  * Template: team_carousel.php
  */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 // Unique IDs
 $section_id = 'team-carousel-' . wp_generate_uuid4();
@@ -31,15 +33,20 @@ $show_name      = (int) get_sub_field('show_name') === 1;
 $show_job_title = (int) get_sub_field('show_job_title') === 1;
 
 // Slider toggles
-$enable_slider     = (int) get_sub_field('enable_slider') === 1;
-$arrow_enabled     = (int) get_sub_field('arrows') === 1;
-$dots_enabled      = (int) get_sub_field('dots') === 1;
-$autoplay_enabled  = (int) get_sub_field('autoplay') === 1;
-$autoplay_speed    = (int) get_sub_field('autoplay_speed') ?: 5000;
-$slides_xl         = (int) get_sub_field('slides_xl'); if ($slides_xl <= 0) $slides_xl = 4; // desktop default 4
-$slides_lg         = (int) get_sub_field('slides_lg'); if ($slides_lg <= 0) $slides_lg = 3;
-$slides_md         = (int) get_sub_field('slides_md'); if ($slides_md <= 0) $slides_md = 2;
-$slides_sm         = (int) get_sub_field('slides_sm'); if ($slides_sm <= 0) $slides_sm = 1;
+$enable_slider = (int) get_sub_field('enable_slider') === 1;
+$arrow_enabled = (int) get_sub_field('arrows') === 1;
+$dots_enabled  = (int) get_sub_field('dots') === 1;
+
+// Autoplay: ON by default unless explicitly disabled via field
+$autoplay_field   = get_sub_field('autoplay');
+$autoplay_enabled = ($autoplay_field === null) ? true : ((int) $autoplay_field === 1);
+
+$autoplay_speed = (int) get_sub_field('autoplay_speed') ?: 5000;
+
+$slides_xl = (int) get_sub_field('slides_xl'); if ($slides_xl <= 0) { $slides_xl = 4; } // desktop default 4
+$slides_lg = (int) get_sub_field('slides_lg'); if ($slides_lg <= 0) { $slides_lg = 3; }
+$slides_md = (int) get_sub_field('slides_md'); if ($slides_md <= 0) { $slides_md = 2; }
+$slides_sm = (int) get_sub_field('slides_sm'); if ($slides_sm <= 0) { $slides_sm = 1; }
 
 // Padding classes
 $padding_classes = [];
@@ -49,6 +56,7 @@ if (have_rows('padding_settings')) {
         $screen = get_sub_field('screen_size');
         $pt     = get_sub_field('padding_top');
         $pb     = get_sub_field('padding_bottom');
+
         if ($screen !== '' && $pt !== '' && $pt !== null) {
             $padding_classes[] = "{$screen}:pt-[{$pt}rem]";
         }
@@ -76,6 +84,7 @@ if ($source_mode === 'manual') {
             $img_id  = isset($row['image']) ? (int) $row['image'] : 0;
             $img_url = $img_id ? wp_get_attachment_image_url($img_id, 'large') : $default_profile;
             $img_alt = $img_id ? (get_post_meta($img_id, '_wp_attachment_image_alt', true) ?: get_the_title($img_id)) : 'Profile image';
+
             $items[] = [
                 'img_url'   => $img_url,
                 'img_alt'   => $img_alt,
@@ -87,6 +96,7 @@ if ($source_mode === 'manual') {
     }
 } else {
     $tax_query = [];
+
     if ($taxonomy_type === 'team_practice_area') {
         $terms = is_array($practice_terms) ? array_filter(array_map('intval', $practice_terms)) : [];
         if (!empty($terms)) {
@@ -115,6 +125,7 @@ if ($source_mode === 'manual') {
         'order'          => $order,
         'no_found_rows'  => true,
     ];
+
     if (!empty($tax_query)) {
         $args['tax_query'] = $tax_query;
     }
@@ -123,11 +134,13 @@ if ($source_mode === 'manual') {
     if ($q->have_posts()) {
         while ($q->have_posts()) {
             $q->the_post();
-            $pid       = get_the_ID();
+            $pid = get_the_ID();
 
-            $image_id  = get_post_thumbnail_id($pid);
-            $img_url   = $image_id ? wp_get_attachment_image_url($image_id, 'large') : $default_profile;
-            $img_alt   = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: get_the_title($image_id)) : get_the_title($pid);
+            $image_id = get_post_thumbnail_id($pid);
+            $img_url  = $image_id ? wp_get_attachment_image_url($image_id, 'large') : $default_profile;
+            $img_alt  = $image_id
+                ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: get_the_title($image_id))
+                : get_the_title($pid);
 
             $title     = get_the_title($pid);
             $job_title = function_exists('get_field') ? (string) get_field('job_title', $pid) : '';
@@ -145,6 +158,7 @@ if ($source_mode === 'manual') {
     }
 }
 ?>
+
 <section
   id="<?php echo esc_attr($section_id); ?>"
   class="flex overflow-hidden relative"
@@ -155,10 +169,10 @@ if ($source_mode === 'manual') {
   <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 max-md:pb-10 pb-20 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
     <?php if (!empty($heading)) : ?>
-      <header class="px-12 pt-14 w-full max-md:px-5">
+      <header class="px-12 pt-5 w-full lg:pt-14 max-md:px-5">
         <<?php echo esc_html($heading_tag); ?>
           id="<?php echo esc_attr($section_id); ?>-heading"
-          class="w-full text-3xl font-bold tracking-wider leading-none text-primary max-md:max-w-full"
+          class="pb-4 w-full text-3xl font-bold tracking-wider leading-none text-primary max-md:max-w-full"
         >
           <?php echo esc_html($heading); ?>
         </<?php echo esc_html($heading_tag); ?>>
@@ -180,7 +194,15 @@ if ($source_mode === 'manual') {
                 $permalink = $it['permalink'] ?? '';
               ?>
                 <div class="px-2">
-                  <article class="relative h-[520px] overflow-hidden group t-card">
+                  <?php if (!empty($permalink)) : ?>
+                    <a
+                      href="<?php echo esc_url($permalink); ?>"
+                      class="block group"
+                      aria-label="<?php echo esc_attr('View profile for ' . ($title ?: 'team member')); ?>"
+                    >
+                  <?php endif; ?>
+
+                  <article class="relative h-[520px] overflow-hidden t-card">
                     <!-- Photo -->
                     <img
                       src="<?php echo esc_url($img_url); ?>"
@@ -206,16 +228,20 @@ if ($source_mode === 'manual') {
                         <?php endif; ?>
 
                         <?php if (!empty($permalink)) : ?>
-                          <a href="<?php echo esc_url($permalink); ?>" class="inline-flex gap-2 items-center mt-4 text-primary hover:opacity-90">
+                          <span class="inline-flex gap-2 items-center mt-4 text-primary group-hover:opacity-90" aria-hidden="true">
                             <span class="text-base leading-5">Get in touch</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                             </svg>
-                          </a>
+                          </span>
                         <?php endif; ?>
                       </div>
                     </div>
                   </article>
+
+                  <?php if (!empty($permalink)) : ?>
+                    </a>
+                  <?php endif; ?>
                 </div>
               <?php endforeach; ?>
             </div>
@@ -249,7 +275,6 @@ if ($source_mode === 'manual') {
               clip-path: inset(0 -100vw 0 14px);
               -webkit-clip-path: inset(0 -100vw 0 14px);
             }
-            /* Opacity dimming, same behavior as Testimonials */
             #<?php echo esc_attr($section_id); ?> .t-card { opacity: 1; transition: opacity .25s ease; will-change: opacity; }
             #<?php echo esc_attr($section_id); ?> .is-dim .t-card { opacity: .35; }
           </style>
@@ -263,12 +288,10 @@ if ($source_mode === 'manual') {
             var $dots  = $('#<?php echo esc_js($dots_id); ?>');
 
             function updateDimming(slick){
-              // All slides (real + clones)
               var $all    = $(slick.$slideTrack).children('.slick-slide');
               var $active = $all.filter('.slick-active');
               var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
 
-              // Dim everything, then clear first N visible
               $all.addClass('is-dim');
               var clearCount = isDesktop ? 3 : $active.length;
               $active.slice(0, clearCount).removeClass('is-dim');
@@ -291,6 +314,8 @@ if ($source_mode === 'manual') {
                 autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
                 autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
                 adaptiveHeight: false,
+                pauseOnHover: true,
+                pauseOnFocus: true,
                 responsive: [
                   { breakpoint: 1280, settings: { slidesToShow: <?php echo (int) $slides_lg; ?> } },
                   { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
@@ -298,7 +323,6 @@ if ($source_mode === 'manual') {
                 ]
               });
 
-              // Keep it in sync on resize/orientation change
               $(window).on('resize orientationchange', function(){
                 if ($track.hasClass('slick-initialized')) {
                   $track.slick('setPosition');
@@ -311,38 +335,55 @@ if ($source_mode === 'manual') {
         <?php else : ?>
           <!-- Non-slider grid fallback -->
           <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <?php foreach ($items as $it) : ?>
-              <article class="relative h-[520px] overflow-hidden group">
+            <?php foreach ($items as $it) :
+              $img_url   = $it['img_url'] ?? $default_profile;
+              $img_alt   = $it['img_alt'] ?? 'Profile image';
+              $title     = $it['title'] ?? '';
+              $subtitle  = $it['subtitle'] ?? '';
+              $permalink = $it['permalink'] ?? '';
+            ?>
+              <?php if (!empty($permalink)) : ?>
+                <a href="<?php echo esc_url($permalink); ?>" class="block group" aria-label="<?php echo esc_attr('View profile for ' . ($title ?: 'team member')); ?>">
+              <?php endif; ?>
+
+              <article class="relative h-[520px] overflow-hidden">
                 <img
-                  src="<?php echo esc_url($it['img_url'] ?? $default_profile); ?>"
-                  alt="<?php echo esc_attr($it['img_alt'] ?? 'Profile image'); ?>"
+                  src="<?php echo esc_url($img_url); ?>"
+                  alt="<?php echo esc_attr($img_alt); ?>"
                   class="object-cover absolute inset-0 w-full h-full"
                   loading="lazy"
                   decoding="async"
                 />
+
                 <div class="absolute bottom-6 left-6">
                   <div class="bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] px-6 py-5 w-[320px] max-w-[85vw]">
-                    <?php if ($show_name && !empty($it['title'])) : ?>
+                    <?php if ($show_name && !empty($title)) : ?>
                       <div class="text-base font-semibold tracking-normal text-black">
-                        <?php echo esc_html($it['title']); ?>
+                        <?php echo esc_html($title); ?>
                       </div>
                     <?php endif; ?>
-                    <?php if ($show_job_title && !empty($it['subtitle'])) : ?>
+
+                    <?php if ($show_job_title && !empty($subtitle)) : ?>
                       <div class="mt-1 text-sm leading-5 text-black/70">
-                        <?php echo esc_html($it['subtitle']); ?>
+                        <?php echo esc_html($subtitle); ?>
                       </div>
                     <?php endif; ?>
-                    <?php if (!empty($it['permalink'])) : ?>
-                      <a href="<?php echo esc_url($it['permalink']); ?>" class="inline-flex gap-2 items-center mt-4 text-primary hover:opacity-90">
+
+                    <?php if (!empty($permalink)) : ?>
+                      <span class="inline-flex gap-2 items-center mt-4 text-primary group-hover:opacity-90" aria-hidden="true">
                         <span class="text-base leading-5">Get in touch</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                           <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                      </a>
+                      </span>
                     <?php endif; ?>
                   </div>
                 </div>
               </article>
+
+              <?php if (!empty($permalink)) : ?>
+                </a>
+              <?php endif; ?>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>

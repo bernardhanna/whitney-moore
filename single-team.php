@@ -244,10 +244,10 @@ get_header();
             <!-- PAGE CONTENT + SIDEBAR -->
             <section class="flex overflow-hidden relative">
                 <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-[1568px] max-xxl:px-5">
-                    <div class="flex relative gap-20 justify-center items-start self-stretch px-5 pt-20 pb-24 max-lg:flex-col max-md:gap-12 max-md:pb-20 max-sm:gap-8 max-sm:pt-8 max-sm:pb-12">
+                    <div class="flex relative gap-20 justify-center items-start self-stretch px-5 pt-5 pb-24 lg:pt-20 max-lg:flex-col max-md:gap-12 max-md:pb-20 max-sm:gap-8 max-sm:pt-8 max-sm:pb-12">
 
                         <!-- Left Column - Main Content -->
-                        <article class="flex relative flex-col gap-6 items-start w-2/3 max-md:w-full">
+                        <article class="flex relative flex-col gap-6 items-start w-full lg:w-2/3 max-md:w-full">
 
                             <!-- Main Heading -->
                             <header class="flex relative flex-col gap-1 items-start self-stretch">
@@ -277,7 +277,7 @@ get_header();
                             <!-- Testimonials (dynamic Slick slider) -->
                                 <?php if ($enable_testimonials && !empty($slides)) : ?>
                                   <section class="flex overflow-hidden relative w-full" aria-label="Client testimonials">
-                                    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full min-w-0 max-w-container max-xxl:px-5">
+                                    <div class="flex flex-col items-center mx-auto w-full min-w-0 lg:pt-5 lg:pb-5 max-w-container">
                                       <div class="w-full min-w-0 pt-6 max-w-[920px]">
                                         <header>
                                           <h2 class="text-2xl font-semibold leading-none text-primary">
@@ -299,14 +299,14 @@ get_header();
                                               <div class="w-full min-w-0">
                                                 <div class="relative w-full min-w-0 text-primary">
                                                   <?php if (!empty($slide['quote'])) : ?>
-                                                    <blockquote class="relative z-0 w-full min-w-0 text-3xl font-light leading-[52px] max-md:pl-8 max-md:text-2xl max-md:leading-9">
+                                                    <blockquote class="relative z-0 w-full min-w-0 text-3xl font-light leading-[52px] max-md:pl-8 max-lg:text-2xl max-lg:leading-9">
                                                     <img
                                                       src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/quotes.svg'); ?>"
                                                       alt=""
                                                       aria-hidden="true"
-                                                      class="absolute left-[-30px] top-[-35px]
-                                                             z-0 h-[48px] w-[48px]
-                                                             md:left-[-40px]
+                                                      class="absolute left-[-16px] top-[-35px]
+                                                             z-0 h-[28px] lg:h-[48px] lg:w-[48px]
+                                                             lg:left-[-40px]
                                                              max-md:top-[-18px]"
                                                     />
 
@@ -467,8 +467,8 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
 
   $fallback_img = '/wp-content/uploads/2025/12/image-2-1.png'; // change if you prefer
   ?>
-  <section class="flex overflow-hidden relative px-20 pt-20 pb-24 tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
-    <div class="flex flex-col items-center mx-auto w-full max-w-container max-xxl:px-5">
+  <section class="flex overflow-hidden relative  tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
+    <div class="flex flex-col items-center py-6 mx-auto w-full max-w-[1568px] max-xxl:px-5 xl:pt-20 xl:pb-24">
 
       <header class="w-full text-3xl font-bold leading-none text-primary max-md:max-w-full">
         <h2 id="sectors-heading">Related Sectors</h2>
@@ -492,7 +492,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
                   false,
                   [
                     'alt'     => esc_attr($img_alt),
-                    'class'   => 'object-cover w-full aspect-[1.1]',
+                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
                     'loading' => 'lazy',
                     'decoding'=> 'async',
                   ]
@@ -500,7 +500,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
               } else {
                 // No featured image on the sector post – fallback image
                 $img_html = sprintf(
-                  '<img src="%s" alt="%s" class="object-cover w-full aspect-[1.1]" loading="lazy" />',
+                  '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]" loading="lazy" />',
                   esc_url($fallback_img),
                   esc_attr($term->name)
                 );
@@ -509,7 +509,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
               // No matching sectors CPT found – link to the sectors archive (or skip)
               $card_link = get_post_type_archive_link('sectors') ?: home_url('/sectors/');
               $img_html  = sprintf(
-                '<img src="%s" alt="%s" class="object-cover w-full aspect-[1.1]" loading="lazy" />',
+                '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]" loading="lazy" />',
                 esc_url($fallback_img),
                 esc_attr($term->name)
               );

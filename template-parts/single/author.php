@@ -61,7 +61,7 @@ $share_linkedin = 'https://www.linkedin.com/sharing/share-offsite/?url=' . $shar
 ?>
 
 <section class="flex overflow-hidden relative">
-  <div class="flex flex-col items-center w-full mx-auto max-w-[1360px] pt-8 pb-5 lg:pb-32 max-xxl:px-5">
+  <div class="flex flex-col items-center w-full mx-auto max-w-[1360px] pt-8 pb-5 xl:pb-32 max-xxl:px-5">
     <div class="flex flex-wrap gap-10 justify-between items-center pt-6 w-full text-black">
       <figure class="flex gap-8 items-center min-w-60 max-md:max-w-full">
         <a href="<?php echo esc_url($team_link); ?>" class="block" aria-label="<?php echo esc_attr($author_name); ?>">

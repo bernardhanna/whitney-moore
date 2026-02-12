@@ -52,19 +52,19 @@ $heading_tag = 'h2';
     class="flex overflow-hidden relative bg-[#F5F5F5] "
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-container max-sm:py-10">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-[1568px] max-sm:py-10">
 
         <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full">
             <<?php echo esc_attr($heading_tag); ?>
                 id="<?php echo esc_attr($section_id); ?>-heading"
-                class="max-md:text-[26px] max-md:font-bold max-md:leading-[32px] max-md:tracking-[1px] w-full text-[2rem] font-bold leading-[2.5rem] tracking-[0.0625rem] max-md:text-[1.625rem] max-md:font-bold max-md:leading-8 max-md:tracking-[0.0625rem]"
+                class="w-full text-[2rem] font-bold leading-[2.5rem] tracking-[0.0625rem] max-md:text-[1.625rem] max-md:leading-8"
             >
                 <?php echo esc_html($heading); ?>
             </<?php echo esc_attr($heading_tag); ?>>
         </header>
 
         <div class="mt-14 w-full text-base text-black max-md:mt-10 max-md:max-w-full">
-            <div class="grid grid-cols-3 gap-6 w-full  max-sm:grid-cols-1" role="list">
+            <div class="grid grid-cols-3 gap-6 w-full max-sm:grid-cols-1" role="list">
                 <?php while ($related->have_posts()) : $related->the_post(); ?>
                     <?php
                     $pid          = get_the_ID();
