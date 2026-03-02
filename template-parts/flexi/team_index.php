@@ -143,7 +143,7 @@ $base_args = array(
 );
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
     <div class="flex flex-col items-center w-full mx-auto max-w-[1568px] pt-5 pb-5 md:pb-10 lg:pb-20 max-xxl:px-5 <?php echo esc_attr($padding_classes_string); ?>">
 <!-- FILTERS (directly below grid as requested) -->
 <!-- FILTERS (directly below grid as requested) -->

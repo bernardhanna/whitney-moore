@@ -14,7 +14,7 @@ $breadcrumb_home_url   = home_url('/');
 ?>
 <div class="mt-[10rem]"></div>
 <section
-  id="<?php echo esc_attr($section_id); ?>"
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
   class="pt-14 pb-12 text-white bg-center bg-cover bg-primary"
   role="region"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-title"

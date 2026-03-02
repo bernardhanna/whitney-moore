@@ -48,7 +48,7 @@ if ($bg_id) {
 $section_id = 'hero_' . wp_generate_uuid4();
 ?>
 <section
-  id="<?php echo esc_attr($section_id); ?>"
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
   class="flex overflow-hidden relative max-sm:flex-col"
   role="banner"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"

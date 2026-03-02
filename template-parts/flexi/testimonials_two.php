@@ -123,7 +123,7 @@ $slide_count = count($slides);
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="relative overflow-hidden md:min-h-[450px]"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
 >

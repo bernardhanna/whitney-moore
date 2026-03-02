@@ -78,7 +78,7 @@ $prev_id   = $section_id . '-prev';
 $next_id   = $section_id . '-next';
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>" class="bg-[#F5F5F5]  flex overflow-hidden relative">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="bg-[#F5F5F5]  flex overflow-hidden relative">
     <div class="flex flex-col items-center w-full mx-auto max-w-[1590px] py-10 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
         <header class="flex justify-between items-center w-full max-md:flex-col max-md:gap-6 max-md:items-start max-md:mb-6 max-sm:gap-5 max-sm:mb-5">

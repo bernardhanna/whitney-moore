@@ -81,7 +81,7 @@ $total      = is_array($posts_array) ? count($posts_array) : 0;
 $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="flex overflow-hidden relative"
     style="<?php
         echo $background_color ? 'background-color:' . esc_attr($background_color) . ';' : '';

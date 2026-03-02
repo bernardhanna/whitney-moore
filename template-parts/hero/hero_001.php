@@ -92,7 +92,7 @@ $has_labelledby = $has_main;
 $aria_labelledby_attr = $has_labelledby ? 'aria-labelledby="' . esc_attr($section_id) . '-heading"' : 'aria-label="Page hero"';
 ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="flex overflow-hidden relative max-sm:flex-col"
     role="banner"
     <?php echo $aria_labelledby_attr; ?>

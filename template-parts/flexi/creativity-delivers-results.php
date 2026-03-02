@@ -41,7 +41,7 @@ if ($img_title === '') { $img_title = 'Image'; }
 $inner_base = 'flex flex-col items-center w-full mx-auto max-w-container max-lg:px-5';
 $inner_classes = trim($inner_base . ' ' . '' . ' ' . implode(' ', $padding_classes));
 ?>
-<section id="<?php echo esc_attr($section_id); ?>" class="relative flex">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="relative flex">
   <div class="<?php echo esc_attr($inner_classes); ?>">
     <?php /* BEGIN AI FRAGMENT with SLOTs replaced by PHP */ ?>
     <section class="relative flex">

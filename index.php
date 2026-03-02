@@ -164,7 +164,7 @@ $section_id = 'hero_' . wp_generate_uuid4();
 <main class="w-full overflow-hidden site-main max-sm:mt-[2.5rem] mt-[5rem]">
 
     <!-- HERO -->
-    <section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative max-sm:flex-col" role="banner" aria-labelledby="<?php echo esc_attr($section_id); ?>-heading">
+    <section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="flex overflow-hidden relative max-sm:flex-col" role="banner" aria-labelledby="<?php echo esc_attr($section_id); ?>-heading">
         <?php if (!empty($hero_bg_url)) : ?>
             <img
                 src="<?php echo esc_url($hero_bg_url); ?>"
