@@ -42,12 +42,6 @@ $partners
         'allow_null' => 1,
         'ui' => 1,
     ])
-    ->addTab('Design', ['label' => 'Design'])
-    ->addColorPicker('background_color', [
-        'label' => 'Background Color',
-        'instructions' => 'Set the background color for the section.',
-        'default_value' => '#FFFFFF',
-    ])
     ->addTab('Layout', ['label' => 'Layout'])
     ->addRepeater('padding_settings', [
         'label' => 'Padding Settings',

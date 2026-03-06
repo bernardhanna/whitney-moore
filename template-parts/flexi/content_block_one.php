@@ -51,7 +51,7 @@ if ($image_id) {
         [
             'alt'     => esc_attr($image_alt),
             // NOTE: removed any aspect-[...] utilities per spec; keep responsive sizing
-            'class'   => 'object-contain w-full h-auto max-md:max-w-full',
+            'class'   => 'object-contain w-full h-auto max-md:max-w-full max-w-[696px] max-h-[464px]',
             'loading' => 'lazy',
         ]
     );
@@ -66,31 +66,30 @@ if ($image_id) {
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full max-w-container max-lg:px-5">
-        <div class="flex overflow-hidden gap-10 justify-center items-start
-            flex-wrap max-md:flex-col-reverse
-            w-full px-3 sm:px-0 lg:px-32
-            py-4 sm:py-8 lg:pt-20 lg:pb-20">
+    <div class="flex flex-col items-center py-4 mx-auto w-full sm:py-8 lg:pt-20 lg:pb-20 max-w-container max-xxl:px-5">
+        <div class="grid overflow-hidden gap-10 w-full 
+            grid-cols-1 
+            lg:grid-cols-[45%_50%] max-lg:flex max-lg:flex-col-reverse">
 
 
 
 
             <?php if ($reverse_layout): ?>
                 <!-- Image first when reversed -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="flex justify-center w-full">
                     <?php echo $image_markup; ?>
                 </div>
 
                 <!-- Text content second when reversed -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="text-lg font-medium tracking-wider text-black">
+                            <div class="max-sm:text-base max-sm:font-medium max-sm:leading-[16px] max-sm:tracking-[0.18px] font-medium text-[18px] leading-normal tracking-[1px] text-black">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>
@@ -98,7 +97,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-indigo-800 leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-lg:text-4xl max-md:leading-[54px] max-sm:text-[26px] max-sm:font-bold max-sm:leading-[32px] max-sm:tracking-[1px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>
@@ -106,7 +105,7 @@ if ($image_id) {
                     </div>
 
                     <?php if (!empty($content)): ?>
-                        <div class="mt-4 text-lg tracking-wider leading-7 text-black max-md:max-w-full wp_editor">
+                        <div class="mt-4 font-normal text-[18px] leading-[26px] tracking-[1px] text-black max-md:max-w-full wp_editor">
                             <?php echo wp_kses_post($content); ?>
                         </div>
                     <?php endif; ?>
@@ -114,10 +113,10 @@ if ($image_id) {
 
             <?php else: ?>
                 <!-- Default layout: Text first, image second -->
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="w-full">
                     <div class="w-full max-md:max-w-full">
                         <?php if (!empty($section_name)): ?>
-                            <div class="text-lg font-medium tracking-wider text-black">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-sm:text-base max-sm:font-medium max-sm:leading-[16px] max-sm:tracking-[0.18px]">
                                 <?php echo esc_html($section_name); ?>
                             </div>
                         <?php endif; ?>
@@ -125,7 +124,7 @@ if ($image_id) {
                         <?php if (!empty($heading)): ?>
                             <<?php echo esc_attr($heading_tag); ?>
                                 id="<?php echo esc_attr($section_id); ?>-heading"
-                                class="mt-1 text-5xl font-bold text-indigo-800 leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px]"
+                                class="mt-1 text-5xl font-bold text-primary leading-[58px] max-md:max-w-full max-md:text-4xl max-md:leading-[54px] max-sm:text-[26px] max-sm:font-bold max-sm:leading-[32px] max-sm:tracking-[1px]"
                             >
                                 <?php echo esc_html($heading); ?>
                             </<?php echo esc_attr($heading_tag); ?>>
@@ -139,7 +138,7 @@ if ($image_id) {
                     <?php endif; ?>
                 </div>
 
-                <div class="flex-1 shrink basis-0 min-w-60 max-md:max-w-full">
+                <div class="flex justify-center w-full">
                     <?php echo $image_markup; ?>
                 </div>
             <?php endif; ?>

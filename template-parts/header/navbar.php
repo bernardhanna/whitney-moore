@@ -67,7 +67,7 @@ $secondary_navigation = Navi::make()->build('secondary');
   <?php get_template_part('template-parts/header/topbar'); ?>
 
 <nav
-  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 h-[107px] max-w-[1400px]"
+  class="flex flex-row justify-between items-center mx-auto w-full lg:px-2 xl:px-5 xxl:px-0 h-[67px] md:h-[107px] max-w-[1400px]"
   role="navigation"
   aria-label="Main navigation"
 >
@@ -113,7 +113,7 @@ $secondary_navigation = Navi::make()->build('secondary');
                 href="<?php echo esc_url($item->url); ?>"
                 class="self-stretch my-auto transition
                        hover:underline underline-offset-8 decoration-2 hover:decoration-indigo-400 focus:underline focus:decoration-indigo-400
-                       focus:text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-[#00005e] text-center
+                       focus:text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary  text-[1rem] tracking-[-0.02em] leading-[1rem] font-medium font-primary text-[#00005e] text-center
                        <?php echo $item->active ? 'active-item' : ''; ?>"
                 role="menuitem"
                 <?php if (!empty($item->children)) : ?>
@@ -180,13 +180,13 @@ $secondary_navigation = Navi::make()->build('secondary');
   <?php endif; ?>
 
   <!-- RIGHT CLUSTER (mobile CTA + hamburger) -->
-  <div class="flex gap-3 items-center lg:hidden">
+  <div class="flex gap-3 justify-end items-center w-full lg:hidden">
     <?php if (!empty($contact_button['url']) && !empty($contact_button['title'])) : ?>
       <!-- Mobile CTA: sits left of hamburger -->
       <a
         href="<?php echo esc_url($contact_button['url']); ?>"
         target="<?php echo esc_attr($contact_button['target'] ?: '_self'); ?>"
-        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded transition-colors duration-200 btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        class="inline-flex justify-center items-center px-4 h-10 text-sm font-semibold text-white rounded-none transition-colors duration-200 w-fit btn bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary min-w-fit max-xxs:hidden"
         aria-label="<?php echo esc_attr($contact_button['title']); ?>"
         role="button"
       >

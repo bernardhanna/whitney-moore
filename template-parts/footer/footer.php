@@ -24,7 +24,7 @@ $address       = get_field('address', 'option');
 $social_icons  = get_field('social_icons', 'option') ?: [];
 $partner_logos = get_field('partner_logos', 'option') ?: [];
 
-$attr_text = get_field('attribution_text', 'option') ?: 'Designed and Developed by';
+$attr_text = get_field('attribution_text', 'option') ?: 'Designed & Developed by';
 $attr_link = get_field('attribution_link', 'option');
 
 $bg  = get_field('footer_bg_color', 'option') ?: '#0902A4';
@@ -55,11 +55,37 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 >
   <div class="flex flex-col gap-12 justify-center items-center w-full mx-auto max-w-container py-12 max-md:gap-8 max-md:py-8 max-sm:gap-6 max-xxl:px-[1rem] max-sm:py-6 <?php echo esc_attr(implode(' ', $padding_classes)); ?>">
 
-    <div class="h-px w-[100px] bg-[#ffffff85] self-start" aria-hidden="true"></div>
+    <!-- Partner logos -->
+    <?php if (!empty($partner_logos)) : ?>
+      <div class="hidden gap-14 items-center max-md:flex max-md:flex-wrap max-md:gap-8 max-md:justify-center max-sm:flex-col max-sm:gap-6" role="list" aria-label="<?php esc_attr_e('Partner organizations', 'matrix-starter'); ?>">
+        <?php $shown = 0; ?>
+        <?php foreach ($partner_logos as $pl) :
+          $img = $pl['logo_image'] ?? 0;
+          $lnk = $pl['logo_link'] ?? null;
+          $alt = $pl['logo_alt'] ?? 'Partner logo';
+          $url = (is_array($lnk) && !empty($lnk['url'])) ? $lnk['url'] : '';
+          $tgt = (is_array($lnk) && !empty($lnk['target'])) ? $lnk['target'] : '_self';
+
+          if (!$img) continue;
+          ?>
+          <div role="listitem mb-8">
+            <?php if ($url): ?><a href="<?php echo esc_url($url); ?>" target="<?php echo esc_attr($tgt); ?>" rel="noopener"><?php endif; ?>
+              <?php echo matrix_footer_render_image($img, 'full', $alt, ['class' => 'h-[58px] w-auto max-sm:h-auto max-sm:max-w-[150px]']); ?>
+            <?php if ($url): ?></a><?php endif; ?>
+          </div>
+          <?php
+            $shown++;
+            if ($shown >= 1) { break; }
+          ?>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+
+    <div class="h-px w-[100px] bg-[#ffffff85] self-start max-md:hidden" aria-hidden="true"></div>
 
     <!-- Top Columns (5) -->
     <nav
-      class="grid grid-cols-2 gap-x-8 gap-y-10 items-start self-stretch
+      class="grid grid-cols-2 px-4 lg:gap-x-8 gap-y-10 items-start self-stretch
        max-[480px]:grid-cols-1
        lg:grid-cols-5"
       aria-label="<?php esc_attr_e('Footer navigation', 'matrix-starter'); ?>"
@@ -67,9 +93,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
       <!-- Column 1 -->
       <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
-        <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
+        <span class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col1_heading); ?>
-        </h2>
+        </span>
         <div class="flex flex-col gap-6">
           <?php
           wp_nav_menu([
@@ -77,7 +103,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
             'container'      => false,
             'menu_class'     => 'flex flex-col gap-6',
             'fallback_cb'    => false,
-            'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:text-gray-200">',
+            'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">',
             'link_after'     => '</span>',
             'depth'          => 1,
           ]);
@@ -87,9 +113,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
       <!-- Column 2 (menu or Sectors CPT) -->
       <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
-        <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
+        <span class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col2_heading); ?>
-        </h2>
+        </span>
         <div class="flex flex-col gap-6">
           <?php if ( has_nav_menu('footer_two') ) :
             wp_nav_menu([
@@ -97,7 +123,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
               'container'      => false,
               'menu_class'     => 'flex flex-col gap-6',
               'fallback_cb'    => false,
-              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:text-gray-200">',
+              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">',
               'link_after'     => '</span>',
               'depth'          => 1,
             ]);
@@ -112,7 +138,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
             if ($sectors_fallback->have_posts()) : ?>
               <ul class="flex flex-col gap-6" role="list">
                 <?php while ($sectors_fallback->have_posts()) : $sectors_fallback->the_post(); ?>
-                  <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url(get_permalink()); ?>"><?php echo esc_html(get_the_title()); ?></a></li>
+                  <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url(get_permalink()); ?>"><?php echo esc_html(get_the_title()); ?></a></li>
                 <?php endwhile; ?>
               </ul>
             <?php else : ?>
@@ -123,9 +149,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
       <!-- Column 3 (menu or Practice Areas CPT) -->
       <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
-        <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
+        <span class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col3_heading); ?>
-        </h2>
+        </span>
         <div class="flex flex-col gap-6">
           <?php if ( has_nav_menu('footer_three') ) :
             wp_nav_menu([
@@ -133,7 +159,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
               'container'      => false,
               'menu_class'     => 'flex flex-col gap-6',
               'fallback_cb'    => false,
-              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:text-gray-200">',
+              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">',
               'link_after'     => '</span>',
               'depth'          => 1,
             ]);
@@ -148,7 +174,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
             if ($practice_fallback->have_posts()) : ?>
               <ul class="flex flex-col gap-6" role="list">
                 <?php while ($practice_fallback->have_posts()) : $practice_fallback->the_post(); ?>
-                  <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url(get_permalink()); ?>"><?php echo esc_html(get_the_title()); ?></a></li>
+                  <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url(get_permalink()); ?>"><?php echo esc_html(get_the_title()); ?></a></li>
                 <?php endwhile; ?>
               </ul>
             <?php else : ?>
@@ -159,9 +185,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
       <!-- Column 4 (menu or default KI links) -->
       <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
-        <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
+        <span class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php echo esc_html($col4_heading); ?>
-        </h2>
+        </span>
         <div class="flex flex-col gap-6">
           <?php if ( has_nav_menu('footer_four') ) :
             wp_nav_menu([
@@ -169,16 +195,16 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
               'container'      => false,
               'menu_class'     => 'flex flex-col gap-6',
               'fallback_cb'    => false,
-              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:text-gray-200">',
+              'link_before'    => '<span class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">',
               'link_after'     => '</span>',
               'depth'          => 1,
             ]);
           else : ?>
             <ul class="flex flex-col gap-6" role="list">
-              <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url( home_url('/insights/') ); ?>">Insights</a></li>
-              <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url( home_url('/news/') ); ?>">News</a></li>
-              <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url( home_url('/events/') ); ?>">Events &amp; Webinar</a></li>
-              <li><a class="text-base font-light transition-colors duration-200 hover:text-gray-200" href="<?php echo esc_url( home_url('/press-releases/') ); ?>">Press Releases</a></li>
+              <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url( home_url('/insights/') ); ?>">Insights</a></li>
+              <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url( home_url('/news/') ); ?>">News</a></li>
+              <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url( home_url('/events/') ); ?>">Events &amp; Webinar</a></li>
+              <li><a class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200" href="<?php echo esc_url( home_url('/press-releases/') ); ?>">Press Releases</a></li>
             </ul>
           <?php endif; ?>
         </div>
@@ -186,9 +212,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
 
       <!-- Column 5: Get in touch -->
       <section class="flex flex-col gap-8 items-start self-stretch min-w-0">
-        <h2 class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
+        <span class="text-xl font-semibold tracking-wide leading-5 max-sm:text-lg max-sm:leading-5">
           <?php esc_html_e('Get in touch', 'matrix-starter'); ?>
-        </h2>
+        </span>
 
         <div class="flex flex-col gap-6">
           <?php if ($phone_number): ?>
@@ -196,7 +222,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
               <span aria-hidden="true" class="flex-shrink-0">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.96 8.666a6.8 6.8 0 0 1-1.32-.34 1.33 1.33 0 0 0-1.64.8l-.147.3c-1.35-.743-2.486-1.879-3.226-3.226l.28-.187a1.33 1.33 0 0 0 .308-1.64 6.98 6.98 0 0 1-.34-1.32A2 2 0 0 0 5.34 1.36h-2a1.99 1.99 0 0 0-2 2.273c.355 2.793 1.63 5.388 3.624 7.375 1.994 1.988 4.594 3.254 7.388 3.6a2 2 0 0 0 2.287-2V10.6a2 2 0 0 0-1.68-1.934z" fill="currentColor"/></svg>
               </span>
-              <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone_number)); ?>" class="text-base font-light transition-colors duration-200 hover:text-gray-200">
+              <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone_number)); ?>" class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">
                 <?php echo esc_html($phone_number); ?>
               </a>
             </div>
@@ -207,7 +233,7 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
               <span aria-hidden="true" class="flex-shrink-0">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="3" width="12.8" height="10.4" rx="1.4" stroke="currentColor" stroke-width="1.2"/><path d="M14 5.2l-5.23 3.34c-.46.294-1.08.294-1.54 0L2 5.2" stroke="currentColor" stroke-width="1.2"/></svg>
               </span>
-              <a href="mailto:<?php echo esc_attr($email_address); ?>" class="text-base font-light transition-colors duration-200 hover:text-gray-200">
+              <a href="mailto:<?php echo esc_attr($email_address); ?>" class="text-base font-light transition-colors duration-200 hover:underline hover:text-gray-200">
                 <?php echo esc_html($email_address); ?>
               </a>
             </div>
@@ -216,7 +242,9 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
           <?php if ($address): ?>
             <div class="flex gap-2 items-start">
               <span aria-hidden="true" class="flex-shrink-0 mt-0.5">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.6a5.4 5.4 0 0 0-5.4 5.4C2.6 11 8 14.4 8 14.4S13.4 11 13.4 7a5.4 5.4 0 0 0-5.4-5.4Zm0 7.4a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" fill="currentColor"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 4.66667V2H1.33333V14H14.6667V4.66667H8ZM4 12.6667H2.66667V11.3333H4V12.6667ZM4 10H2.66667V8.66667H4V10ZM4 7.33333H2.66667V6H4V7.33333ZM4 4.66667H2.66667V3.33333H4V4.66667ZM6.66667 12.6667H5.33333V11.3333H6.66667V12.6667ZM6.66667 10H5.33333V8.66667H6.66667V10ZM6.66667 7.33333H5.33333V6H6.66667V7.33333ZM6.66667 4.66667H5.33333V3.33333H6.66667V4.66667ZM13.3333 12.6667H8V11.3333H9.33333V10H8V8.66667H9.33333V7.33333H8V6H13.3333V12.6667ZM12 7.33333H10.6667V8.66667H12V7.33333ZM12 10H10.6667V11.3333H12V10Z" fill="white"/>
+                </svg>
               </span>
               <address class="text-base not-italic font-light">
                 <?php echo wp_kses_post($address); ?>
@@ -248,11 +276,11 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
       </section>
     </nav>
 
-    <div class="h-px w-[100px] bg-[#ffffff85] self-start" aria-hidden="true"></div>
+    <div class="h-px w-[100px] bg-[#ffffff85] self-start max-md:hidden" aria-hidden="true"></div>
 
     <!-- Partner logos -->
     <?php if (!empty($partner_logos)) : ?>
-      <div class="flex gap-14 items-center max-md:flex-wrap max-md:gap-8 max-md:justify-center max-sm:flex-col max-sm:gap-6" role="list" aria-label="<?php esc_attr_e('Partner organizations', 'matrix-starter'); ?>">
+      <div class="flex gap-14 items-center max-md:flex-wrap max-md:gap-8 max-md:justify-center max-sm:flex-col max-md:hidden max-sm:gap-6" role="list" aria-label="<?php esc_attr_e('Partner organizations', 'matrix-starter'); ?>">
         <?php foreach ($partner_logos as $pl) :
           $img = $pl['logo_image'] ?? 0;
           $lnk = $pl['logo_link'] ?? null;
@@ -270,23 +298,107 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
     <?php endif; ?>
 
     <!-- Bottom bar -->
-    <div class="flex flex-col gap-6 justify-center items-center self-stretch">
-      <div class="flex justify-between items-start w-full max-md:flex-col max-md:gap-4 max-md:items-center">
-        <nav class="flex relative gap-7 justify-center items-start max-md:flex-wrap max-md:gap-4 max-md:justify-center max-sm:flex-col max-sm:gap-3 max-sm:text-center" aria-label="<?php esc_attr_e('Legal and policy links', 'matrix-starter'); ?>">
+    <div class="flex flex-col flex-wrap gap-6 justify-center items-center self-stretch max-md:items-start" >
+      <div class="flex justify-between items-start w-full max-lg:justify-start max-md:flex-col max-md:gap-4 max-md:items-start">
+        <nav class="flex relative flex-wrap gap-7 justify-center items-start w-full max-md:gap-4 max-md:justify-center max-sm:flex-col max-sm:gap-3 max-sm:text-center" aria-label="<?php esc_attr_e('Legal and policy links', 'matrix-starter'); ?>">
           <p class="text-sm font-medium">
             <?php echo esc_html( sprintf('© %s Whitney Moore. All rights reserved', date('Y')) ); ?>
           </p>
-          <?php
-          wp_nav_menu([
-            'theme_location' => 'copyright',
-            'container'      => false,
-            'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
-            'fallback_cb'    => false,
-            'depth'          => 1,
-            'link_before'    => '<span class="text-sm font-medium transition-colors duration-200 hover:text-gray-200">',
-            'link_after'     => '</span>',
-          ]);
-          ?>
+            <?php
+            // Build items for dropdown (depth 1)
+            $locations  = get_nav_menu_locations();
+            $menu_id    = isset($locations['copyright']) ? (int) $locations['copyright'] : 0;
+            $menu_items = $menu_id ? wp_get_nav_menu_items($menu_id) : [];
+
+            $dd_id      = 'footer-copyright-dd-' . wp_rand(1000, 9999);
+            $btn_id     = $dd_id . '-btn';
+            $list_id    = $dd_id . '-list';
+            $status_id  = $dd_id . '-status';
+
+            $placeholder = 'Legal links';
+
+            // Build a flat array of top-level items
+            $dd_items = [];
+            if (!empty($menu_items)) {
+              foreach ($menu_items as $mi) {
+                if ((int) $mi->menu_item_parent !== 0) {
+                  continue;
+                }
+                $url   = !empty($mi->url) ? $mi->url : '';
+                $label = !empty($mi->title) ? $mi->title : '';
+                if (!$url || !$label) {
+                  continue;
+                }
+
+                $dd_items[] = [
+                  'url'   => $url,
+                  'label' => wp_specialchars_decode((string) $label, ENT_QUOTES),
+                ];
+              }
+            }
+            ?>
+
+            <!-- Desktop / tablet links (above 575px) -->
+            <div class="max-ipad:hidden">
+              <?php
+              wp_nav_menu([
+                'theme_location' => 'copyright',
+                'container'      => false,
+                'menu_class'     => 'flex gap-7 items-start max-md:flex-wrap max-md:gap-4',
+                'fallback_cb'    => false,
+                'depth'          => 1,
+                'link_before'    => '<span class="text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-gray-200">',
+                'link_after'     => '</span>',
+              ]);
+              ?>
+            </div>
+
+                  <!-- Mobile dropdown (575px and below) -->
+                  <?php if (!empty($dd_items)) : ?>
+                    <div class="hidden w-full max-ipad:block">
+                      <div class="relative w-full" id="<?php echo esc_attr($dd_id); ?>">
+                        <button
+                          id="<?php echo esc_attr($btn_id); ?>"
+                          type="button"
+                          class="flex justify-between items-center px-4 py-3 w-full min-h-[48px]
+                                bg-white/10 border border-white/40 text-white
+                                transition-colors duration-200 hover:bg-white/15"
+                          aria-haspopup="listbox"
+                          aria-expanded="false"
+                          aria-controls="<?php echo esc_attr($list_id); ?>"
+                        >
+                          <span class="text-sm font-medium js-dd-label"><?php echo esc_html($placeholder); ?></span>
+
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                              class="transition-transform duration-200 js-dd-chevron">
+                            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+
+                        <!-- Opens UPWARD to avoid footer overflow -->
+                        <ul
+                          id="<?php echo esc_attr($list_id); ?>"
+                          role="listbox"
+                          tabindex="-1"
+                          class="hidden overflow-y-auto absolute left-0 bottom-full z-50 mb-2 w-full max-h-60 text-black bg-white border shadow-lg border-white/40"
+                          aria-labelledby="<?php echo esc_attr($btn_id); ?>"
+                        >
+                          <?php foreach ($dd_items as $it) : ?>
+                            <li
+                              role="option"
+                              tabindex="-1"
+                              data-url="<?php echo esc_url($it['url']); ?>"
+                              class="px-4 py-3 text-sm cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+                            >
+                              <?php echo esc_html($it['label']); ?>
+                            </li>
+                          <?php endforeach; ?>
+                        </ul>
+
+                        <div id="<?php echo esc_attr($status_id); ?>" class="sr-only" role="status" aria-live="polite"></div>
+                      </div>
+                    </div>
+                  <?php endif; ?>
         </nav>
 
         <?php
@@ -294,18 +406,148 @@ $footer_id = 'site-footer-' . wp_rand(1000, 9999);
         $attr_tgt = (is_array($attr_link) && !empty($attr_link['target'])) ? $attr_link['target'] : '_self';
         $attr_lbl = (is_array($attr_link) && !empty($attr_link['title'])) ? $attr_link['title'] : 'Matrix Internet';
         ?>
-        <p class="text-sm font-medium">
-          <?php echo esc_html($attr_text); ?>
-          <?php if ($attr_url): ?>
-            <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
-          <?php else: ?>
-            <span class="underline">Matrix Internet</span>
-          <?php endif; ?>
-        </p>
+       <div class="flex max-xxl:hidden">
+          <div class="flex text-sm font-medium xxl:whitespace-nowrap">
+            <?php echo esc_html($attr_text); ?>
+            <?php if ($attr_url): ?>
+              <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
+            <?php else: ?>
+              <span class="underline">Matrix Internet</span>
+            <?php endif; ?>
+          </div>
+       </div>
       </div>
+      <div class="flex xxl:hidden">
+          <div class="text-sm font-medium xxl:whitespace-nowrap">
+            <?php echo esc_html($attr_text); ?>
+            <?php if ($attr_url): ?>
+              <a href="<?php echo esc_url($attr_url); ?>" target="<?php echo esc_attr($attr_tgt); ?>" rel="noopener" class="underline transition-opacity duration-200 btn hover:opacity-90"><?php echo esc_html($attr_lbl); ?></a>
+            <?php else: ?>
+              <span class="underline">Matrix Internet</span>
+            <?php endif; ?>
+          </div>
+       </div>
     </div>
 
   </div>
 </footer>
 
 <?php wp_footer(); ?>
+<script>
+(function () {
+  const root = document.getElementById(<?php echo wp_json_encode($dd_id); ?>);
+  if (!root) return;
+
+  const btn     = root.querySelector('#' + <?php echo wp_json_encode($btn_id); ?>);
+  const list    = root.querySelector('#' + <?php echo wp_json_encode($list_id); ?>);
+  const labelEl = root.querySelector('.js-dd-label');
+  const chev    = root.querySelector('.js-dd-chevron');
+  const status  = root.querySelector('#' + <?php echo wp_json_encode($status_id); ?>);
+
+  if (!btn || !list) return;
+
+  let isOpen = false;
+  let focusIndex = -1;
+
+  function options() {
+    return list.querySelectorAll('[role="option"]');
+  }
+
+  function open() {
+    isOpen = true;
+    btn.setAttribute('aria-expanded', 'true');
+    list.classList.remove('hidden');
+    if (chev) chev.style.transform = 'rotate(180deg)';
+    if (status) status.textContent = 'Options expanded.';
+
+    const opts = options();
+    focusIndex = opts.length ? 0 : -1;
+    if (opts.length) opts[0].focus();
+  }
+
+  function close() {
+    isOpen = false;
+    btn.setAttribute('aria-expanded', 'false');
+    list.classList.add('hidden');
+    if (chev) chev.style.transform = 'rotate(0deg)';
+    if (status) status.textContent = 'Options collapsed.';
+    btn.focus();
+  }
+
+  function toggle() {
+    isOpen ? close() : open();
+  }
+
+  function selectEl(el) {
+    const url = el?.dataset?.url || '';
+    const text = (el?.textContent || '').trim();
+
+    if (labelEl && text) labelEl.textContent = text;
+    if (status && text) status.textContent = text + ' selected.';
+    close();
+
+    if (url) window.location.assign(url);
+  }
+
+  // Toggle click
+  btn.addEventListener('click', function () {
+    toggle();
+  });
+
+  // Button keyboard
+  btn.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      open();
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      open();
+    }
+  });
+
+  // Click option
+  list.addEventListener('click', function (e) {
+    const opt = e.target.closest('[role="option"]');
+    if (opt) selectEl(opt);
+  });
+
+  // List keyboard nav
+  list.addEventListener('keydown', function (e) {
+    const opts = options();
+    if (!opts.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusIndex = Math.min(opts.length - 1, focusIndex + 1);
+      opts[focusIndex].focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusIndex = Math.max(0, focusIndex - 1);
+      opts[focusIndex].focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      focusIndex = 0;
+      opts[0].focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      focusIndex = opts.length - 1;
+      opts[focusIndex].focus();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      selectEl(opts[focusIndex]);
+    } else if (e.key === 'Tab') {
+      close();
+    }
+  });
+
+  // Click-away
+  document.addEventListener('click', function (e) {
+    if (!isOpen) return;
+    if (!root.contains(e.target)) close();
+  });
+})();
+</script>

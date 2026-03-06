@@ -39,7 +39,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
@@ -62,7 +62,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
             <div class="flex flex-col items-center max-w-full tracking-wider text-center lg:w-[581px] max-sm:px-5">
 
                 <!-- Headings Container -->
-                <div class="flex flex-col items-start w-full max-w-[flex flex-col items-start max-w-[580px]">
+                <div class="flex flex-col items-center w-full max-w-[flex flex-col justify-center max-w-[580px]">
 
                     <!-- Section Heading -->
                     <?php if (!empty($section_heading)): ?>
@@ -98,7 +98,7 @@ $section_id = 'our-people-' . wp_rand(1000, 9999);
             <?php if ($cta_button && is_array($cta_button) && isset($cta_button['url'], $cta_button['title'])): ?>
                 <a
                     href="<?php echo esc_url($cta_button['url']); ?>"
-                    class="flex gap-2 justify-center items-center px-16 py-4 mt-14 text-xl leading-none whitespace-nowrap border border-indigo-800 border-solid transition-colors duration-300 text-primary hover:bg-primary hover:text-white focus:bg-primary focus:text-white max-md:px-5 max-md:mt-10 w-fit btn max-sm:text-[1.25rem] max-sm:leading-[1.25rem]"
+                    class="flex gap-2 justify-center items-center px-16 py-4 mt-14 text-xl leading-none whitespace-nowrap border border-primary border-solid transition-colors duration-300 text-primary hover:bg-primary hover:text-white focus:bg-primary focus:text-white max-md:px-5 max-md:mt-10 w-fit btn max-sm:text-[1.25rem] max-sm:leading-[1.25rem]"
                     target="<?php echo esc_attr($cta_button['target'] ?? '_self'); ?>"
                     aria-label="<?php echo esc_attr($cta_button['title']); ?>"
                 >

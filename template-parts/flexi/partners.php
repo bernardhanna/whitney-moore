@@ -78,30 +78,30 @@ $prev_id   = $section_id . '-prev';
 $next_id   = $section_id . '-next';
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
-    <div class="flex flex-col items-center w-full mx-auto max-w-[1400px] pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="bg-[#F5F5F5]  flex overflow-hidden relative">
+    <div class="flex flex-col items-center w-full mx-auto max-w-[1590px] py-10 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
-        <header class="flex justify-between items-center mb-8 w-full max-md:flex-col max-md:gap-6 max-md:items-start max-md:mb-6 max-sm:gap-5 max-sm:mb-5">
+        <header class="flex justify-between items-center w-full max-md:flex-col max-md:gap-6 max-md:items-start max-md:mb-6 max-sm:gap-5 max-sm:mb-5">
             <div class="flex flex-col items-start">
                 <?php if (!empty($subheading)) : ?>
-                    <p class="mb-2 text-lg font-medium tracking-wider text-black max-md:text-base max-sm:text-sm">
+                    <p class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-lg:mb-2 max-md:text-base max-sm:text-sm">
                         <?php echo esc_html($subheading); ?>
                     </p>
                 <?php endif; ?>
 
-                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-indigo-800 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
+                <<?php echo esc_html($heading_tag); ?> class="text-3xl font-bold tracking-wider leading-10 text-primary max-sm:text-2xl max-sm:leading-8">
                     <?php echo esc_html($heading_text); ?>
                 </<?php echo esc_html($heading_tag); ?>>
             </div>
 
             <!-- Arrow controls (positioned like your example) -->
-            <div class="flex relative gap-3 items-center max-md:self-end w-full justify-between sm:w-auto sm:justify-center">
+            <div class="flex relative gap-3 justify-between items-center mr-6 w-full max-md:hidden max-md:self-end sm:w-auto sm:justify-center">
                 <div class="pointer-events-auto">
                     <button
                         id="<?php echo esc_attr($prev_id); ?>"
                         type="button"
                         aria-label="Previous partners"
-                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-14 md:h-14 bg-primary matrix-prev hover:opacity-90"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-prev hover:opacity-90"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -114,7 +114,7 @@ $next_id   = $section_id . '-next';
                         id="<?php echo esc_attr($next_id); ?>"
                         type="button"
                         aria-label="Next partners"
-                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-14 md:h-14 bg-primary matrix-next hover:opacity-90"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-next hover:opacity-90"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -173,6 +173,34 @@ $next_id   = $section_id . '-next';
             </div>
         </div>
 
+        <div class="flex hidden relative gap-3 items-center p-4 mx-auto mr-6 w-full max-lg:justify-between max-md:self-end lg:w-auto max-md:flex">
+                <div class="pointer-events-auto">
+                    <button
+                        id="<?php echo esc_attr($prev_id); ?>"
+                        type="button"
+                        aria-label="Previous partners"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-prev hover:opacity-90"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="pointer-events-auto">
+                    <button
+                        id="<?php echo esc_attr($next_id); ?>"
+                        type="button"
+                        aria-label="Next partners"
+                        class="flex justify-center items-center w-12 h-12 rounded-full shadow transition-all md:w-[2.5rem] md:h-[2.5rem] bg-primary matrix-next hover:opacity-90"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
     </div>
 
     <style>
@@ -221,6 +249,12 @@ $next_id   = $section_id . '-next';
                             breakpoint: 640,
                             settings: {
                                 slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 580,
+                            settings: {
+                                slidesToShow: 1
                             }
                         }
                     ]

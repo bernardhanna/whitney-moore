@@ -62,6 +62,20 @@ $blogFields
       'default_value'=> 'Filter by',
     ])
 
+    ->addTaxonomy('visible_filter_categories', [
+      'label'         => 'Visible Filter Categories',
+      'instructions'  => 'Optional. Choose which blog categories should appear in filter pills. Leave empty to show all non-empty categories.',
+      'taxonomy'      => 'category',
+      'field_type'    => 'multi_select',
+      'return_format' => 'id',
+      'add_term'      => 0,
+      'save_terms'    => 0,
+      'load_terms'    => 0,
+      'allow_null'    => 1,
+      'multiple'      => 1,
+      'ui'            => 1,
+    ])
+
   ->endGroup();
 
 return $blogFields;

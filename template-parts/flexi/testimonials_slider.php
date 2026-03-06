@@ -22,7 +22,7 @@ $dots_enabled     = (bool) get_sub_field('dots');
 $autoplay_enabled = (bool) get_sub_field('autoplay');
 $autoplay_speed   = (int) get_sub_field('autoplay_speed') ?: 5000;
 
-/** Force desktop to 4; keep smaller breakpoints */
+/** Desktop shows 4; smaller breakpoints use ACF values */
 $slides_xl = 4;
 $slides_lg = (int) get_sub_field('slides_lg') ?: 3;
 $slides_md = (int) get_sub_field('slides_md') ?: 2;
@@ -43,7 +43,7 @@ if (have_rows('padding_settings')) {
   }
 }
 
-/** Helper: fetch logo fields from CPT */
+/** Helper: logo fields on CPT */
 function _matrix_t_logo($post_id) {
   $logo_img_id = get_field('logo_image', $post_id);
   $logo_svg    = get_field('logo_svg', $post_id);
@@ -65,7 +65,7 @@ if ($data_source === 'latest') {
   while ($q->have_posts()) { $q->the_post();
     $pid       = get_the_ID();
     $name      = get_the_title($pid);
-    $position  = get_the_excerpt($pid);
+    $position  = has_excerpt($pid) ? wp_strip_all_tags((string) get_post_field('post_excerpt', $pid)) : '';
     $text_html = apply_filters('the_content', get_post_field('post_content', $pid));
     $image_id  = get_post_thumbnail_id($pid);
     [$logo_img_id, $logo_svg] = _matrix_t_logo($pid);
@@ -77,7 +77,7 @@ if ($data_source === 'latest') {
   foreach ($selected_posts as $pid) {
     $pid       = (int) $pid;
     $name      = get_the_title($pid);
-    $position  = get_the_excerpt($pid);
+    $position  = has_excerpt($pid) ? wp_strip_all_tags((string) get_post_field('post_excerpt', $pid)) : '';
     $text_html = apply_filters('the_content', get_post_field('post_content', $pid));
     $image_id  = get_post_thumbnail_id($pid);
     [$logo_img_id, $logo_svg] = _matrix_t_logo($pid);
@@ -110,14 +110,14 @@ $allowed_svg = [
 ?>
 
 <section
-  id="<?php echo esc_attr($section_id); ?>"
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-  <div class="flex flex-col items-center pt-10 pb-5 mx-auto w-full md:py-24 max-w-[1728px] max-xxl:px-[1rem]">
+  <div class="flex flex-col items-center py-10 mx-auto w-full lg:py-20 max-w-container max-xxl:px-5">
 
     <!-- Headings -->
-    <div class="flex flex-col gap-4 items-start w-full max-w-container">
+    <div class="flex flex-col gap-4 items-start w-full">
       <?php if ($subheading) : ?>
         <div class="text-lg font-medium tracking-wide text-black"><?php echo esc_html($subheading); ?></div>
       <?php endif; ?>
@@ -136,9 +136,8 @@ $allowed_svg = [
       <?php endif; ?>
     </div>
 
-    <!-- Slider wrapper provides positioning for arrows -->
-    <div class="relative mt-8 w-full max-w-container">
-      <!-- Shell is clipped: hides left strip, allows right overflow -->
+    <!-- Slider -->
+    <div class="relative mt-8 w-full">
       <div class="overflow-visible relative w-full" data-slick-shell="<?php echo esc_attr($section_id); ?>">
         <div class="matrix-slick" data-slick-root="<?php echo esc_attr($section_id); ?>">
           <?php foreach ($slides as $s) :
@@ -152,7 +151,7 @@ $allowed_svg = [
             $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
           ?>
             <div class="px-4">
-              <article class="relative h-[480px] overflow-hidden group">
+              <article class="relative h-[480px] overflow-hidden group t-card flex justify-end items-end p-4">
                 <?php if ($image_id) :
                   echo wp_get_attachment_image($image_id, 'large', false, [
                     'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
@@ -160,7 +159,7 @@ $allowed_svg = [
                   ]);
                 endif; ?>
 
-                <div class="absolute right-6 bottom-6 left-6">
+                <div class="relative z-20">
                   <div class="relative backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
                     <div class="flex items-start">
                       <?php
@@ -196,9 +195,8 @@ $allowed_svg = [
         </div>
       </div>
 
-      <!-- Overlaid arrows (outside clipped shell so they don't get cut) -->
       <?php if ($arrow_enabled): ?>
-        <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute inset-0 pointer-events-none -left-[1rem] md:-left-[1rem] xxl:-left-[2.5rem] xl:-left-[1.5rem]">
           <div class="absolute left-2 top-1/2 z-20 -translate-y-1/2 pointer-events-auto md:left-3 lg:left-4 xl:left-6">
             <button type="button" aria-label="<?php esc_attr_e('Previous testimonials', 'matrix-starter'); ?>"
               class="flex justify-center items-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all matrix-prev bg-[#e2e2e2] hover:opacity-90 shadow">
@@ -214,59 +212,86 @@ $allowed_svg = [
         </div>
       <?php endif; ?>
 
-      <!-- Dots (optional, below slider) -->
       <?php if ($dots_enabled): ?>
         <div class="flex gap-4 justify-center items-center mt-6" data-slick-dots="<?php echo esc_attr($section_id); ?>"></div>
       <?php endif; ?>
     </div>
   </div>
 
-  <!-- Scoped CSS: allow right peek & hide only left via clip-path -->
   <style>
-    /* Allow the next slide to peek on the right */
+    /* Let next slide peek on the right */
     #<?php echo esc_attr($section_id); ?> .slick-list { overflow: visible; padding-right: 2rem; }
     @media (min-width:1536px){
       #<?php echo esc_attr($section_id); ?> .slick-list { padding-right: 2.5rem; }
     }
 
-    /* Hide ONLY the left side of the shell.
-       inset: top | right | bottom | left
-       Right is negative to allow right-side overflow to show. */
+    /* Hide only the left side via clip-path */
     #<?php echo esc_attr($section_id); ?> [data-slick-shell] {
       clip-path: inset(0 -100vw 0 24px);
       -webkit-clip-path: inset(0 -100vw 0 0px);
     }
 
+    /* --- Opacity dimming ---
+       Default: every slide starts dimmed. JS removes dim from the first 3 visible on desktop.
+       This fades the ENTIRE slide (image + content card).
+    */
+    #<?php echo esc_attr($section_id); ?> .t-card { opacity: 1; transition: opacity .25s ease; will-change: opacity; }
+    #<?php echo esc_attr($section_id); ?> .is-dim .t-card { opacity: .35; }
   </style>
 
-  <script>
-  jQuery(function($){
-    var $root   = $('#<?php echo esc_js($section_id); ?>');
-    var $track  = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
-    var $prev   = $root.find('.matrix-prev');
-    var $next   = $root.find('.matrix-next');
-    var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
+<script>
+jQuery(function($){
+  var $root   = $('#<?php echo esc_js($section_id); ?>');
+  var $track  = $root.find('[data-slick-root="<?php echo esc_js($section_id); ?>"]');
+  var $prev   = $root.find('.matrix-prev');
+  var $next   = $root.find('.matrix-next');
+  var $dots   = $root.find('[data-slick-dots="<?php echo esc_js($section_id); ?>"]');
 
-    if (!$track.hasClass('slick-initialized')) {
-      $track.slick({
-        slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
-        slidesToScroll: 1,
-        infinite: true,
-        arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
-        prevArrow: $prev,
-        nextArrow: $next,
-        dots: <?php echo $dots_enabled ? 'true' : 'false'; ?>,
-        appendDots: $dots.length ? $dots : undefined,
-        autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
-        autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
-        adaptiveHeight: false,
-        responsive: [
-          { breakpoint: 1280, settings: { slidesToShow: <?php echo (int) $slides_lg; ?> } },
-          { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
-          { breakpoint: 640,  settings: { slidesToShow: <?php echo (int) $slides_sm; ?> } },
-        ]
-      });
+  function updateDimming(slick){
+    // Select ALL slides in the track (real + cloned), not just slick.$slides
+    var $all    = $(slick.$slideTrack).children('.slick-slide');
+    var $active = $all.filter('.slick-active');
+    var isDesktop = window.matchMedia('(min-width: 1280px)').matches;
+
+    // Start with everything dim
+    $all.addClass('is-dim');
+
+    // Desktop: first 3 visible are clear. Smaller screens: all visible are clear.
+    var clearCount = isDesktop ? 3 : $active.length;
+    $active.slice(0, clearCount).removeClass('is-dim');
+  }
+
+  if (!$track.hasClass('slick-initialized')) {
+    $track.on('init reInit afterChange setPosition', function(e, slick){
+      updateDimming(slick);
+    });
+
+    $track.slick({
+      slidesToShow: <?php echo (int) $slides_xl; ?>, // 4 on desktop
+      slidesToScroll: 1,
+      infinite: true,
+      arrows: <?php echo $arrow_enabled ? 'true' : 'false'; ?>,
+      prevArrow: $prev,
+      nextArrow: $next,
+      dots: <?php echo $dots_enabled ? 'true' : 'false'; ?>,
+      appendDots: $dots.length ? $dots : undefined,
+      autoplay: <?php echo $autoplay_enabled ? 'true' : 'false'; ?>,
+      autoplaySpeed: <?php echo (int) $autoplay_speed; ?>,
+      adaptiveHeight: false,
+      responsive: [
+        { breakpoint: 1280, settings: { slidesToShow: <?php echo (int) $slides_lg; ?> } },
+        { breakpoint: 1024, settings: { slidesToShow: <?php echo (int) $slides_md; ?> } },
+        { breakpoint: 640,  settings: { slidesToShow: <?php echo (int) $slides_sm; ?> } },
+      ]
+    });
+  }
+
+  // Recalc on resize/orientation changes
+  $(window).on('resize orientationchange', function(){
+    if ($track.hasClass('slick-initialized')) {
+      $track.slick('setPosition'); // triggers setPosition -> updateDimming
     }
   });
-  </script>
+});
+</script>
 </section>

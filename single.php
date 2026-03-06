@@ -52,7 +52,7 @@ if (function_exists('load_hero_templates')) {
       $intro = has_excerpt() ? get_the_excerpt() : '';
       ?>
 
-      <div class="flex flex-col justify-center self-stretch px-48 pt-20 pb-32 bg-white max-md:px-5 max-md:pb-24">
+      <div class="flex flex-col justify-center self-stretch px-8 pt-20 bg-white xl:px-48 max-md:px-5">
         <article class="w-full bg-white shadow-lg max-md:max-w-full max-w-[1360px] mx-auto">
 
           <header>
@@ -67,14 +67,14 @@ if (function_exists('load_hero_templates')) {
             <?php endif; ?>
           </header>
 
-          <div class="px-24 pt-14 pb-20 w-full bg-white max-md:px-5 max-md:max-w-full">
+          <div class="px-5 pt-5 pb-20 w-full bg-white xl:pt-14 sxxl:px-24 max-md:px-5 max-md:max-w-full">
             <div class="flex flex-col w-full max-md:max-w-full">
 
               <!-- Breadcrumb -->
               <nav aria-label="<?php esc_attr_e('Breadcrumb', 'matrix-starter'); ?>"
-                   class="flex gap-2 items-center self-start text-base font-medium tracking-wider text-black whitespace-nowrap">
+                   class="flex gap-2 items-center self-start text-[14px] xl:text-base font-medium tracking-wider text-black whitespace-nowrap">
                 <a href="<?php echo esc_url($home_url); ?>"
-                   class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800">
+                   class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                   <?php echo esc_html($home_label); ?>
                 </a>
 
@@ -85,7 +85,7 @@ if (function_exists('load_hero_templates')) {
 
                 <?php if (!empty($news_url)) : ?>
                   <a href="<?php echo esc_url($news_url); ?>"
-                     class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800">
+                     class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                     <?php echo esc_html(mb_strtoupper($news_label)); ?>
                   </a>
                 <?php else : ?>
@@ -101,7 +101,7 @@ if (function_exists('load_hero_templates')) {
 
                   <?php if (!empty($cat_url)) : ?>
                     <a href="<?php echo esc_url($cat_url); ?>"
-                       class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-800"
+                       class="self-stretch my-auto text-black hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                        aria-current="page">
                       <?php echo esc_html($cat_name); ?>
                     </a>
@@ -114,7 +114,7 @@ if (function_exists('load_hero_templates')) {
               </nav>
 
               <!-- Title -->
-              <h1 class="mt-4 text-6xl font-bold text-indigo-800 leading-[68px] max-md:max-w-full max-md:text-4xl max-md:leading-[52px]">
+              <h1 class="mt-4 xl:text-6xl font-bold text-primary leading-[68px] max-md:max-w-full max-xl:text-4xl max-xl:leading-[52px] max-md:leading-[52px]">
                 <?php the_title(); ?>
               </h1>
 
@@ -127,7 +127,7 @@ if (function_exists('load_hero_templates')) {
             </div>
 
             <!-- Post Content -->
-            <div class="mt-12 w-full max-md:mt-10 max-md:max-w-full wp_editor">
+            <div class="mt-5 w-full xl:mt-12 max-md:mt-10 max-md:max-w-full wp_editor">
               <?php the_content(); ?>
             </div>
           </div>

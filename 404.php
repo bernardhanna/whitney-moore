@@ -48,7 +48,7 @@ if ($bg_id) {
 $section_id = 'hero_' . wp_generate_uuid4();
 ?>
 <section
-  id="<?php echo esc_attr($section_id); ?>"
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
   class="flex overflow-hidden relative max-sm:flex-col"
   role="banner"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
@@ -108,7 +108,7 @@ $section_id = 'hero_' . wp_generate_uuid4();
 
           <?php if (!empty($btn_primary['url']) && !empty($btn_primary['title'])) : ?>
             <a href="<?php echo esc_url($btn_primary['url']); ?>"
-               class="flex gap-2 justify-center items-center px-8 py-5 tracking-wide text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full"
+               class="flex gap-2 justify-center items-center px-8 py-5 tracking-wide text-center text-white bg-primary min-h-14 w-fit whitespace-nowrap shadow-[10px_14px_24px_rgba(0,0,0,0.25)] max-md:px-5 btn hover:bg-primary-lighter duration-200 max-sm:w-full hover:text-primary "
                target="<?php echo esc_attr($btn_primary['target'] ?? ''); ?>"
                aria-label="<?php echo esc_attr($btn_primary['title']); ?>">
               <span class="self-stretch my-auto">
@@ -122,7 +122,7 @@ $section_id = 'hero_' . wp_generate_uuid4();
 
           <?php if (!empty($btn_secondary['url']) && !empty($btn_secondary['title'])) : ?>
             <a href="<?php echo esc_url($btn_secondary['url']); ?>"
-               class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:opacity-90 transition-opacity duration-200 max-sm:w-full"
+               class="flex gap-2 justify-center items-center px-8 py-5 text-[#1D4ED8] bg-[#DBEAFE] min-h-14 w-fit whitespace-nowrap shadow-[20px_14px_24px_rgba(0,0,0,0.08)] max-md:px-5 btn hover:bg-primary-lighter hover:text-primary duration-200 max-sm:w-full"
                target="<?php echo esc_attr($btn_secondary['target'] ?? ''); ?>"
                aria-label="<?php echo esc_attr($btn_secondary['title']); ?>">
               <span class="self-stretch my-auto">

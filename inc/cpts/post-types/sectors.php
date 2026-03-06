@@ -11,6 +11,7 @@ add_action('init', function () {
         [
             'menu_icon'       => 'dashicons-category',
             'supports'        => ['title','editor','excerpt','thumbnail','revisions'],
+            'taxonomies'      => ['what_we_do_category'],
             'public'          => true,
             'show_ui'         => true,
             'show_in_menu'    => true,

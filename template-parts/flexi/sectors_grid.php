@@ -17,6 +17,13 @@ $text_color           = get_sub_field('text_color');
 $underline_color      = get_sub_field('underline_color');
 
 $posts_per_page       = (int) get_sub_field('posts_per_page') ?: 6;
+$items_source         = get_sub_field('items_source') ?: 'post_type';
+$manual_items         = get_sub_field('manual_items');
+$manual_cards         = get_sub_field('manual_cards');
+$query_post_type      = sanitize_key((string) (get_sub_field('query_post_type') ?: 'sectors'));
+$query_selected_posts = get_sub_field('query_selected_posts');
+$query_categories     = (array) get_sub_field('query_categories');
+$override_link        = get_sub_field('override_link');
 
 $image_radius         = get_sub_field('image_radius') ?: 'rounded-none';
 $tile_radius          = get_sub_field('tile_radius')  ?: 'rounded-none';
@@ -49,39 +56,146 @@ if (function_exists('is_plugin_active')) {
     $metronet_active = is_plugin_active('metronet-reorder-posts/metronet-reorder-posts.php');
 }
 
-/**
- * Build posts array:
- * - If Metronet is active: use get_posts() with menu_order ASC (up to 50)
- * - Else: use original WP_Query with ACF posts_per_page
- */
-$posts_array   = [];
+// Build normalized card items
+$grid_items    = [];
 $sectors_query = null;
+$allowed_mixed_post_types = ['sectors', 'practice_areas', 'what_we_do'];
 
-if ($metronet_active) {
-    $posts_array = get_posts([
-        'orderby'        => 'menu_order',
-        'order'          => 'ASC',
-        'post_status'    => 'publish',
-        'post_type'      => 'sectors',
-        'posts_per_page' => 50,
-        'suppress_filters' => false,
-    ]);
+$build_post_item = static function ($post_obj) use ($override_link) {
+    if (!($post_obj instanceof WP_Post)) {
+        return null;
+    }
+
+    $post_id  = (int) $post_obj->ID;
+    $title    = get_the_title($post_id);
+    $thumb_id = get_post_thumbnail_id($post_id);
+    $img_alt  = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
+    $img_alt  = $img_alt ?: $title;
+
+    $item_link = $override_link && !empty($override_link['url'])
+        ? $override_link
+        : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
+
+    return [
+        'title'       => $title,
+        'image_id'    => $thumb_id ? (int) $thumb_id : 0,
+        'image_url'   => '',
+        'image_alt'   => $img_alt ?: $title,
+        'link_url'    => (string) ($item_link['url'] ?? ''),
+        'link_title'  => (string) ($item_link['title'] ?: $title),
+        'link_target' => (string) ($item_link['target'] ?? ''),
+    ];
+};
+
+if ($items_source === 'manual_cards') {
+    $manual_cards = is_array($manual_cards) ? $manual_cards : [];
+    foreach ($manual_cards as $row) {
+        $title = isset($row['title']) ? trim((string) $row['title']) : '';
+        $link  = isset($row['link']) && is_array($row['link']) ? $row['link'] : [];
+        $image = isset($row['image']) && is_array($row['image']) ? $row['image'] : [];
+
+        $link_url = isset($link['url']) ? (string) $link['url'] : '';
+        if ($title === '' && !empty($link['title'])) {
+            $title = (string) $link['title'];
+        }
+        if ($title === '') {
+            continue;
+        }
+
+        $grid_items[] = [
+            'title'       => $title,
+            'image_id'    => !empty($image['ID']) ? (int) $image['ID'] : 0,
+            'image_url'   => !empty($image['url']) ? (string) $image['url'] : '',
+            'image_alt'   => !empty($image['alt']) ? (string) $image['alt'] : $title,
+            'link_url'    => $link_url,
+            'link_title'  => !empty($link['title']) ? (string) $link['title'] : $title,
+            'link_target' => !empty($link['target']) ? (string) $link['target'] : '',
+        ];
+    }
+} elseif ($items_source === 'manual') {
+    $manual_items = is_array($manual_items) ? $manual_items : [];
+    foreach ($manual_items as $item) {
+        if (!($item instanceof WP_Post)) {
+            continue;
+        }
+        if (!in_array($item->post_type, $allowed_mixed_post_types, true)) {
+            continue;
+        }
+        $normalized = $build_post_item($item);
+        if ($normalized) {
+            $grid_items[] = $normalized;
+        }
+    }
 } else {
-    $sectors_query = new WP_Query([
-        'post_type'      => 'sectors',
+    if (!in_array($query_post_type, $allowed_mixed_post_types, true)) {
+        $query_post_type = 'sectors';
+    }
+
+    $query_selected_posts = is_array($query_selected_posts) ? $query_selected_posts : [];
+    $selected_ids = [];
+    foreach ($query_selected_posts as $selected_post) {
+        if (!($selected_post instanceof WP_Post)) {
+            continue;
+        }
+        if ($selected_post->post_type !== $query_post_type) {
+            continue;
+        }
+        $selected_ids[] = (int) $selected_post->ID;
+    }
+    $selected_ids = array_values(array_unique(array_filter($selected_ids)));
+
+    $query_args = [
+        'post_type'      => $query_post_type,
         'posts_per_page' => $posts_per_page,
         'post_status'    => 'publish',
         'orderby'        => 'menu_order',
         'order'          => 'ASC',
-    ]);
-    $posts_array = $sectors_query->posts;
+    ];
+
+    if (!empty($selected_ids)) {
+        $query_args['post__in'] = $selected_ids;
+        $query_args['orderby'] = 'post__in';
+        $query_args['posts_per_page'] = count($selected_ids);
+    }
+
+    $query_categories = array_values(array_filter(array_map('intval', $query_categories)));
+    if (!empty($query_categories)) {
+        $query_args['tax_query'] = [[
+            'taxonomy' => 'what_we_do_category',
+            'field'    => 'term_id',
+            'terms'    => $query_categories,
+        ]];
+    }
+
+    if ($metronet_active && $query_post_type === 'sectors' && empty($query_args['tax_query']) && empty($selected_ids)) {
+        $posts_array = get_posts([
+            'orderby'          => 'menu_order',
+            'order'            => 'ASC',
+            'post_status'      => 'publish',
+            'post_type'        => 'sectors',
+            'posts_per_page'   => max(50, $posts_per_page),
+            'suppress_filters' => false,
+        ]);
+    } else {
+        $sectors_query = new WP_Query($query_args);
+        $posts_array = $sectors_query->posts;
+    }
+
+    if (!empty($posts_array) && is_array($posts_array)) {
+        foreach ($posts_array as $post_obj) {
+            $normalized = $build_post_item($post_obj);
+            if ($normalized) {
+                $grid_items[] = $normalized;
+            }
+        }
+    }
 }
 
-$total      = is_array($posts_array) ? count($posts_array) : 0;
+$total      = is_array($grid_items) ? count($grid_items) : 0;
 $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
 ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="flex overflow-hidden relative"
     style="<?php
         echo $background_color ? 'background-color:' . esc_attr($background_color) . ';' : '';
@@ -113,45 +227,42 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
             <!-- Simple GRID for mobile/tablet: 1 / 2 / 3 cols -->
             <div class="mt-10 w-full max-md:mt-8 lg:hidden">
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2">
-                    <?php foreach ($posts_array as $post): ?>
+                    <?php foreach ($grid_items as $item): ?>
                         <?php
-                        $post_id  = $post->ID;
-                        $title    = get_the_title($post_id);
-                        $thumb_id = get_post_thumbnail_id($post_id);
-                        $img_alt  = $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '';
-                        $img_alt  = $img_alt ?: $title;
-
-                        $override_link = get_sub_field('override_link');
-                        $item_link     = $override_link && !empty($override_link['url'])
-                            ? $override_link
-                            : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
-                        $link_url    = esc_url($item_link['url']);
-                        $link_title  = esc_attr($item_link['title'] ?: $title);
-                        $link_target = !empty($item_link['target']) ? ' target="'.esc_attr($item_link['target']).'" rel="noopener"' : '';
+                        $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                         ?>
                         <li class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?>">
                             <article class="h-full">
                                 <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
-                                   href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
+                                   href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                     <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                         <?php
-                                        if ($thumb_id) {
+                                        if (!empty($item['image_id'])) {
                                             echo wp_get_attachment_image(
-                                                $thumb_id,
+                                                (int) $item['image_id'],
                                                 'large',
                                                 false,
                                                 [
-                                                    'alt'     => esc_attr($img_alt),
-                                                    'title'   => esc_attr(get_the_title($thumb_id) ?: $title),
+                                                    'alt'     => esc_attr($item['image_alt']),
                                                     'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
                                                     'loading' => 'lazy',
                                                 ]
                                             );
+                                        } elseif (!empty($item['image_url'])) {
+                                            ?>
+                                            <img
+                                                src="<?php echo esc_url($item['image_url']); ?>"
+                                                alt="<?php echo esc_attr($item['image_alt']); ?>"
+                                                class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]"
+                                                loading="lazy"
+                                                decoding="async"
+                                            >
+                                            <?php
                                         }
                                         ?>
                                     </div>
-                                    <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></span>
+                                    <div class="px-4 py-3" style="<?php echo $underline_color ?>">
+                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block max-md:text-[18px] max-md:not-italic max-md:font-semibold max-md:leading-[24px] max-md:tracking-[2px] max-md:whitespace-pre-wrap max-md:text-[#0902A4]"><?php echo esc_html($item['title']); ?></span>
                                     </div>
                                 </a>
                             </article>
@@ -173,44 +284,41 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                             $idx = $group_start + $i;
                             if ($idx >= $total) { break; }
 
-                            $post    = $posts_array[$idx];
-                            $post_id = $post->ID;
-                            $title   = get_the_title($post_id);
-                            $thumb   = get_post_thumbnail_id($post_id);
-                            $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
-                            $img_alt = $img_alt ?: $title;
-
-                            $override_link = get_sub_field('override_link');
-                            $item_link     = $override_link && !empty($override_link['url'])
-                                ? $override_link
-                                : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
-                            $link_url    = esc_url($item_link['url']);
-                            $link_title  = esc_attr($item_link['title'] ?: $title);
-                            $link_target = !empty($item_link['target']) ? ' target="'.esc_attr($item_link['target']).'" rel="noopener"' : '';
+                            $item = $grid_items[$idx];
+                            $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                             ?>
                             <li class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?>">
                                 <article class="h-full">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
-                                       href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
+                                       href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
-                                            if ($thumb) {
+                                            if (!empty($item['image_id'])) {
                                                 echo wp_get_attachment_image(
-                                                    $thumb,
+                                                    (int) $item['image_id'],
                                                     'large',
                                                     false,
                                                     [
-                                                        'alt'     => esc_attr($img_alt),
-                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'alt'     => esc_attr($item['image_alt']),
                                                         'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
+                                            } elseif (!empty($item['image_url'])) {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($item['image_url']); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
+                                        <div class="px-4 py-3">
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
                                         </div>
                                     </a>
                                 </article>
@@ -225,43 +333,40 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                             // 50%
                             $idx = $group_start + 3;
                             if ($idx < $total) :
-                                $post    = $posts_array[$idx];
-                                $post_id = $post->ID;
-                                $title   = get_the_title($post_id);
-                                $thumb   = get_post_thumbnail_id($post_id);
-                                $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
-                                $img_alt = $img_alt ?: $title;
-
-                                $override_link = get_sub_field('override_link');
-                                $item_link     = $override_link && !empty($override_link['url'])
-                                    ? $override_link
-                                    : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
-                                $link_url    = esc_url($item_link['url']);
-                                $link_title  = esc_attr($item_link['title'] ?: $title);
-                                $link_target = !empty($item_link['target']) ? ' target="'.esc_attr($item_link['target']).'" rel="noopener"' : '';
+                                $item = $grid_items[$idx];
+                                $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                                 ?>
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/2">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
-                                       href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
+                                       href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
-                                            if ($thumb) {
+                                            if (!empty($item['image_id'])) {
                                                 echo wp_get_attachment_image(
-                                                    $thumb,
+                                                    (int) $item['image_id'],
                                                     'large',
                                                     false,
                                                     [
-                                                        'alt'     => esc_attr($img_alt),
-                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'alt'     => esc_attr($item['image_alt']),
                                                         'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
+                                            } elseif (!empty($item['image_url'])) {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($item['image_url']); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
+                                        <div class="px-4 py-3" style="<?php echo $underline_color; ?>">
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
                                         </div>
                                     </a>
                                 </article>
@@ -273,43 +378,40 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 $idx = $group_start + $j;
                                 if ($idx >= $total) { break; }
 
-                                $post    = $posts_array[$idx];
-                                $post_id = $post->ID;
-                                $title   = get_the_title($post_id);
-                                $thumb   = get_post_thumbnail_id($post_id);
-                                $img_alt = $thumb ? get_post_meta($thumb, '_wp_attachment_image_alt', true) : '';
-                                $img_alt = $img_alt ?: $title;
-
-                                $override_link = get_sub_field('override_link');
-                                $item_link     = $override_link && !empty($override_link['url'])
-                                    ? $override_link
-                                    : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
-                                $link_url    = esc_url($item_link['url']);
-                                $link_title  = esc_attr($item_link['title'] ?: $title);
-                                $link_target = !empty($item_link['target']) ? ' target="'.esc_attr($item_link['target']).'" rel="noopener"' : '';
+                                $item = $grid_items[$idx];
+                                $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                                 ?>
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/4">
                                     <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
-                                       href="<?php echo $link_url; ?>" aria-label="<?php echo $link_title; ?>"<?php echo $link_target; ?>>
+                                       href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
-                                            if ($thumb) {
+                                            if (!empty($item['image_id'])) {
                                                 echo wp_get_attachment_image(
-                                                    $thumb,
+                                                    (int) $item['image_id'],
                                                     'large',
                                                     false,
                                                     [
-                                                        'alt'     => esc_attr($img_alt),
-                                                        'title'   => esc_attr(get_the_title($thumb) ?: $title),
+                                                        'alt'     => esc_attr($item['image_alt']),
                                                         'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
+                                            } elseif (!empty($item['image_url'])) {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($item['image_url']); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
                                         <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($title); ?></h3>
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
                                         </div>
                                     </a>
                                 </article>
@@ -324,7 +426,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
             </div>
         <?php else : ?>
             <div class="mt-10 w-full text-center">
-                <p class="text-lg opacity-70">No sectors found. Please add some sectors in the WordPress admin.</p>
+                <p class="text-lg opacity-70">No items found. Please add manual items or adjust the query filters.</p>
             </div>
         <?php endif; ?>
 

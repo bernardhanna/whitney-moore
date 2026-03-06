@@ -155,7 +155,7 @@ if (!function_exists('matrix_resolve_post_type_for_acf')) {
 }
 
 /**
- * Default stack for sectors + practice_areas flexible_content_blocks.
+ * Default stack for sectors + practice_areas + what_we_do flexible_content_blocks.
  * IMPORTANT: Layout names must match your ACF layout "name" values exactly.
  */
 if (!function_exists('matrix_sector_like_default_stack')) {
@@ -236,7 +236,7 @@ add_filter('acf/update_value/type=flexible_content', function ($value, $post_id,
  * --------------------
  * - Posts: banner_image
  * - Pages: hero_001
- * - Sectors/practice_areas: hero_001
+ * - Sectors/practice_areas/what_we_do: hero_001
  */
 add_filter('acf/load_value/name=hero_content_blocks', function ($value, $post_id, $field) {
     if (!empty($value)) {
@@ -249,7 +249,7 @@ add_filter('acf/load_value/name=hero_content_blocks', function ($value, $post_id
         return [ ['acf_fc_layout' => 'banner_image'] ];
     }
 
-    if ($type === 'page' || $type === 'sectors' || $type === 'practice_areas') {
+    if ($type === 'page' || $type === 'sectors' || $type === 'practice_areas' || $type === 'what_we_do') {
         return [ ['acf_fc_layout' => 'hero_001'] ];
     }
 
@@ -261,7 +261,7 @@ add_filter('acf/load_value/name=hero_content_blocks', function ($value, $post_id
  * FLEX DEFAULTS
  * --------------------
  * - Posts: single_post_content
- * - Sectors/practice_areas: sector-like stack
+ * - Sectors/practice_areas/what_we_do: sector-like stack
  */
 add_filter('acf/load_value/name=flexible_content_blocks', function ($value, $post_id, $field) {
     if (!empty($value)) {
@@ -274,7 +274,7 @@ add_filter('acf/load_value/name=flexible_content_blocks', function ($value, $pos
         return [ ['acf_fc_layout' => 'single_post_content'] ];
     }
 
-    if ($type === 'sectors' || $type === 'practice_areas') {
+    if ($type === 'sectors' || $type === 'practice_areas' || $type === 'what_we_do') {
         return matrix_sector_like_default_stack();
     }
 

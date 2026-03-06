@@ -21,7 +21,7 @@ $header_secondary_button = get_sub_field('header_secondary_button');
 // Always enforce minimum of 3 posts
 $posts_per_page = max(3, (int) get_sub_field('posts_per_page'));
 
-// Card CTAs (text only now; visual only – no inner <a>)
+// Card CTAs (visual only – label text)
 $small_cta      = get_sub_field('small_cta');
 $small_cta_text = get_sub_field('small_cta_text') ?: 'Discover';
 
@@ -37,6 +37,9 @@ $overlay_blur_class = get_sub_field('overlay_blur_class') ?: 'backdrop-blur-[15p
 $text_color_class   = get_sub_field('text_color_class') ?: 'text-primary';
 $date_color_class   = get_sub_field('date_color_class') ?: 'text-black';
 $link_color_class   = get_sub_field('link_color_class') ?: 'text-black/60 hover:text-black';
+
+// Category style (matches your spec)
+$category_class = 'text-[16px]';
 
 // ---------------------------------
 // Layout: Responsive padding (Tailwind classes)
@@ -57,12 +60,22 @@ if (have_rows('padding_settings')) {
 }
 
 // ---------------------------------
+// Helpers
+// ---------------------------------
+function matrix_first_cat_name($post_id): string {
+    $cats = get_the_category($post_id);
+    if (empty($cats) || is_wp_error($cats)) return '';
+    return (string) ($cats[0]->name ?? '');
+}
+
+// ---------------------------------
 // Query
 // ---------------------------------
 $query = new WP_Query([
-    'post_type'      => 'post',
-    'posts_per_page' => $posts_per_page,
-    'post_status'    => 'publish',
+    'post_type'           => 'post',
+    'posts_per_page'      => $posts_per_page,
+    'post_status'         => 'publish',
+    'ignore_sticky_posts' => true,
 ]);
 
 $left_posts  = [];
@@ -92,34 +105,21 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
     class="relative flex overflow-hidden py-12 sm:py-12 lg:py-16 <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($section_bg_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-
     <div class="pt-5 pb-5 lg:pb-12 mx-auto w-full max-w-container max-xxl:px-[1rem]">
-
-        <?php
-        /**
-         * Layout requirement:
-         * Mobile: Heading -> Grid -> Buttons (DOM order)
-         * Desktop: Heading (left) + Buttons (right) on same row -> Grid below (full width)
-         *
-         * We implement a grid wrapper:
-         * - mobile: grid-cols-1 (natural DOM order)
-         * - desktop: grid-cols-2 with two rows; grid spans both columns in row 2
-         */
-        ?>
 
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-6">
 
-            <!-- Heading (always first in DOM + top-left on desktop) -->
+            <!-- Heading -->
             <div class="lg:col-start-1 lg:row-start-1">
                 <?php if ($section_heading) : ?>
                     <<?php echo esc_attr($section_heading_tag); ?>
                         id="<?php echo esc_attr($section_id); ?>-heading"
-                        class="text-3xl font-bold tracking-wider leading-10 text-indigo-800 max-sm:text-2xl"
+                        class="text-3xl font-bold tracking-wider leading-10 text-primary max-sm:text-2xl"
                     >
                         <?php echo esc_html($section_heading); ?>
                     </<?php echo esc_attr($section_heading_tag); ?>>
@@ -128,27 +128,30 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 <?php endif; ?>
             </div>
 
-            <!-- Grid (second in DOM; full width on desktop row 2) -->
+            <!-- Grid -->
             <div class="lg:col-span-2 lg:row-start-2">
                 <div class="flex flex-col gap-4 <?php echo esc_attr($layout_class); ?>">
 
                     <?php if (!empty($left_posts)) : ?>
-                        <div class="flex flex-col gap-4 w-full lg:w-1/2">
+                        <div class="flex flex-col gap-4 justify-between w-full lg:w-1/2">
                             <?php foreach ($left_posts as $post_id) :
                                 $title   = get_the_title($post_id);
                                 $image   = get_post_thumbnail_id($post_id);
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
-                                $type    = get_field('post_type_label', $post_id);
-                                $time    = get_field('event_time', $post_id); // optional
+                                $time    = get_field('event_time', $post_id); // optional, keep if you need it
                                 $cta_lbl = $small_cta_text;
+
+                                // CATEGORY (WP category name)
+                                $cat_name = matrix_first_cat_name($post_id);
 
                                 $override_link = (is_array($small_cta) && !empty($small_cta['url'])) ? $small_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group rounded">
+                                <article class="relative max-lg:h-[332px] lg:h-[332px] overflow-hidden group">
+                                    <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
-                                        class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                        class="absolute inset-0 z-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                         aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
                                     >
                                         <span class="sr-only"><?php echo esc_html($title); ?></span>
@@ -160,26 +163,28 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                             $image,
                                             'large',
                                             false,
-                                            ['class' => 'absolute inset-0 w-full h-full object-cover']
+                                            ['class' => 'absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105', 'alt' => esc_attr($title)]
                                         );
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-200"></div>
+                                    <!-- Tint overlay shouldn't block clicks -->
+                                    <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 rounded">
-                                        <?php if ($type) : ?>
-                                            <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
-                                                <?php echo esc_html($type); ?>
-                                            </p>
+                                    <!-- Content card shouldn't block clicks -->
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-5 pointer-events-none">
+                                        <?php if (!empty($cat_name)) : ?>
+                                            <div class=" uppercase font-medium tracking-[1px] text-primary <?php echo esc_attr($category_class); ?>">
+                                                <?php echo esc_html($cat_name); ?>
+                                            </div>
                                         <?php endif; ?>
 
-                                        <h3 class="mt-2 text-lg font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
+                                        <h3 class="mt-2 text-[20px] font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
                                             <?php echo esc_html($title); ?>
                                         </h3>
 
                                         <?php if ($date) : ?>
-                                            <p class="mt-2 text-sm <?php echo esc_attr($date_color_class); ?>">
+                                            <p class="mt-2 text-[18px] font-medium <?php echo esc_attr($date_color_class); ?>">
                                                 <?php echo esc_html($date); ?>
                                                 <?php if (!empty($time)) : ?>
                                                     <span class="mx-1">|</span><?php echo esc_html($time); ?>
@@ -188,7 +193,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                         <?php endif; ?>
 
                                         <div class="mt-4">
-                                            <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
+                                            <span class="<?php echo esc_attr($link_color_class); ?> text-[16px] underline pointer-events-none select-none">
                                                 <?php echo esc_html($cta_lbl); ?>
                                             </span>
                                         </div>
@@ -205,16 +210,19 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                 $image   = get_post_thumbnail_id($post_id);
                                 $link    = get_permalink($post_id);
                                 $date    = get_the_date('', $post_id);
-                                $type    = get_field('post_type_label', $post_id);
                                 $time    = get_field('event_time', $post_id); // optional
                                 $cta_lbl = $big_cta_text;
 
+                                // CATEGORY (WP category name)
+                                $cat_name = matrix_first_cat_name($post_id);
+
                                 $override_link = (is_array($big_cta) && !empty($big_cta['url'])) ? $big_cta['url'] : $link;
                                 ?>
-                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group rounded">
+                                <article class="relative max-lg:h-[332px] lg:h-[696px] overflow-hidden group">
+                                    <!-- Full-card anchor sits above everything -->
                                     <a
                                         href="<?php echo esc_url($override_link); ?>"
-                                        class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                        class="absolute inset-0 z-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                         aria-label="<?php echo esc_attr(sprintf('Read: %s', $title)); ?>"
                                     >
                                         <span class="sr-only"><?php echo esc_html($title); ?></span>
@@ -226,26 +234,26 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                             $image,
                                             'large',
                                             false,
-                                            ['class' => 'absolute inset-0 w-full h-full object-cover']
+                                            ['class' => 'absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105', 'alt' => esc_attr($title)]
                                         );
                                     }
                                     ?>
 
-                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-200"></div>
+                                    <div class="absolute inset-0 transition-colors duration-200 pointer-events-none bg-black/10 group-hover:bg-black/20"></div>
 
-                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 rounded">
-                                        <?php if ($type) : ?>
-                                            <p class="text-xs font-semibold tracking-widest uppercase <?php echo esc_attr($text_color_class); ?>">
-                                                <?php echo esc_html($type); ?>
-                                            </p>
+                                    <div class="absolute left-6 bottom-6 right-6 z-20 <?php echo esc_attr($overlay_bg_class); ?> <?php echo esc_attr($overlay_blur_class); ?> p-6 pointer-events-none">
+                                        <?php if (!empty($cat_name)) : ?>
+                                            <div class="<?php echo esc_attr($category_class); ?>">
+                                                <?php echo esc_html($cat_name); ?>
+                                            </div>
                                         <?php endif; ?>
 
-                                        <h3 class="mt-2 text-xl font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
+                                        <h3 class="mt-2 text-[20px] font-semibold leading-snug <?php echo esc_attr($text_color_class); ?>">
                                             <?php echo esc_html($title); ?>
                                         </h3>
 
                                         <?php if ($date) : ?>
-                                            <p class="mt-2 text-sm <?php echo esc_attr($date_color_class); ?>">
+                                            <p class="mt-2 text-[18px] font-medium <?php echo esc_attr($date_color_class); ?>">
                                                 <?php echo esc_html($date); ?>
                                                 <?php if (!empty($time)) : ?>
                                                     <span class="mx-1">|</span><?php echo esc_html($time); ?>
@@ -254,7 +262,7 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                                         <?php endif; ?>
 
                                         <div class="mt-4">
-                                            <span class="<?php echo esc_attr($link_color_class); ?> underline pointer-events-none select-none">
+                                            <span class="<?php echo esc_attr($link_color_class); ?> text-[16px] underline pointer-events-none select-none">
                                                 <?php echo esc_html($cta_lbl); ?>
                                             </span>
                                         </div>
@@ -267,18 +275,18 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                 </div>
             </div>
 
-            <!-- Buttons (third in DOM; top-right on desktop row 1) -->
+            <!-- Header buttons -->
             <?php if ($header_primary_button || $header_secondary_button) : ?>
                 <div class="lg:col-start-2 lg:row-start-1 lg:justify-self-end">
                     <div class="flex flex-col gap-3 w-full lg:w-auto lg:flex-row lg:flex-nowrap lg:gap-4 lg:items-center lg:justify-end">
                         <?php if (is_array($header_primary_button) && !empty($header_primary_button['url']) && !empty($header_primary_button['title'])) : ?>
                             <a
                                 href="<?php echo esc_url($header_primary_button['url']); ?>"
-                                class="btn flex justify-center items-center px-8 py-4 h-14 bg-indigo-800 text-white cursor-pointer border-0 w-full lg:w-fit whitespace-nowrap hover:bg-indigo-900 transition-colors duration-200"
+                                class="flex justify-center items-center px-8 py-4 w-full h-14 text-white whitespace-nowrap border-0 transition-colors duration-200 cursor-pointer btn bg-primary lg:w-fit hover:bg-primary-dark"
                                 target="<?php echo esc_attr($header_primary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_primary_button['title']); ?>"
                             >
-                                <span class="text-xl tracking-wide leading-5 text-center max-md:text-lg max-sm:text-base max-sm:leading-5">
+                                <span class="text-[20px] tracking-wide leading-5 text-center max-md:text-lg max-sm:text-base max-sm:leading-5">
                                     <?php echo esc_html($header_primary_button['title']); ?>
                                 </span>
                             </a>
@@ -287,11 +295,11 @@ $layout_class   = $has_right_post ? 'lg:flex-row' : 'lg:flex-col';
                         <?php if (is_array($header_secondary_button) && !empty($header_secondary_button['url']) && !empty($header_secondary_button['title'])) : ?>
                             <a
                                 href="<?php echo esc_url($header_secondary_button['url']); ?>"
-                                class="btn flex justify-center items-center px-8 py-4 border border-indigo-800 text-indigo-800 border-solid cursor-pointer w-full lg:w-fit whitespace-nowrap hover:bg-indigo-50 transition-colors duration-200"
+                                class="flex justify-center items-center px-8 py-4 w-full whitespace-nowrap border border-solid transition-colors duration-200 cursor-pointer btn border-primary hover:border-primary-light text-primary lg:w-fit hover:bg-primary-light hover:text-white"
                                 target="<?php echo esc_attr($header_secondary_button['target'] ?? '_self'); ?>"
                                 aria-label="<?php echo esc_attr($header_secondary_button['title']); ?>"
                             >
-                                <span class="text-xl leading-5 max-md:text-lg max-sm:text-base max-sm:leading-5">
+                                <span class="text-[20px] leading-5 max-md:text-lg max-sm:text-base max-sm:leading-5">
                                     <?php echo esc_html($header_secondary_button['title']); ?>
                                 </span>
                             </a>

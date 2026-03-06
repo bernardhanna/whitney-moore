@@ -110,23 +110,23 @@ if ($form_markup) {
 }
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>"
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
          class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
          style="background-color: <?php echo esc_attr($background_color); ?>; color: <?php echo esc_attr($text_color); ?>;">
-    <div class="flex flex-col items-center pt-0 pb-8 md:pt-20 md:pb-24 mx-auto w-full max-w-container max-lg:px-5">
+    <div class="flex flex-col items-center pt-0 pb-8 mx-auto w-full md:pt-20 md:pb-24 max-w-container max-xxl:px-5">
         <div class="flex overflow-hidden flex-wrap gap-10 justify-center items-start w-full">
 
             <!-- Contact Details Section -->
             <div class="flex-1 pt-12 shrink basis-28 min-w-60 max-md:max-w-full">
                 <div class="w-full max-md:max-w-full">
                     <?php if ($heading): ?>
-                        <<?php echo esc_attr($heading_tag); ?> class="text-3xl font-semibold leading-tight text-indigo-800 max-md:max-w-full">
+                        <<?php echo esc_attr($heading_tag); ?> class="text-3xl font-semibold leading-tight text-primary max-md:max-w-full">
                             <?php echo esc_html($heading); ?>
                         </<?php echo esc_attr($heading_tag); ?>>
                     <?php endif; ?>
 
                     <?php if ($description): ?>
-                        <div class="mt-4 text-lg tracking-wider leading-7 text-black max-md:max-w-full wp_editor">
+                        <div class="mt-4 text-lg tracking-wider leading-7 text-black wp_editor max-w-[697px] w-full">
                             <?php echo wp_kses_post($description); ?>
                         </div>
                     <?php endif; ?>
@@ -141,19 +141,19 @@ if ($form_markup) {
                             <div class="text-lg font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($phone_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-indigo-800 max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-primary max-md:max-w-full">
                                 <?php if ($phone_icon): ?>
                                     <?php echo wp_get_attachment_image($phone_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 self-stretch my-auto w-8 aspect-square',
                                         'alt' => 'Phone icon'
                                     ]); ?>
                                 <?php else: ?>
-                                    <img src="https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/fb9d93512043514ef80e18a9a169ba6eccf9cc38?placeholderIfAbsent=true"
-                                         class="object-contain self-stretch my-auto w-8 shrink-0 aspect-square"
-                                         alt="Phone icon" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                    <path d="M29.3339 22.56V26.56C29.3354 26.9313 29.2593 27.2989 29.1106 27.6391C28.9618 27.9793 28.7436 28.2848 28.47 28.5358C28.1964 28.7868 27.8733 28.9779 27.5216 29.0969C27.1698 29.2159 26.7971 29.2601 26.4272 29.2266C22.3243 28.7808 18.3832 27.3788 14.9206 25.1333C11.699 23.0862 8.96768 20.3549 6.92056 17.1333C4.6672 13.6549 3.26489 9.69463 2.82723 5.5733C2.79391 5.20459 2.83773 4.83298 2.9559 4.48213C3.07406 4.13128 3.26399 3.80889 3.51358 3.53546C3.76318 3.26204 4.06697 3.04358 4.40562 2.894C4.74426 2.74441 5.11035 2.66698 5.48056 2.66663H9.48056C10.1276 2.66026 10.755 2.8894 11.2456 3.31134C11.7362 3.73328 12.0567 4.31923 12.1472 4.95997C12.3161 6.24006 12.6292 7.49694 13.0806 8.70663C13.26 9.18387 13.2988 9.70252 13.1924 10.2011C13.0861 10.6998 12.839 11.1574 12.4806 11.52L10.7872 13.2133C12.6853 16.5514 15.4492 19.3152 18.7872 21.2133L20.4806 19.52C20.8431 19.1615 21.3008 18.9144 21.7994 18.8081C22.298 18.7018 22.8167 18.7406 23.2939 18.92C24.5036 19.3714 25.7605 19.6845 27.0406 19.8533C27.6883 19.9447 28.2798 20.2709 28.7026 20.77C29.1254 21.269 29.3501 21.9061 29.3339 22.56Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                 <?php endif; ?>
                                 <a href="tel:<?php echo esc_attr(preg_replace('/[^+\d]/', '', $phone_number)); ?>"
-                                   class="flex-1 self-stretch my-auto text-indigo-800 shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2">
+                                   class="flex-1 self-stretch my-auto text-2xl font-normal tracking-wide leading-7 text-primary shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                                     <?php echo esc_html($phone_number); ?>
                                 </a>
                             </div>
@@ -166,19 +166,19 @@ if ($form_markup) {
                             <div class="text-lg font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($email_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none text-indigo-800 whitespace-nowrap max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-center mt-4 w-full text-2xl leading-none whitespace-nowrap text-primary max-md:max-w-full">
                                 <?php if ($email_icon): ?>
                                     <?php echo wp_get_attachment_image($email_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 self-stretch my-auto w-8 aspect-square',
                                         'alt' => 'Email icon'
                                     ]); ?>
                                 <?php else: ?>
-                                    <img src="https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/fef238ead5417dc207bf11cd8bdec3132e2d8ada?placeholderIfAbsent=true"
-                                         class="object-contain self-stretch my-auto w-8 shrink-0 aspect-square"
-                                         alt="Email icon" />
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none">
+                                    <path d="M27.6667 3.66667C27.6667 2.2 26.4667 1 25 1H3.66667C2.2 1 1 2.2 1 3.66667M27.6667 3.66667V19.6667C27.6667 21.1333 26.4667 22.3333 25 22.3333H3.66667C2.2 22.3333 1 21.1333 1 19.6667V3.66667M27.6667 3.66667L14.3333 13L1 3.66667" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                 <?php endif; ?>
                                 <a href="mailto:<?php echo esc_attr($email_address); ?>"
-                                   class="flex-1 self-stretch my-auto text-indigo-800 shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2">
+                                   class="flex-1 self-stretch my-auto text-2xl font-normal tracking-wide leading-7 text-primary shrink basis-0 max-md:max-w-full hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                                     <?php echo esc_html($email_address); ?>
                                 </a>
                             </div>
@@ -191,31 +191,31 @@ if ($form_markup) {
                             <div class="font-medium text-black max-md:max-w-full">
                                 <?php echo esc_html($address_label); ?>
                             </div>
-                            <div class="flex flex-wrap gap-4 items-start mt-4 w-full leading-6 text-indigo-800 max-md:max-w-full">
+                            <div class="flex flex-wrap gap-4 items-start mt-4 w-full leading-6 text-primary max-md:max-w-full">
                                 <?php if ($address_icon): ?>
                                     <?php echo wp_get_attachment_image($address_icon, 'full', false, [
                                         'class' => 'object-contain shrink-0 w-8 aspect-square',
                                         'alt' => 'Location icon'
                                     ]); ?>
                                 <?php else: ?>
-                                    <img src="https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/fef238ead5417dc207bf11cd8bdec3132e2d8ada?placeholderIfAbsent=true"
-                                         class="object-contain w-8 shrink-0 aspect-square"
-                                         alt="Location icon" />
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none">
+                                    <path d="M27.6667 3.66667C27.6667 2.2 26.4667 1 25 1H3.66667C2.2 1 1 2.2 1 3.66667M27.6667 3.66667V19.6667C27.6667 21.1333 26.4667 22.3333 25 22.3333H3.66667C2.2 22.3333 1 21.1333 1 19.6667V3.66667M27.6667 3.66667L14.3333 13L1 3.66667" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                 <?php endif; ?>
-                                <div class="flex-1 text-indigo-800 shrink basis-0 max-md:max-w-full">
-                                    <span class="text-black">
+                                <div class="flex-1 text-primary shrink basis-0 max-md:max-w-full">
+                                    <span class="text-black text-[16px]font-normal leading-6 tracking-[1px]">
                                         <?php echo esc_html($address_text); ?>
                                     </span>
                                     <?php if ($address_link && is_array($address_link) && isset($address_link['url'], $address_link['title'])): ?>
                                         <br />
                                         <a href="<?php echo esc_url($address_link['url']); ?>"
-                                           class="text-indigo-800 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2"
+                                           class="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                                            target="<?php echo esc_attr($address_link['target'] ?? '_self'); ?>">
                                             <?php echo esc_html($address_link['title']); ?>
                                         </a>
                                     <?php elseif ($address_link_text): ?>
                                         <br />
-                                        <span class="text-indigo-800"><?php echo esc_html($address_link_text); ?></span>
+                                        <span class="text-primary"><?php echo esc_html($address_link_text); ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@ if ($form_markup) {
                     <!-- Social Media Section -->
                     <?php if (have_rows('social_links')): ?>
                         <div class="flex flex-col mt-10 w-full max-md:max-w-full">
-                            <div class="text-lg font-medium tracking-wider text-black max-md:max-w-full">
+                            <div class="font-medium text-[18px] leading-normal tracking-[1px] text-black max-md:max-w-full">
                                 <?php echo esc_html($social_label); ?>
                             </div>
                             <div class="flex gap-4 items-center self-start mt-4">
@@ -237,7 +237,7 @@ if ($form_markup) {
                                     if ($social_url && is_array($social_url) && isset($social_url['url'])):
                                 ?>
                                     <a href="<?php echo esc_url($social_url['url']); ?>"
-                                       class="transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2 hover:opacity-80"
+                                       class="transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:opacity-80"
                                        target="<?php echo esc_attr($social_url['target'] ?? '_blank'); ?>"
                                        aria-label="<?php echo esc_attr($social_label_text); ?>">
                                         <?php if ($social_icon): ?>
@@ -246,9 +246,11 @@ if ($form_markup) {
                                                 'alt' => esc_attr($social_label_text)
                                             ]); ?>
                                         <?php else: ?>
-                                            <img src="https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/fe3c245fc56e8bfbc242773908253ed6c3314887?placeholderIfAbsent=true"
-                                                 class="object-contain self-stretch my-auto w-8 shrink-0 aspect-square"
-                                                 alt="<?php echo esc_attr($social_label_text); ?>" />
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                            <path d="M21.334 10.6666C23.4557 10.6666 25.4905 11.5095 26.9908 13.0098C28.4911 14.5101 29.334 16.5449 29.334 18.6666V28H24.0007V18.6666C24.0007 17.9594 23.7197 17.2811 23.2196 16.781C22.7195 16.2809 22.0412 16 21.334 16C20.6267 16 19.9485 16.2809 19.4484 16.781C18.9483 17.2811 18.6673 17.9594 18.6673 18.6666V28H13.334V18.6666C13.334 16.5449 14.1768 14.5101 15.6771 13.0098C17.1774 11.5095 19.2123 10.6666 21.334 10.6666Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M7.99935 12H2.66602V28H7.99935V12Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M5.33268 7.99996C6.80544 7.99996 7.99935 6.80605 7.99935 5.33329C7.99935 3.86053 6.80544 2.66663 5.33268 2.66663C3.85992 2.66663 2.66602 3.86053 2.66602 5.33329C2.66602 6.80605 3.85992 7.99996 5.33268 7.99996Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
                                         <?php endif; ?>
                                     </a>
                                 <?php endif; endwhile; ?>
@@ -263,7 +265,7 @@ if ($form_markup) {
                  style="background-color: <?php echo esc_attr($form_bg_color); ?>;">
 
                 <?php if ($form_heading): ?>
-                    <<?php echo esc_attr($form_heading_tag); ?> class="text-3xl font-semibold leading-tight text-indigo-800 max-md:max-w-full">
+                    <<?php echo esc_attr($form_heading_tag); ?> class="text-3xl font-semibold leading-tight text-primary max-md:max-w-full">
                         <?php echo esc_html($form_heading); ?>
                     </<?php echo esc_attr($form_heading_tag); ?>>
                 <?php endif; ?>

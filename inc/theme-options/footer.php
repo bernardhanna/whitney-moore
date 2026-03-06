@@ -100,7 +100,7 @@ $footer
     // DESIGN (only background color)
     ->addColorPicker('footer_bg_color', [
         'label'         => 'Footer Background Color',
-        'default_value' => '#0902A4', // indigo-800
+        'default_value' => '#0902A4', // primary
     ])
 
     // Layout (Padding repeater — no tabs)

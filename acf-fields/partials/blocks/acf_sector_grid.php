@@ -39,9 +39,85 @@ $sectors_grid
             'max' => 24,
             'step' => 1,
         ])
+        ->addSelect('items_source', [
+            'label' => 'Items Source',
+            'instructions' => 'Choose how cards are populated.',
+            'choices' => [
+                'post_type' => 'Query by Post Type',
+                'manual'    => 'Select Specific Posts (Mixed)',
+                'manual_cards' => 'Manual Cards (Image/Text/Link)',
+            ],
+            'default_value' => 'post_type',
+            'ui' => 1,
+        ])
+        ->addRelationship('manual_items', [
+            'label' => 'Selected Posts (Mixed)',
+            'instructions' => 'Pick posts one-by-one from Sectors, Practice Areas, and What We Do.',
+            'post_type' => ['sectors', 'practice_areas', 'what_we_do'],
+            'filters' => ['search', 'post_type', 'taxonomy'],
+            'elements' => ['featured_image'],
+            'return_format' => 'object',
+            'min' => 0,
+            'max' => 24,
+        ])
+        ->addRepeater('manual_cards', [
+            'label' => 'Manual Cards',
+            'instructions' => 'Create fully manual cards with custom image, title, and link.',
+            'layout' => 'row',
+            'button_label' => 'Add Card',
+            'min' => 0,
+            'max' => 24,
+        ])
+            ->addImage('image', [
+                'label' => 'Card Image',
+                'return_format' => 'array',
+                'preview_size' => 'medium',
+            ])
+            ->addText('title', [
+                'label' => 'Card Title',
+            ])
+            ->addLink('link', [
+                'label' => 'Card Link',
+                'return_format' => 'array',
+            ])
+        ->endRepeater()
+        ->addSelect('query_post_type', [
+            'label' => 'Query Post Type',
+            'instructions' => 'Used when Items Source is Query by Post Type.',
+            'choices' => [
+                'sectors' => 'Sectors',
+                'practice_areas' => 'Practice Areas',
+                'what_we_do' => 'What We Do',
+            ],
+            'default_value' => 'sectors',
+            'ui' => 1,
+        ])
+        ->addRelationship('query_selected_posts', [
+            'label' => 'Query: Selected Posts',
+            'instructions' => 'Optional. Choose specific posts to include from the selected post type. If empty, all posts from that post type are eligible.',
+            'post_type' => ['sectors', 'practice_areas', 'what_we_do'],
+            'filters' => ['search', 'post_type', 'taxonomy'],
+            'elements' => ['featured_image'],
+            'return_format' => 'object',
+            'min' => 0,
+            'max' => 24,
+        ])
+        ->addTaxonomy('query_categories', [
+            'label' => 'Category Terms',
+            'instructions' => 'Optional. Filter by shared Categories terms.',
+            'taxonomy' => 'what_we_do_category',
+            'field_type' => 'multi_select',
+            'return_format' => 'id',
+            'add_term' => 0,
+            'save_terms' => 0,
+            'load_terms' => 0,
+            'allow_null' => 1,
+            'multiple' => 1,
+            'ui' => 1,
+        ])
         ->addLink('override_link', [
             'label' => 'Override Link (optional)',
-            'instructions' => 'If set, all cards will use this link (ACF link array).',
+            'instructions' => 'If set, post-based cards will use this link. Manual Cards use each card link.',
             'return_format' => 'array',
         ])
 

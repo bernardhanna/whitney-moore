@@ -44,37 +44,73 @@ $related = new WP_Query($q_args);
 $section_id  = 'related-content-' . wp_rand(1000, 9999);
 $heading     = __('Related articles', 'matrix-starter');
 $heading_tag = 'h2';
+$default_related_fallback_image = home_url('/wp-content/uploads/2025/12/lawyers-meeting-with-chef-in-office-2022-02-07-21-47-35-utc-1.png');
+
+$get_related_image_data = static function ($post_id) use ($default_related_fallback_image) {
+    $post_id = (int) $post_id;
+    $title   = get_the_title($post_id);
+    $alt     = $title ? $title : __('Related image', 'matrix-starter');
+
+    $thumb_id = get_post_thumbnail_id($post_id);
+    if ($thumb_id) {
+        $thumb_alt = get_post_meta($thumb_id, '_wp_attachment_image_alt', true);
+        if (!empty($thumb_alt)) {
+            $alt = $thumb_alt;
+        }
+
+        return [
+            'source' => 'attachment',
+            'id'     => $thumb_id,
+            'url'    => '',
+            'alt'    => $alt,
+        ];
+    }
+
+    $content = (string) get_post_field('post_content', $post_id);
+    if ($content && preg_match('/<img[^>]+src=[\'"]([^\'"]+)[\'"]/i', $content, $matches)) {
+        return [
+            'source' => 'url',
+            'id'     => 0,
+            'url'    => $matches[1],
+            'alt'    => $alt,
+        ];
+    }
+
+    return [
+        'source' => 'url',
+        'id'     => 0,
+        'url'    => $default_related_fallback_image,
+        'alt'    => $alt,
+    ];
+};
 ?>
 
 <?php if ($related->have_posts()) : ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>"
-    class="flex overflow-hidden relative bg-[#F5F5F5]"
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+    class="flex overflow-hidden relative bg-[#F5F5F5] "
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
-    <div class="flex flex-col items-center px-20 pt-20 pb-24 mx-auto w-full max-w-container max-md:px-5">
+    <div class="flex flex-col items-center pt-20 pb-24 mx-auto w-full max-xxl:px-5 max-w-[1568px] max-sm:py-10">
 
-        <header class="flex flex-col justify-center items-center w-full text-3xl font-bold tracking-wider leading-none text-center text-indigo-800 max-md:max-w-full">
+        <header class="flex flex-col justify-center items-center w-full text-center text-primary max-md:max-w-full">
             <<?php echo esc_attr($heading_tag); ?>
                 id="<?php echo esc_attr($section_id); ?>-heading"
-                class="max-md:max-w-full"
+                class="w-full text-[2rem] font-bold leading-[2.5rem] tracking-[0.0625rem] max-md:text-[1.625rem] max-md:leading-8"
             >
                 <?php echo esc_html($heading); ?>
             </<?php echo esc_attr($heading_tag); ?>>
         </header>
 
         <div class="mt-14 w-full text-base text-black max-md:mt-10 max-md:max-w-full">
-            <div class="grid grid-cols-3 gap-6 w-full max-lg:grid-cols-2 max-sm:grid-cols-1" role="list">
+            <div class="grid grid-cols-3 gap-6 w-full max-sm:grid-cols-1" role="list">
                 <?php while ($related->have_posts()) : $related->the_post(); ?>
                     <?php
                     $pid          = get_the_ID();
                     $permalink    = get_permalink($pid);
                     $title        = get_the_title($pid);
 
-                    $featured_id  = get_post_thumbnail_id($pid);
-                    $featured_alt = $featured_id
-                        ? (get_post_meta($featured_id, '_wp_attachment_image_alt', true) ?: $title)
-                        : $title;
+                    $image_data = $get_related_image_data($pid);
 
                     $cats     = get_the_category($pid);
                     $cat_name = (!empty($cats) && !is_wp_error($cats)) ? $cats[0]->name : __('Uncategorized', 'matrix-starter');
@@ -89,33 +125,41 @@ $heading_tag = 'h2';
                         <!-- Full-card clickable overlay -->
                         <a
                             href="<?php echo esc_url($permalink); ?>"
-                            class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                            class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:underline"
                             aria-label="<?php echo esc_attr(sprintf(__('Read: %s', 'matrix-starter'), $title)); ?>"
                             aria-describedby="<?php echo esc_attr($meta_id); ?>"
                         >
                             <span class="sr-only"><?php echo esc_html($title); ?></span>
                         </a>
 
-                        <?php if ($featured_id) : ?>
-                            <div class="w-full">
-                                <?php echo wp_get_attachment_image($featured_id, 'large', false, [
-                                    'alt'     => esc_attr($featured_alt),
-                                    'title'   => esc_attr(get_the_title($featured_id)),
-                                    'class'   => 'object-cover w-full h-auto',
-                                    'loading' => 'lazy',
-                                    'decoding'=> 'async',
+                        <div class="w-full overflow-hidden max-lg:h-[240px] lg:h-[343px]">
+                            <?php if ($image_data['source'] === 'attachment' && !empty($image_data['id'])) : ?>
+                                <?php echo wp_get_attachment_image($image_data['id'], 'large', false, [
+                                    'alt'      => esc_attr($image_data['alt']),
+                                    'title'    => esc_attr(get_the_title((int) $image_data['id'])),
+                                    'class'    => 'object-cover w-full h-full block',
+                                    'loading'  => 'lazy',
+                                    'decoding' => 'async',
                                 ]); ?>
-                            </div>
-                        <?php endif; ?>
+                            <?php else : ?>
+                                <img
+                                    src="<?php echo esc_url($image_data['url']); ?>"
+                                    alt="<?php echo esc_attr($image_data['alt']); ?>"
+                                    class="object-cover w-full h-full block"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            <?php endif; ?>
+                        </div>
 
-                        <div class="flex overflow-hidden flex-col px-4 mt-4 w-full">
-                            <div class="text-lg font-medium tracking-wider" aria-label="<?php esc_attr_e('Category', 'matrix-starter'); ?>">
+                        <div class="flex overflow-hidden flex-col px-4 mt-4 w-full max-sm:px-0">
+                            <div class="text-lg font-medium tracking-wider max-sm:text-[14px]" aria-label="<?php esc_attr_e('Category', 'matrix-starter'); ?>">
                                 <?php echo esc_html($cat_name); ?>
                             </div>
 
                             <!-- Title no longer a link (overlay link handles click) -->
-                            <h3 class="mt-2 text-2xl font-semibold leading-7 text-indigo-800">
-                                <span class="text-indigo-800"><?php echo esc_html($title); ?></span>
+                            <h3 class="mt-2 text-2xl font-semibold leading-7 text-primary max-sm:text-[22px]">
+                                <span class="text-primary"><?php echo esc_html($title); ?></span>
                             </h3>
 
                             <time
@@ -127,8 +171,8 @@ $heading_tag = 'h2';
                             </time>
 
                             <!-- Read more converted to non-interactive (overlay link is primary target) -->
-                            <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-indigo-800">
-                                <span class="flex gap-2 items-center text-indigo-800 whitespace-nowrap pointer-events-none select-none">
+                            <div class="flex gap-2 items-center self-start mt-2 tracking-tight leading-none text-primary">
+                                <span class="flex gap-2 items-center whitespace-nowrap pointer-events-none select-none text-primary">
                                     <span class="self-stretch my-auto"><?php esc_html_e('Read more', 'matrix-starter'); ?></span>
                                     <svg class="object-contain self-stretch my-auto w-6 transition-colors duration-200 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path d="M5 12H19M19 12L12 5M19 12L12 19"

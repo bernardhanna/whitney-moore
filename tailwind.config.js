@@ -20,8 +20,11 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: '#0902A4',
+          blue: '#1D4ED8',
+          lightBlue: '#86A8FF',
           light: '#9B97FF',
           dark: '#00005E',
+          lighter: '#DBEAFE',
         },
         secondary: {
           DEFAULT: '#F5F5F5',
@@ -92,6 +95,7 @@ module.exports = {
         'lg': '1200px',
         'xl': '1280px',
         'xxl': '1440px',
+        'xxxl': '1568px',
         'ultrawide': '1920px',
       },
       borderRadius: {
@@ -120,7 +124,7 @@ module.exports = {
       sm: '640px',
       md: '768px',
       tab: '993px', 
-      ipad: '1084px',
+      ipad: '1099px',
       lg: '1100px',
       xl: '1280px',
       xxl: '1600px',

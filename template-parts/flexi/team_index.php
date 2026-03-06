@@ -131,11 +131,6 @@ if (count($tax_query) > 1) {
 $team_query  = new WP_Query($query_args);
 $total_pages = (int) $team_query->max_num_pages;
 
-/**
- * Pagination icons
- */
-$pagination_prev_icon = 'https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/2477391f1f96c5bfe31172bb55f02827c897357b?placeholderIfAbsent=true';
-$pagination_next_icon = 'https://api.builder.io/api/v1/image/assets/f35586c581c84ecf82b6de32c55ed39e/d080e210c9584614973eec7ef0b06c163ffcd58a?placeholderIfAbsent=true';
 
 /**
  * Preserve filters in pagination links
@@ -148,224 +143,376 @@ $base_args = array(
 );
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>" class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
-    <div class="flex flex-col items-center w-full mx-auto max-w-container pt-5 pb-5 max-lg:px-5<?php echo esc_attr($padding_classes_string); ?>">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="flex overflow-hidden relative" style="background-color: <?php echo esc_attr($background_color); ?>;">
+    <div class="flex flex-col items-center w-full mx-auto max-w-[1568px] pt-5 pb-5 md:pb-10 lg:pb-20 max-xxl:px-5 <?php echo esc_attr($padding_classes_string); ?>">
+<!-- FILTERS (directly below grid as requested) -->
+<!-- FILTERS (directly below grid as requested) -->
+<form
+    class="box-border flex flex-wrap justify-between items-start pt-6 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:pt-8 max-md:pb-0 max-sm:pt-5 max-sm:pb-0 relative xxl:left-[1.5rem]"
+    method="get"
+    action="<?php echo esc_url(get_permalink()); ?>"
+    role="search"
+    aria-label="Filter and search options"
+    x-data="{
+        paOpen:false, sectorOpen:false, roleOpen:false,
+        paValue:'<?php echo esc_js($selected_practice_area); ?>',
+        sectorValue:'<?php echo esc_js($selected_sector); ?>',
+        roleValue:'<?php echo esc_js($selected_role); ?>',
+        paLabel:'<?php echo esc_js($selected_practice_area === 'all' ? 'All practice areas' : $selected_practice_area); ?>',
+        sectorLabel:'<?php echo esc_js($selected_sector === 'all' ? 'All Sectors' : $selected_sector); ?>',
+        roleLabel:'<?php echo esc_js($selected_role === 'all' ? 'All roles' : $selected_role); ?>',
+        closeAll(){ this.paOpen=false; this.sectorOpen=false; this.roleOpen=false; },
+        selectPA(slug,label){ this.paValue=slug; this.paLabel=label; this.paOpen=false; },
+        selectSector(slug,label){ this.sectorValue=slug; this.sectorLabel=label; this.sectorOpen=false; },
+        selectRole(slug,label){ this.roleValue=slug; this.roleLabel=label; this.roleOpen=false; }
+    }"
+    @click.outside="closeAll()"
+>
+    <!-- reset to page 1 on filter submit -->
+    <input type="hidden" name="team_page" value="1" />
 
-        <!-- FILTERS (directly below grid as requested) -->
-        <form
-            class="box-border flex flex-wrap justify-between items-start px-20 pt-10 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:px-10 max-md:pt-8 max-md:pb-0 max-sm:px-4 max-sm:pt-5 max-sm:pb-0"
-            method="get"
-            action="<?php echo esc_url(get_permalink()); ?>"
-            role="search"
-            aria-label="Filter and search options"
-            x-data="{
-                paOpen:false, sectorOpen:false, roleOpen:false,
-                paValue:'<?php echo esc_js($selected_practice_area); ?>',
-                sectorValue:'<?php echo esc_js($selected_sector); ?>',
-                roleValue:'<?php echo esc_js($selected_role); ?>',
-                paLabel:'<?php echo esc_js($selected_practice_area === 'all' ? 'All practice areas' : $selected_practice_area); ?>',
-                sectorLabel:'<?php echo esc_js($selected_sector === 'all' ? 'All Sectors' : $selected_sector); ?>',
-                roleLabel:'<?php echo esc_js($selected_role === 'all' ? 'All roles' : $selected_role); ?>',
-                closeAll(){ this.paOpen=false; this.sectorOpen=false; this.roleOpen=false; },
-                selectPA(slug,label){ this.paValue=slug; this.paLabel=label; this.paOpen=false; },
-                selectSector(slug,label){ this.sectorValue=slug; this.sectorLabel=label; this.sectorOpen=false; },
-                selectRole(slug,label){ this.roleValue=slug; this.roleLabel=label; this.roleOpen=false; }
-            }"
-            @click.outside="closeAll()"
-        >
-            <!-- reset to page 1 on filter submit -->
-            <input type="hidden" name="team_page" value="1" />
+    <!-- BELOW XL: grid layout (4 cols down to xl, 3 cols to lg, 2 cols to ipad, 1 col to sm) -->
+    <fieldset
+        class="hidden p-0 m-0 mb-4 w-full border-0 max-xl:grid max-xl:gap-8 max-xl:items-start max-xl:grid-cols-4 max-lg:grid-cols-4 max-ipad:grid-cols-2 max-sm:grid-cols-1 max-md:mb-0"
+    >
+        <legend class="sr-only">Filter Options</legend>
 
-            <fieldset class="flex flex-wrap gap-8 items-center p-0 m-0 border-0 max-md:flex-col max-md:gap-4 max-md:w-full max-sm:gap-3 mb-4 max-md:mb-0">
+        <!-- Practice areas -->
+        <div class="flex flex-col items-start w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
+                Practice areas
+            </label>
 
-                <legend class="sr-only">Filter Options</legend>
+            <input type="hidden" name="team_practice_area" :value="paValue" />
 
-                <!-- Practice areas -->
-                <div class="flex flex-col items-start w-[296px] max-md:w-full">
-                    <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
-                        Practice areas
-                    </label>
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="paOpen ? 'true' : 'false'"
+                    @click="paOpen=!paOpen; sectorOpen=false; roleOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="paValue==='all' ? 'All practice areas' : paLabel"></span>
+                    </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
 
-                    <input type="hidden" name="team_practice_area" :value="paValue" />
+                <ul
+                    class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
+                    role="listbox"
+                    x-show="paOpen"
+                    x-transition
+                >
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                        @click="selectPA('all','All practice areas')">
+                        All practice areas
+                    </li>
 
-                    <div class="flex relative flex-col gap-1 items-start w-full">
-                        <button
-                            type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
-                            aria-haspopup="listbox"
-                            :aria-expanded="paOpen ? 'true' : 'false'"
-                            @click="paOpen=!paOpen; sectorOpen=false; roleOpen=false;"
-                        >
-                            <div class="flex flex-1 gap-2 items-center">
-                                <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="paValue==='all' ? 'All practice areas' : paLabel"></span>
-                            </div>
-                            <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </button>
-
-                        <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
-                            role="listbox"
-                            x-show="paOpen"
-                            x-transition
-                        >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
-                                @click="selectPA('all','All practice areas')">
-                                All practice areas
+                    <?php if (!empty($practice_area_terms) && !is_wp_error($practice_area_terms)) : ?>
+                        <?php foreach ($practice_area_terms as $term) : ?>
+                            <li
+                                class="px-4 py-3 cursor-pointer hover:bg-primary-light"
+                                role="option"
+                                tabindex="0"
+                                @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                            >
+                                <?php echo esc_html($term->name); ?>
                             </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
 
-                            <?php if (!empty($practice_area_terms) && !is_wp_error($practice_area_terms)) : ?>
-                                <?php foreach ($practice_area_terms as $term) : ?>
-                                    <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
-                                        role="option"
-                                        tabindex="0"
-                                        @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
-                                    >
-                                        <?php echo esc_html($term->name); ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </ul>
+        <!-- Sectors -->
+        <div class="flex flex-col items-start w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
+                Sectors
+            </label>
+
+            <input type="hidden" name="team_sector" :value="sectorValue" />
+
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="sectorOpen ? 'true' : 'false'"
+                    @click="sectorOpen=!sectorOpen; paOpen=false; roleOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="sectorValue==='all' ? 'All Sectors' : sectorLabel"></span>
                     </div>
-                </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
 
-                <!-- Sectors -->
-                <div class="flex flex-col items-start w-[296px] max-md:w-full">
-                    <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
-                        Sectors
-                    </label>
+                <ul
+                    class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
+                    role="listbox"
+                    x-show="sectorOpen"
+                    x-transition
+                >
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                        @click="selectSector('all','All Sectors')">
+                        All Sectors
+                    </li>
 
-                    <input type="hidden" name="team_sector" :value="sectorValue" />
-
-                    <div class="flex relative flex-col gap-1 items-start w-full">
-                        <button
-                            type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
-                            aria-haspopup="listbox"
-                            :aria-expanded="sectorOpen ? 'true' : 'false'"
-                            @click="sectorOpen=!sectorOpen; paOpen=false; roleOpen=false;"
-                        >
-                            <div class="flex flex-1 gap-2 items-center">
-                                <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="sectorValue==='all' ? 'All Sectors' : sectorLabel"></span>
-                            </div>
-                            <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </button>
-
-                        <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
-                            role="listbox"
-                            x-show="sectorOpen"
-                            x-transition
-                        >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
-                                @click="selectSector('all','All Sectors')">
-                                All Sectors
+                    <?php if (!empty($sector_terms) && !is_wp_error($sector_terms)) : ?>
+                        <?php foreach ($sector_terms as $term) : ?>
+                            <li
+                                class="px-4 py-3 cursor-pointer hover:bg-primary-light"
+                                role="option"
+                                tabindex="0"
+                                @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                            >
+                                <?php echo esc_html($term->name); ?>
                             </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
 
-                            <?php if (!empty($sector_terms) && !is_wp_error($sector_terms)) : ?>
-                                <?php foreach ($sector_terms as $term) : ?>
-                                    <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
-                                        role="option"
-                                        tabindex="0"
-                                        @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
-                                    >
-                                        <?php echo esc_html($term->name); ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </ul>
+        <!-- Roles -->
+        <div class="flex flex-col items-start w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
+                Roles
+            </label>
+
+            <input type="hidden" name="team_role" :value="roleValue" />
+
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="roleOpen ? 'true' : 'false'"
+                    @click="roleOpen=!roleOpen; paOpen=false; sectorOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="roleValue==='all' ? 'All roles' : roleLabel"></span>
                     </div>
-                </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
 
-                <!-- Roles -->
-                <div class="flex flex-col items-start w-[296px] max-md:w-full">
-                    <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
-                        Roles
-                    </label>
+                <ul
+                    class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary"
+                    role="listbox"
+                    x-show="roleOpen"
+                    x-transition
+                >
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                        @click="selectRole('all','All roles')">
+                        All roles
+                    </li>
 
-                    <input type="hidden" name="team_role" :value="roleValue" />
-
-                    <div class="flex relative flex-col gap-1 items-start w-full">
-                        <button
-                            type="button"
-                            class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-indigo-800 border-solid btn max-sm:px-3 max-sm:py-2.5"
-                            aria-haspopup="listbox"
-                            :aria-expanded="roleOpen ? 'true' : 'false'"
-                            @click="roleOpen=!roleOpen; paOpen=false; sectorOpen=false;"
-                        >
-                            <div class="flex flex-1 gap-2 items-center">
-                                <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="roleValue==='all' ? 'All roles' : roleLabel"></span>
-                            </div>
-                            <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </button>
-
-                        <ul
-                            class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 border-indigo-800 shadow-lg"
-                            role="listbox"
-                            x-show="roleOpen"
-                            x-transition
-                        >
-                            <li class="px-4 py-3 cursor-pointer hover:bg-indigo-50" role="option" tabindex="0"
-                                @click="selectRole('all','All roles')">
-                                All roles
+                    <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
+                        <?php foreach ($role_terms as $term) : ?>
+                            <li
+                                class="px-4 py-3 cursor-pointer hover:bg-primary-light"
+                                role="option"
+                                tabindex="0"
+                                @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                            >
+                                <?php echo esc_html($term->name); ?>
                             </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
 
-                            <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
-                                <?php foreach ($role_terms as $term) : ?>
-                                    <li
-                                        class="px-4 py-3 cursor-pointer hover:bg-indigo-50"
-                                        role="option"
-                                        tabindex="0"
-                                        @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
-                                    >
-                                        <?php echo esc_html($term->name); ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </ul>
+        <!-- Search (ONLY below xl, included as grid item) -->
+        <div class="flex flex-col items-start w-full">
+            <label for="<?php echo esc_attr($section_id); ?>-team-search" class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
+                Search
+            </label>
+
+            <div class="flex flex-col gap-1 items-start w-full">
+                <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-solid border-primary max-sm:px-3 max-sm:py-2.5">
+                    <div class="flex flex-1 gap-2 items-center">
+                        <input
+                            type="search"
+                            id="<?php echo esc_attr($section_id); ?>-team-search"
+                            name="team_search"
+                            value="<?php echo esc_attr($search_name); ?>"
+                            class="flex-1 p-0 text-base leading-6 text-black bg-transparent border-0 outline-none max-sm:text-sm max-sm:leading-5 focus:ring-0"
+                            placeholder="Search by name"
+                            aria-label="Search by name"
+                            autocomplete="off"
+                        >
                     </div>
-                </div>
-            </fieldset>
 
-            <!-- Search -->
-            <div class="flex flex-col gap-2 items-start max-md:w-full">
-                <div class="flex flex-col items-start w-[296px] max-md:w-full">
-                    <label for="<?php echo esc_attr($section_id); ?>-team-search" class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
-                        Search
-                    </label>
-
-                    <div class="flex flex-col gap-1 items-start w-full">
-                        <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-indigo-800 border-solid max-sm:px-3 max-sm:py-2.5">
-                            <div class="flex flex-1 gap-2 items-center">
-                                <input
-                                    type="search"
-                                    id="<?php echo esc_attr($section_id); ?>-team-search"
-                                    name="team_search"
-                                    value="<?php echo esc_attr($search_name); ?>"
-                                    class="flex-1 p-0 text-base leading-6 text-black bg-transparent border-0 outline-none max-sm:text-sm max-sm:leading-5 focus:ring-0"
-                                    placeholder="Search by name"
-                                    aria-label="Search by name"
-                                    autocomplete="off"
-                                >
-                            </div>
-
-                            <button type="submit" class="p-0 bg-transparent border-0 btn" aria-label="Submit search">
-                                <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+                    <button type="submit" class="p-0 bg-transparent border-0 btn" aria-label="Submit search">
+                        <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </form>
+        </div>
+    </fieldset>
+
+    <!-- XL+ (original layout exactly as before) -->
+    <fieldset class="flex flex-wrap gap-8 items-center p-0 m-0 mb-4 w-full border-0 max-md:flex-col max-md:gap-4 max-sm:gap-3 max-md:mb-0 max-w-[80%] max-xl:hidden">
+        <legend class="sr-only">Filter Options</legend>
+
+        <!-- Practice areas -->
+        <div class="flex flex-col items-start max-w-[296px] w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">Practice areas</label>
+            <input type="hidden" name="team_practice_area" :value="paValue" />
+
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="paOpen ? 'true' : 'false'"
+                    @click="paOpen=!paOpen; sectorOpen=false; roleOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="paValue==='all' ? 'All practice areas' : paLabel"></span>
+                    </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+
+                <ul class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary" role="listbox" x-show="paOpen" x-transition>
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0" @click="selectPA('all','All practice areas')">
+                        All practice areas
+                    </li>
+
+                    <?php if (!empty($practice_area_terms) && !is_wp_error($practice_area_terms)) : ?>
+                        <?php foreach ($practice_area_terms as $term) : ?>
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                                @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
+                                <?php echo esc_html($term->name); ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sectors -->
+        <div class="flex flex-col items-start max-w-[296px] w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">Sectors</label>
+            <input type="hidden" name="team_sector" :value="sectorValue" />
+
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="sectorOpen ? 'true' : 'false'"
+                    @click="sectorOpen=!sectorOpen; paOpen=false; roleOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="sectorValue==='all' ? 'All Sectors' : sectorLabel"></span>
+                    </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+
+                <ul class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary" role="listbox" x-show="sectorOpen" x-transition>
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0" @click="selectSector('all','All Sectors')">
+                        All Sectors
+                    </li>
+
+                    <?php if (!empty($sector_terms) && !is_wp_error($sector_terms)) : ?>
+                        <?php foreach ($sector_terms as $term) : ?>
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                                @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
+                                <?php echo esc_html($term->name); ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Roles -->
+        <div class="flex flex-col items-start max-w-[296px] w-full">
+            <label class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">Roles</label>
+            <input type="hidden" name="team_role" :value="roleValue" />
+
+            <div class="flex relative flex-col gap-1 items-start w-full">
+                <button
+                    type="button"
+                    class="box-border flex justify-between items-center px-4 py-3 w-full text-left bg-white border border-solid border-primary btn max-sm:px-3 max-sm:py-2.5"
+                    aria-haspopup="listbox"
+                    :aria-expanded="roleOpen ? 'true' : 'false'"
+                    @click="roleOpen=!roleOpen; paOpen=false; sectorOpen=false;"
+                >
+                    <div class="flex flex-1 gap-2 items-center">
+                        <span class="flex-1 text-base leading-6 text-black max-sm:text-sm max-sm:leading-5" x-text="roleValue==='all' ? 'All roles' : roleLabel"></span>
+                    </div>
+                    <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9L12 15L18 9" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+
+                <ul class="overflow-y-auto absolute left-0 top-full z-50 w-full max-h-60 bg-white border border-t-0 shadow-lg border-primary" role="listbox" x-show="roleOpen" x-transition>
+                    <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0" @click="selectRole('all','All roles')">
+                        All roles
+                    </li>
+
+                    <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
+                        <?php foreach ($role_terms as $term) : ?>
+                            <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
+                                @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
+                                <?php echo esc_html($term->name); ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- XL+ Search (original position, unchanged) -->
+    <div class="flex flex-col gap-2 items-start max-md:w-full max-xl:hidden">
+        <div class="flex flex-col items-start max-w-[296px] w-full">
+            <label for="<?php echo esc_attr($section_id); ?>-team-search" class="mb-1 text-sm leading-6 text-black max-sm:text-xs max-sm:leading-5">
+                Search
+            </label>
+
+            <div class="flex flex-col gap-1 items-start w-full">
+                <div class="box-border flex justify-between items-center px-4 py-3 w-full bg-white border border-solid border-primary max-sm:px-3 max-sm:py-2.5">
+                    <div class="flex flex-1 gap-2 items-center">
+                        <input
+                            type="search"
+                            id="<?php echo esc_attr($section_id); ?>-team-search"
+                            name="team_search"
+                            value="<?php echo esc_attr($search_name); ?>"
+                            class="flex-1 p-0 text-base leading-6 text-black bg-transparent border-0 outline-none max-sm:text-sm max-sm:leading-5 focus:ring-0"
+                            placeholder="Search by name"
+                            aria-label="Search by name"
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <button type="submit" class="p-0 bg-transparent border-0 btn" aria-label="Submit search">
+                        <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 
         <!-- GRID -->
         <div class="grid grid-cols-4 gap-8
@@ -394,47 +541,53 @@ $base_args = array(
                     }
                     ?>
 
+                    <a
+                    href="<?php echo esc_url($permalink); ?>"
+                    class="block team-card group"
+                    aria-label="<?php echo esc_attr('View profile for ' . $name); ?>"
+                    >
                     <article
-                        class="team-card flex relative flex-col justify-end items-center px-6 pt-80 pb-6 w-full h-[480px]"
+                        class="flex relative flex-col justify-end items-center px-6 pt-80 pb-6 w-full h-[480px]"
                         role="img"
                         aria-label="<?php echo esc_attr('Team member ' . $name); ?>"
                         style="<?php echo esc_attr($bg_style); ?>"
                     >
                         <div class="flex absolute left-6 flex-col gap-6 justify-center items-start p-6 bg-white border border-solid shadow-lg border-white border-opacity-20 h-[138px] top-[318px] w-[calc(100%_-_48px)]">
-                            <div class="flex relative flex-col items-start self-stretch">
-                                <h3 class="relative self-stretch text-base font-bold tracking-tight leading-6 text-neutral-900">
-                                    <?php echo esc_html($name); ?>
-                                </h3>
+                        <div class="flex relative flex-col items-start self-stretch">
+                            <h3 class="relative self-stretch text-base font-bold tracking-tight leading-6 text-neutral-900">
+                            <?php echo esc_html($name); ?>
+                            </h3>
 
-                                <?php if (!empty($role)) : ?>
-                                    <p class="relative self-stretch text-sm tracking-normal leading-5 text-black text-opacity-60">
-                                        <?php echo esc_html($role); ?>
-                                    </p>
-                                <?php endif; ?>
-                            </div>
+                            <?php if (!empty($role)) : ?>
+                            <p class="relative self-stretch text-sm tracking-normal leading-5 text-black text-opacity-60">
+                                <?php echo esc_html($role); ?>
+                            </p>
+                            <?php endif; ?>
+                        </div>
 
-                            <a
-                                href="<?php echo esc_url($permalink); ?>"
-                                class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 btn w-fit hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
-                                aria-label="<?php echo esc_attr('Get in touch with ' . $name); ?>"
-                            >
-                                <span class="relative text-base tracking-tight leading-6 text-indigo-800">
-                                    Get in touch
-                                </span>
+                        <span
+                            class="flex relative gap-2 items-center whitespace-nowrap transition-colors duration-200 w-fit group-hover:text-primary-dark focus:outline-none"
+                            aria-hidden="true"
+                        >
+                            <span class="relative text-base tracking-tight leading-6 text-primary">
+                            Get in touch
+                            </span>
 
-                                <div class="flex relative justify-center items-center w-6 h-6" aria-hidden="true">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path
-                                            d="M5 12H19M19 12L12 5M19 12L12 19"
-                                            stroke="#0902A4"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </div>
-                            </a>
+                            <span class="flex relative justify-center items-center w-6 h-6" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path
+                                d="M5 12H19M19 12L12 5M19 12L12 19"
+                                stroke="#0902A4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                />
+                            </svg>
+                            </span>
+                        </span>
                         </div>
                     </article>
+                    </a>
+
 
                 <?php endwhile; ?>
                 <?php wp_reset_postdata(); ?>
@@ -444,94 +597,111 @@ $base_args = array(
 
         </div>
 
-        <!-- PAGINATION (preserves filters/search) -->
-        <?php if (!empty($enable_pagination) && $total_pages > 1) : ?>
-            <?php
-            $prev_page = $paged > 1 ? ($paged - 1) : 0;
-            $next_page = $paged < $total_pages ? ($paged + 1) : 0;
+<!-- PAGINATION (preserves filters/search) -->
+<?php if (!empty($enable_pagination) && $total_pages > 1) : ?>
+    <?php
+    $prev_page = $paged > 1 ? ($paged - 1) : 0;
+    $next_page = $paged < $total_pages ? ($paged + 1) : 0;
 
-            $page_numbers = paginate_links(array(
-                'total'     => $total_pages,
-                'current'   => $paged,
-                'type'      => 'array',
-                'prev_next' => false,
-                'end_size'  => 1,
-                'mid_size'  => 2,
-                'base'      => esc_url_raw(add_query_arg(array_merge($base_args, array('team_page' => '%#%')))),
-                'format'    => '',
-            ));
+    $page_numbers = paginate_links(array(
+        'total'     => $total_pages,
+        'current'   => $paged,
+        'type'      => 'array',
+        'prev_next' => false,
+        'end_size'  => 1,
+        'mid_size'  => 2,
+        'base'      => esc_url_raw(add_query_arg(array_merge($base_args, array('team_page' => '%#%')))),
+        'format'    => '',
+    ));
 
-            $prev_url = $prev_page ? add_query_arg(array_merge($base_args, array('team_page' => $prev_page))) : '';
-            $next_url = $next_page ? add_query_arg(array_merge($base_args, array('team_page' => $next_page))) : '';
-            ?>
+    $prev_url = $prev_page ? add_query_arg(array_merge($base_args, array('team_page' => $prev_page))) : '';
+    $next_url = $next_page ? add_query_arg(array_merge($base_args, array('team_page' => $next_page))) : '';
+    ?>
 
-            <nav aria-label="Pagination Navigation" class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
-                <!-- Previous -->
-                <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
-                    <?php if ($prev_page) : ?>
-                        <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
-                           href="<?php echo esc_url($prev_url); ?>"
-                           aria-label="Go to previous page" title="Go to previous page">
-                            <img src="<?php echo esc_url($pagination_prev_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
-                            <span>Previous</span>
-                        </a>
+    <nav aria-label="Pagination Navigation" class="flex flex-wrap gap-8 justify-center items-center mt-12 text-base font-semibold leading-none whitespace-nowrap">
+        <!-- Previous -->
+        <div class="flex gap-1 items-center py-1 pr-4 pl-1 <?php echo $prev_page ? 'text-primary' : 'text-gray-400'; ?>">
+            <?php if ($prev_page) : ?>
+                <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-primary w-fit"
+                   href="<?php echo esc_url($prev_url); ?>"
+                   aria-label="Go to previous page" title="Go to previous page">
+                    <span class="flex justify-center items-center w-8 h-8 shrink-0" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+                            <path d="M9 17L1 9L9 1" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>Previous</span>
+                </a>
+            <?php else : ?>
+                <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Go to previous page" title="Previous page (disabled)">
+                    <span class="flex justify-center items-center w-8 h-8 shrink-0" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+                            <path d="M9 17L1 9L9 1" stroke="#A1A4B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="max-md:hidden">Previous</span>
+                </button>
+            <?php endif; ?>
+        </div>
+
+        <!-- Page numbers -->
+        <div class="flex gap-4 items-center text-lg leading-none" role="group" aria-label="Page numbers">
+            <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
+                <?php foreach ($page_numbers as $link_html) : ?>
+                    <?php
+                    $is_current = (strpos($link_html, 'current') !== false);
+                    $page_num = (int) wp_strip_all_tags($link_html);
+
+                    preg_match('/href=["\']([^"\']+)["\']/', $link_html, $matches);
+                    $url = !empty($matches[1]) ? $matches[1] : '';
+                    ?>
+
+                    <?php if ($is_current) : ?>
+                        <span class="flex flex-col justify-center items-center w-12 h-12 rounded-full border border-solid transition-colors text-primary border-primary btn hover:bg-primary-lightBlue hover:border-primary-lightBlue"
+                              aria-current="page"
+                              aria-label="<?php echo esc_attr('Page ' . $page_num . ', current page'); ?>"
+                              title="<?php echo esc_attr('Current page, page ' . $page_num); ?>">
+                            <span class="text-primary"><?php echo esc_html((string) $page_num); ?></span>
+                        </span>
                     <?php else : ?>
-                        <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Go to previous page" title="Previous page (disabled)">
-                            <img src="<?php echo esc_url($pagination_prev_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
-                            <span>Previous</span>
-                        </button>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Page numbers -->
-                <div class="flex gap-4 items-center text-lg leading-none min-w-60" role="group" aria-label="Page numbers">
-                    <?php if (!empty($page_numbers) && is_array($page_numbers)) : ?>
-                        <?php foreach ($page_numbers as $link_html) : ?>
-                            <?php
-                            $is_current = (strpos($link_html, 'current') !== false);
-                            $page_num = (int) wp_strip_all_tags($link_html);
-
-                            preg_match('/href=["\']([^"\']+)["\']/', $link_html, $matches);
-                            $url = !empty($matches[1]) ? $matches[1] : '';
-                            ?>
-
-                            <?php if ($is_current) : ?>
-                                <span class="flex flex-col justify-center items-center w-12 h-12 text-indigo-800 rounded-full border border-indigo-800 border-solid transition-colors btn hover:bg-indigo-50"
-                                      aria-current="page"
-                                      aria-label="<?php echo esc_attr('Page ' . $page_num . ', current page'); ?>"
-                                      title="<?php echo esc_attr('Current page, page ' . $page_num); ?>">
-                                    <span class="text-indigo-800"><?php echo esc_html((string) $page_num); ?></span>
-                                </span>
-                            <?php else : ?>
-                                <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-white hover:bg-opacity-10"
-                                   href="<?php echo esc_url($url); ?>"
-                                   aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>"
-                                   title="<?php echo esc_attr('Go to page ' . $page_num); ?>">
-                                    <span class="text-white"><?php echo esc_html((string) $page_num); ?></span>
-                                </a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Next -->
-                <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-indigo-800' : 'text-gray-400'; ?>">
-                    <?php if ($next_page) : ?>
-                        <a class="flex gap-1 items-center text-indigo-800 whitespace-nowrap transition-colors btn hover:text-indigo-600 w-fit"
-                           href="<?php echo esc_url($next_url); ?>"
-                           aria-label="Go to next page" title="Go to next page">
-                            <span>Next</span>
-                            <img src="<?php echo esc_url($pagination_next_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
+                        <a class="flex flex-col justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-primary-lightBlue hover:text-primary group"
+                           href="<?php echo esc_url($url); ?>"
+                           aria-label="<?php echo esc_attr('Go to page ' . $page_num); ?>"
+                           title="<?php echo esc_attr('Go to page ' . $page_num); ?>">
+                            <span class="text-white group-hover:text-primary"><?php echo esc_html((string) $page_num); ?></span>
                         </a>
-                    <?php else : ?>
-                        <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Go to next page" title="Next page (disabled)">
-                            <span>Next</span>
-                            <img src="<?php echo esc_url($pagination_next_icon); ?>" alt="" class="object-contain w-8 h-8 shrink-0" role="presentation" />
-                        </button>
                     <?php endif; ?>
-                </div>
-            </nav>
-        <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+        <!-- Next -->
+        <div class="flex gap-1 items-center py-1 pr-1 pl-4 <?php echo $next_page ? 'text-primary' : 'text-gray-400'; ?>">
+            <?php if ($next_page) : ?>
+                <a class="flex gap-1 items-center whitespace-nowrap transition-colors text-primary btn hover:text-primary w-fit"
+                   href="<?php echo esc_url($next_url); ?>"
+                   aria-label="Go to next page" title="Go to next page">
+                    <span class="max-md:hidden">Next</span>
+                    <span class="flex justify-center items-center w-8 h-8 shrink-0" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+                            <path d="M1 17L9 9L1 1" stroke="#0902A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </a>
+            <?php else : ?>
+                <button class="flex gap-1 items-center text-gray-400 cursor-not-allowed btn" disabled aria-label="Go to next page" title="Next page (disabled)">
+                    <span class="max-md:hidden">Next</span>
+                    <span class="flex justify-center items-center w-8 h-8 shrink-0" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+                            <path d="M1 17L9 9L1 1" stroke="#A1A4B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </button>
+            <?php endif; ?>
+        </div>
+    </nav>
+<?php endif; ?>
+
 
     </div>
 </section>
