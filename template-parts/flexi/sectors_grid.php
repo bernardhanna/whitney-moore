@@ -27,6 +27,7 @@ $override_link        = get_sub_field('override_link');
 
 $image_radius         = get_sub_field('image_radius') ?: 'rounded-none';
 $tile_radius          = get_sub_field('tile_radius')  ?: 'rounded-none';
+$default_item_description = 'Lorem ipsum dolor sit amet consectetur. Mauris cras diam lectus pretium.';
 
 $allowed_tags = ['h1','h2','h3','h4','h5','h6','span','p'];
 if (!in_array($section_heading_tag, $allowed_tags, true)) { $section_heading_tag = 'p'; }
@@ -75,9 +76,13 @@ $build_post_item = static function ($post_obj) use ($override_link) {
     $item_link = $override_link && !empty($override_link['url'])
         ? $override_link
         : ['url' => get_permalink($post_id), 'title' => $title, 'target' => ''];
+    $description = has_excerpt($post_id)
+        ? wp_strip_all_tags((string) get_post_field('post_excerpt', $post_id))
+        : wp_trim_words(wp_strip_all_tags((string) get_post_field('post_content', $post_id)), 18);
 
     return [
         'title'       => $title,
+        'description' => $description,
         'image_id'    => $thumb_id ? (int) $thumb_id : 0,
         'image_url'   => '',
         'image_alt'   => $img_alt ?: $title,
@@ -104,6 +109,7 @@ if ($items_source === 'manual_cards') {
 
         $grid_items[] = [
             'title'       => $title,
+            'description' => '',
             'image_id'    => !empty($image['ID']) ? (int) $image['ID'] : 0,
             'image_url'   => !empty($image['url']) ? (string) $image['url'] : '',
             'image_alt'   => !empty($image['alt']) ? (string) $image['alt'] : $title,
@@ -233,7 +239,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                         ?>
                         <li class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?>">
                             <article class="h-full">
-                                <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
+                                <a class="block relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                    href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                     <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                         <?php
@@ -244,7 +250,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 false,
                                                 [
                                                     'alt'     => esc_attr($item['image_alt']),
-                                                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
+                                                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105',
                                                     'loading' => 'lazy',
                                                 ]
                                             );
@@ -253,7 +259,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             <img
                                                 src="<?php echo esc_url($item['image_url']); ?>"
                                                 alt="<?php echo esc_attr($item['image_alt']); ?>"
-                                                class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]"
+                                                class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
                                                 loading="lazy"
                                                 decoding="async"
                                             >
@@ -261,8 +267,11 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                         }
                                         ?>
                                     </div>
-                                    <div class="px-4 py-3" style="<?php echo $underline_color ?>">
-                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block max-md:text-[18px] max-md:not-italic max-md:font-semibold max-md:leading-[24px] max-md:tracking-[2px] max-md:whitespace-pre-wrap max-md:text-[#0902A4]"><?php echo esc_html($item['title']); ?></span>
+                                    <div class="relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color ?>">
+                                        <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block max-md:text-[18px] max-md:not-italic max-md:font-semibold max-md:leading-[24px] max-md:tracking-[2px] max-md:whitespace-pre-wrap max-md:text-[#0902A4] lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></span>
+                                        <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
+                                            <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                        </p>
                                     </div>
                                 </a>
                             </article>
@@ -289,7 +298,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                             ?>
                             <li class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?>">
                                 <article class="h-full">
-                                    <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
+                                    <a class="block relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
@@ -300,7 +309,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     false,
                                                     [
                                                         'alt'     => esc_attr($item['image_alt']),
-                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -309,7 +318,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 <img
                                                     src="<?php echo esc_url($item['image_url']); ?>"
                                                     alt="<?php echo esc_attr($item['image_alt']); ?>"
-                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
                                                     loading="lazy"
                                                     decoding="async"
                                                 >
@@ -317,8 +326,11 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
+                                        <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]">
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
+                                            <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                            </p>
                                         </div>
                                     </a>
                                 </article>
@@ -337,7 +349,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                                 ?>
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/2">
-                                    <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
+                                    <a class="block relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
@@ -348,7 +360,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     false,
                                                     [
                                                         'alt'     => esc_attr($item['image_alt']),
-                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -357,7 +369,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 <img
                                                     src="<?php echo esc_url($item['image_url']); ?>"
                                                     alt="<?php echo esc_attr($item['image_alt']); ?>"
-                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
                                                     loading="lazy"
                                                     decoding="async"
                                                 >
@@ -365,8 +377,11 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="<?php echo $underline_color; ?>">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
+                                        <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color; ?>">
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
+                                            <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                            </p>
                                         </div>
                                     </a>
                                 </article>
@@ -382,7 +397,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                 $link_target = !empty($item['link_target']) ? ' target="'.esc_attr($item['link_target']).'" rel="noopener"' : '';
                                 ?>
                                 <article class="m-0 p-0 overflow-hidden bg-transparent <?php echo esc_attr($tile_radius); ?> w-1/4">
-                                    <a class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
+                                    <a class="block relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current"
                                        href="<?php echo esc_url($item['link_url'] ?: '#'); ?>" aria-label="<?php echo esc_attr($item['link_title']); ?>"<?php echo $link_target; ?>>
                                         <div class="relative w-full overflow-hidden <?php echo esc_attr($image_radius); ?>">
                                             <?php
@@ -393,7 +408,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     false,
                                                     [
                                                         'alt'     => esc_attr($item['image_alt']),
-                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]',
+                                                        'class'   => 'w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105',
                                                         'loading' => 'lazy',
                                                     ]
                                                 );
@@ -402,7 +417,7 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 <img
                                                     src="<?php echo esc_url($item['image_url']); ?>"
                                                     alt="<?php echo esc_attr($item['image_alt']); ?>"
-                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px]"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
                                                     loading="lazy"
                                                     decoding="async"
                                                 >
@@ -410,8 +425,11 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                             }
                                             ?>
                                         </div>
-                                        <div class="px-4 py-3" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
-                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block"><?php echo esc_html($item['title']); ?></h3>
+                                        <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
+                                            <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
+                                            <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                            </p>
                                         </div>
                                     </a>
                                 </article>

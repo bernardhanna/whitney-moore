@@ -20,8 +20,52 @@ body {
 @layer components {
   /* ACCESSIBILITY: style every element using .btn */
   .btn {
-    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary;
   }
+
+  /* ACCESSIBILITY: ensure all button controls get clear keyboard focus */
+  button,
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  input[type='button'],
+  input[type='submit'],
+  input[type='reset'],
+  [role='button'],
+  a.btn {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary;
+  }
+}
+
+/* Prevent mouse-click focus ring; keep keyboard focus-visible ring */
+button:focus:not(:focus-visible),
+[type='button']:focus:not(:focus-visible),
+[type='submit']:focus:not(:focus-visible),
+[type='reset']:focus:not(:focus-visible),
+input[type='button']:focus:not(:focus-visible),
+input[type='submit']:focus:not(:focus-visible),
+input[type='reset']:focus:not(:focus-visible),
+.btn:focus:not(:focus-visible),
+a.btn:focus:not(:focus-visible),
+[role='button']:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Global button motion: slightly slower, smoother transitions */
+button,
+[type='button'],
+[type='submit'],
+[type='reset'],
+input[type='button'],
+input[type='submit'],
+input[type='reset'],
+.btn,
+a.btn,
+[role='button'] {
+  transition-property: background-color, color, border-color, box-shadow, opacity, transform;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Headroom initial state */
@@ -1314,6 +1358,35 @@ body {
  @apply no-underline;
 }
 
+/* Button-like links inside editors should never be underlined */
+.wp_editor a.btn,
+.wp_editor a.inline-flex {
+  text-decoration: none !important;
+}
+
+.wp_editor a.btn:hover,
+.wp_editor a.inline-flex:hover,
+.wp_editor a.btn:focus,
+.wp_editor a.inline-flex:focus,
+.wp_editor a.btn:focus-visible,
+.wp_editor a.inline-flex:focus-visible {
+  text-decoration: none !important;
+}
+
+/* Blog filter pills: unified hover treatment */
+.wm-filter-pill:hover,
+.wm-filter-pill:focus-visible {
+  background: var(--WM---blue-gradient, linear-gradient(90deg, #0902A4 0%, #3600CE 100%)) !important;
+  color: #fff !important;
+}
+
+/* Blog pagination number buttons */
+.wm-pagination-number:hover,
+.wm-pagination-number:focus-visible {
+  background: #86A8FF !important;
+  color: #000 !important;
+}
+
 .wp_editor p {
    @apply font-normal text-[18px] leading-[26px] tracking-[1px] mb-4;
 }
@@ -1453,6 +1526,32 @@ blockquote.right {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Unified slider-arrow hover treatment */
+.matrix-prev:hover,
+.matrix-next:hover,
+.carousel-button:hover,
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: #86A8FF !important;
+  color: #000 !important;
+}
+
+.matrix-prev:hover svg path,
+.matrix-next:hover svg path,
+.carousel-button:hover svg path,
+.slick-prev:hover svg path,
+.slick-next:hover svg path {
+  stroke: #000 !important;
+}
+
+.matrix-prev:hover svg [fill]:not([fill='none']),
+.matrix-next:hover svg [fill]:not([fill='none']),
+.carousel-button:hover svg [fill]:not([fill='none']),
+.slick-prev:hover svg [fill]:not([fill='none']),
+.slick-next:hover svg [fill]:not([fill='none']) {
+  fill: #000 !important;
 }
 
 

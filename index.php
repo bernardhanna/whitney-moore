@@ -339,8 +339,8 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                                         <button
                                             type="button"
                                             class="<?php echo esc_attr($is_active
-                                                ? 'btn flex shrink-0 gap-2 justify-center items-center px-6 py-2.5 text-primary bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap hover:bg-opacity-40 transition-colors duration-200 max-md:px-5'
-                                                : 'btn flex shrink-0 gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-full w-fit whitespace-nowrap hover:bg-primary-light transition-colors duration-200 max-md:px-5'
+                                                ? 'btn wm-filter-pill flex shrink-0 gap-2 justify-center items-center px-6 py-2.5 text-primary bg-indigo-400 bg-opacity-30 rounded-full w-fit whitespace-nowrap transition-colors duration-200 max-md:px-5'
+                                                : 'btn wm-filter-pill flex shrink-0 gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-full w-fit whitespace-nowrap transition-colors duration-200 max-md:px-5'
                                             ); ?>"
                                             :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
                                             aria-label="<?php echo esc_attr($pill['label']); ?>"
@@ -714,7 +714,7 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                                 </span>
                             <?php else : ?>
                                 <a href="<?php echo esc_url(add_query_arg(array_merge($base_args, array('paged' => $i)))); ?>"
-                                    class="flex justify-center items-center w-10 h-10 text-white rounded-full transition-colors btn bg-primary hover:bg-opacity-80"
+                                    class="wm-pagination-number flex justify-center items-center w-10 h-10 text-white rounded-full transition-colors btn bg-primary"
                                     aria-label="<?php echo esc_attr('Go to page ' . $i); ?>">
                                     <?php echo esc_html((string) $i); ?>
                                 </a>
@@ -732,7 +732,7 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                                 </span>
                             <?php else : ?>
                                 <a href="<?php echo esc_url(add_query_arg(array_merge($base_args, array('paged' => $i)))); ?>"
-                                    class="flex justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary hover:bg-opacity-80"
+                                    class="wm-pagination-number flex justify-center items-center w-12 h-12 text-white rounded-full transition-colors btn bg-primary"
                                     aria-label="<?php echo esc_attr('Go to page ' . $i); ?>">
                                     <?php echo esc_html((string) $i); ?>
                                 </a>

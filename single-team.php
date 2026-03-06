@@ -504,9 +504,10 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
   };
 
   $fallback_img = '/wp-content/uploads/2025/12/image-2-1.png'; // change if you prefer
+  $fallback_desc = 'Lorem ipsum dolor sit amet consectetur. Mauris cras diam lectus pretium.';
   ?>
   <section class="flex overflow-hidden relative  tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
-    <div class="flex flex-col items-center py-6 mx-auto w-full max-w-[1568px] max-xxl:px-5 xl:pt-20 xl:pb-24">
+    <div class="flex flex-col items-center py-6 mx-auto w-full max-w-[1568px] max-xxl:px-5 xl:pt-16 xl:pb-200">
 
       <header class="w-full text-3xl font-bold leading-none text-primary max-md:max-w-full">
         <h2 id="sectors-heading">Related Sectors</h2>
@@ -520,6 +521,9 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
             if ($sector_post instanceof WP_Post) {
               $card_link = get_permalink($sector_post);
               $img_id    = get_post_thumbnail_id($sector_post->ID);
+              $desc      = has_excerpt($sector_post->ID)
+                ? wp_strip_all_tags((string) get_post_field('post_excerpt', $sector_post->ID))
+                : wp_trim_words(wp_strip_all_tags((string) get_post_field('post_content', $sector_post->ID)), 18);
               $img_html  = '';
 
               if ($img_id) {
@@ -530,7 +534,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
                   false,
                   [
                     'alt'     => esc_attr($img_alt),
-                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]',
+                    'class'   => 'w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105',
                     'loading' => 'lazy',
                     'decoding'=> 'async',
                   ]
@@ -538,7 +542,7 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
               } else {
                 // No featured image on the sector post – fallback image
                 $img_html = sprintf(
-                  '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]" loading="lazy" />',
+                  '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105" loading="lazy" />',
                   esc_url($fallback_img),
                   esc_attr($term->name)
                 );
@@ -546,21 +550,26 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
             } else {
               // No matching sectors CPT found – link to the sectors archive (or skip)
               $card_link = get_post_type_archive_link('sectors') ?: home_url('/sectors/');
+              $desc      = $fallback_desc;
               $img_html  = sprintf(
-                '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px]" loading="lazy" />',
+                '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105" loading="lazy" />',
                 esc_url($fallback_img),
                 esc_attr($term->name)
               );
             }
+            $desc = !empty($desc) ? $desc : $fallback_desc;
             ?>
             <article class="overflow-hidden flex-1" role="listitem">
-              <a href="<?php echo esc_url($card_link); ?>" class="block group">
-                <div class="w-full">
+              <a href="<?php echo esc_url($card_link); ?>" class="block relative group">
+                <div class="overflow-hidden relative w-full">
                   <?php echo $img_html; ?>
-                  <div class="overflow-hidden px-4 mt-4 w-full">
-                    <h3 class="text-xl font-semibold text-zinc-900 leading-tight tracking-[1px] group-hover:underline">
+                  <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]">
+                    <h3 class="text-xl font-semibold text-zinc-900 leading-tight tracking-[1px] lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]">
                       <?php echo esc_html($term->name); ?>
                     </h3>
+                    <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
+                      <?php echo esc_html($desc); ?>
+                    </p>
                   </div>
                 </div>
               </a>
