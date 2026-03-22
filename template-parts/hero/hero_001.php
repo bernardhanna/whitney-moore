@@ -8,6 +8,25 @@ $description       = get_sub_field('description');
 $primary_button    = get_sub_field('primary_button');   // ACF link array
 $secondary_button  = get_sub_field('secondary_button'); // ACF link array
 
+// Replace placeholder copy when ACF content still contains lorem ipsum.
+$contains_lorem = static function ($value) {
+    if (!is_string($value)) {
+        return false;
+    }
+    return stripos(wp_strip_all_tags($value), 'lorem ipsum') !== false;
+};
+
+if ($contains_lorem($small_heading)) {
+    $fallback_small_heading = get_the_title(get_queried_object_id());
+    $small_heading = is_string($fallback_small_heading) && $fallback_small_heading !== '' ? $fallback_small_heading : 'Expertise';
+}
+if ($contains_lorem($main_heading)) {
+    $main_heading = get_the_title(get_queried_object_id());
+}
+if ($contains_lorem($description)) {
+    $description = 'We advise clients across a range of sectors, including.';
+}
+
 // Background and design settings
 $background_image         = get_sub_field('background_image');
 $background_image_alt_raw = $background_image ? get_post_meta($background_image, '_wp_attachment_image_alt', true) : '';

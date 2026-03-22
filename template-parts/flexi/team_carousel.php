@@ -8,15 +8,29 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 // Unique IDs
 $section_id = 'team-carousel-' . wp_generate_uuid4();
 $track_id   = $section_id . '-track';
 $dots_id    = $section_id . '-dots';
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'team_carousel';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
 
 // Content
 $heading          = get_sub_field('heading');
 $heading_tag      = get_sub_field('heading_tag') ?: 'h2';
 $background_color = get_sub_field('background_color') ?: '#FFFFFF';
+
+if (is_string($heading)) {
+    $heading = matrix_replace_real_estate_copy($heading);
+}
 
 // Source & query defaults
 $source_mode    = get_sub_field('source_mode') ?: 'taxonomy';
@@ -48,6 +62,17 @@ $slides_lg = (int) get_sub_field('slides_lg'); if ($slides_lg <= 0) { $slides_lg
 $slides_md = (int) get_sub_field('slides_md'); if ($slides_md <= 0) { $slides_md = 2; }
 $slides_sm = (int) get_sub_field('slides_sm'); if ($slides_sm <= 0) { $slides_sm = 1; }
 
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($heading) || trim($heading) === '') {
+        $heading = 'Meet our people';
+    }
+    $show_name = true;
+    $show_job_title = true;
+    $enable_slider = true;
+    $arrow_enabled = true;
+    $dots_enabled = true;
+}
+
 // Padding classes
 $padding_classes = [];
 if (have_rows('padding_settings')) {
@@ -76,6 +101,7 @@ if (!in_array($heading_tag, $allowed_tags, true)) {
 // Build items: manual OR taxonomy query
 $items = [];
 $default_profile = '/wp-content/uploads/2025/12/image-2-1.png';
+$is_contextual_team_page = is_singular('sectors') || is_singular('practice_areas');
 
 if ($source_mode === 'manual') {
     $images = get_sub_field('images');
@@ -97,8 +123,45 @@ if ($source_mode === 'manual') {
 } else {
     $tax_query = [];
 
+    $resolve_contextual_team_term_id = static function ($taxonomy) {
+        if (!taxonomy_exists($taxonomy)) {
+            return 0;
+        }
+
+        $queried_id = get_queried_object_id();
+        if (!$queried_id) {
+            return 0;
+        }
+
+        $post_obj = get_post($queried_id);
+        if (!($post_obj instanceof WP_Post)) {
+            return 0;
+        }
+
+        $by_slug = get_term_by('slug', $post_obj->post_name, $taxonomy);
+        if ($by_slug instanceof WP_Term) {
+            return (int) $by_slug->term_id;
+        }
+
+        $title = get_the_title($queried_id);
+        if (is_string($title) && trim($title) !== '') {
+            $by_name = get_term_by('name', $title, $taxonomy);
+            if ($by_name instanceof WP_Term) {
+                return (int) $by_name->term_id;
+            }
+        }
+
+        return 0;
+    };
+
     if ($taxonomy_type === 'team_practice_area') {
         $terms = is_array($practice_terms) ? array_filter(array_map('intval', $practice_terms)) : [];
+        if (empty($terms) && is_singular('practice_areas')) {
+            $matched_term_id = $resolve_contextual_team_term_id('team_practice_area');
+            if ($matched_term_id > 0) {
+                $terms = [$matched_term_id];
+            }
+        }
         if (!empty($terms)) {
             $tax_query[] = [
                 'taxonomy' => 'team_practice_area',
@@ -108,6 +171,12 @@ if ($source_mode === 'manual') {
         }
     } elseif ($taxonomy_type === 'team_sector') {
         $terms = is_array($sector_terms) ? array_filter(array_map('intval', $sector_terms)) : [];
+        if (empty($terms) && is_singular('sectors')) {
+            $matched_term_id = $resolve_contextual_team_term_id('team_sector');
+            if ($matched_term_id > 0) {
+                $terms = [$matched_term_id];
+            }
+        }
         if (!empty($terms)) {
             $tax_query[] = [
                 'taxonomy' => 'team_sector',
@@ -157,10 +226,14 @@ if ($source_mode === 'manual') {
         wp_reset_postdata();
     }
 }
+
+if ($is_contextual_team_page && empty($items)) {
+    return;
+}
 ?>
 
 <section
-  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
   class="flex overflow-hidden relative"
   style="background-color: <?php echo esc_attr($background_color); ?>;"
   role="region"

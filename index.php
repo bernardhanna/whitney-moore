@@ -17,6 +17,10 @@ $hero_heading  = !empty($blog_settings['hero_heading_text']) ? $blog_settings['h
 $hero_kicker   = !empty($blog_settings['hero_kicker_text']) ? $blog_settings['hero_kicker_text'] : get_bloginfo('name');
 $hero_sub      = !empty($blog_settings['hero_subheading_text']) ? $blog_settings['hero_subheading_text'] : 'Latest and greatest.';
 $hero_body     = !empty($blog_settings['hero_body_text']) ? $blog_settings['hero_body_text'] : '';
+$hero_sub_string = is_string($hero_sub) ? $hero_sub : '';
+if ($hero_sub_string !== '' && stripos($hero_sub_string, 'lorem ipsum') !== false) {
+    $hero_sub = 'Explore the latest legal updates, practical insights, and firm news from Whitney Moore.';
+}
 $visible_filter_category_ids = !empty($blog_settings['visible_filter_categories']) ? (array) $blog_settings['visible_filter_categories'] : array();
 $visible_filter_category_ids = array_values(array_filter(array_map('intval', $visible_filter_category_ids)));
 
@@ -137,8 +141,9 @@ $show_filter_arrows = count($filter_pills) > 5;
 // ---------- Featured 3 (ONLY on page 1) ----------
 $featured_query = null;
 $featured_ids   = array();
+$show_featured_section = ($paged === 1 && $blog_cat === 'all' && $blog_search === '');
 
-if ($paged === 1) {
+if ($show_featured_section) {
     $featured_args = $base_query_args;
     $featured_args['posts_per_page'] = 3;
     $featured_args['paged']          = 1;
@@ -284,6 +289,7 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                             search: '<?php echo esc_js($blog_search); ?>',
                             dragging: false,
                             didDrag: false,
+                            dragThreshold: 12,
                             dragStartX: 0,
                             dragStartScrollLeft: 0,
                             setCat(slug){ this.cat = slug; this.$nextTick(() => this.$root.submit()); },
@@ -298,16 +304,17 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                             onDrag(e){
                                 if (!this.dragging) return;
                                 const dx = e.clientX - this.dragStartX;
-                                if (Math.abs(dx) > 3) this.didDrag = true;
+                                if (Math.abs(dx) > this.dragThreshold) this.didDrag = true;
                                 this.$refs.pillScroller.scrollLeft = this.dragStartScrollLeft - dx;
                             },
                             endDrag(e){
                                 if (!this.dragging) return;
+                                const dx = Math.abs(e.clientX - this.dragStartX);
+                                this.didDrag = dx > this.dragThreshold;
                                 this.dragging = false;
                                 if (this.$refs.pillScroller.hasPointerCapture(e.pointerId)) {
                                     this.$refs.pillScroller.releasePointerCapture(e.pointerId);
                                 }
-                                setTimeout(() => { this.didDrag = false; }, 80);
                             }
                         }"
                         aria-label="Article filters and search"
@@ -344,7 +351,7 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
                                             ); ?>"
                                             :aria-pressed="cat === '<?php echo esc_js($pill['slug']); ?>' ? 'true' : 'false'"
                                             aria-label="<?php echo esc_attr($pill['label']); ?>"
-                                            @click="if (didDrag) return; setCat('<?php echo esc_js($pill['slug']); ?>')"
+                                            @click="if (didDrag) { didDrag = false; return; } setCat('<?php echo esc_js($pill['slug']); ?>')"
                                         >
                                             <span><?php echo esc_html($pill['label']); ?></span>
                                         </button>
@@ -420,7 +427,7 @@ $get_blog_card_image_data = static function ($post_id) use ($default_blog_fallba
     </section>
 
     <!-- FEATURED 3 (only page 1) -->
-    <?php if ($paged === 1 && $featured_query instanceof WP_Query && $featured_query->have_posts()) : ?>
+    <?php if ($show_featured_section && $featured_query instanceof WP_Query && $featured_query->have_posts()) : ?>
         <section id="blog-cards-9682" class="flex overflow-hidden relative" style="background-color:#FFFFFF;" aria-labelledby="blog-cards-9682-heading">
             <div class="flex flex-col items-center pt-5 pb-5 mx-auto w-full lg:pb-12 max-w-container max-xxl:px-5">
 

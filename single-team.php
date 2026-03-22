@@ -21,6 +21,33 @@ get_header();
             $what_we_do_terms = get_the_terms(get_the_ID(), 'what_we_do_category');
 
             $member_name    = get_the_title();
+            $member_slug    = (string) get_post_field('post_name', get_the_ID());
+
+            $team_profile_fallbacks = [
+                'john-oconnor' => [
+                    'job_title'      => 'Associate',
+                    'contact_email'  => 'john.oconnor@whitneymoore.ie',
+                    'contact_phone'  => '+353 1 611 0029',
+                    'practice_areas' => ['Banking and Recoveries', 'Dispute Resolution'],
+                    'disable_social' => true,
+                    'bio_html'       => "<p>John O'Connor is an Associate in our Dispute Resolution and Banking and Recoveries teams. He advises clients on commercial disputes, debt recovery and enforcement matters, with a focus on practical and solution-led outcomes.</p>",
+                ],
+                'dean-power' => [
+                    'job_title'      => 'Associate',
+                    'contact_email'  => 'dean.power@whitneymoore.ie',
+                    'contact_phone'  => '+353 1 611 0069',
+                    'practice_areas' => ['Corporate'],
+                    'disable_social' => true,
+                ],
+                'giselle-keenan' => [
+                    'job_title'      => 'Associate',
+                    'contact_email'  => 'giselle.keenan@whitneymoore.ie',
+                    'contact_phone'  => '+353 1 611 0035',
+                    'practice_areas' => ['Employment, Pensions and Immigration'],
+                    'disable_social' => true,
+                ],
+            ];
+            $profile_fallback = $team_profile_fallbacks[$member_slug] ?? null;
 
             // -------- ACF (NOT flexible) --------
             // Top hero fields
@@ -32,16 +59,28 @@ get_header();
             $twitter_handle = function_exists('get_field') ? get_field('twitter_handle') : '';
             $linkedin_url   = function_exists('get_field') ? get_field('linkedin_url') : '';
             $linkedin_handle= function_exists('get_field') ? get_field('linkedin_handle') : '';
-            $vcard_file     = function_exists('get_field') ? get_field('vcard_file') : null;
-            $vcard_ext_url  = function_exists('get_field') ? get_field('vcard_external_url') : '';
 
-            // vCard URL: prefer uploaded file, else external URL
-            $vcard_url = '';
-            if (!empty($vcard_file) && !empty($vcard_file['url'])) {
-                $vcard_url = $vcard_file['url'];
-            } elseif (!empty($vcard_ext_url)) {
-                $vcard_url = $vcard_ext_url;
+            if (is_array($profile_fallback)) {
+                if (!empty($profile_fallback['job_title'])) {
+                    $job_title = (string) $profile_fallback['job_title'];
+                }
+                if (!empty($profile_fallback['contact_email'])) {
+                    $email = (string) $profile_fallback['contact_email'];
+                }
+                if (!empty($profile_fallback['contact_phone'])) {
+                    $phone = (string) $profile_fallback['contact_phone'];
+                }
             }
+
+            $fallback_practice_areas = [];
+            if (is_array($profile_fallback) && !empty($profile_fallback['practice_areas']) && is_array($profile_fallback['practice_areas'])) {
+                $fallback_practice_areas = array_values(array_filter(array_map('strval', $profile_fallback['practice_areas'])));
+            }
+
+            // vCard URL: uploaded file -> external URL -> generated from team ACF fields
+            $vcard_url = function_exists('matrix_get_team_vcard_url')
+                ? matrix_get_team_vcard_url(get_the_ID())
+                : '';
 
             // Social handle derivation (if handle not provided)
             $display_twitter = '';
@@ -81,6 +120,28 @@ get_header();
             $enable_testimonials    = function_exists('get_field') ? (int) get_field('enable_testimonials') === 1 : false;
             $testimonials_heading   = function_exists('get_field') ? get_field('testimonials_heading') : '';
             $testimonials_repeater  = function_exists('get_field') ? get_field('team_testimonials') : [];
+            $about_content_html     = apply_filters('the_content', get_the_content());
+
+            if (is_array($profile_fallback) && !empty($profile_fallback['disable_social'])) {
+                $twitter_url = '';
+                $twitter_handle = '';
+                $linkedin_url = '';
+                $linkedin_handle = '';
+            }
+
+            if (is_array($profile_fallback) && !empty($profile_fallback['bio_html'])) {
+                $about_content_html = wpautop(wp_kses_post((string) $profile_fallback['bio_html']));
+            }
+
+            if (is_array($profile_fallback)) {
+                $about_content_html = str_ireplace('John Lynch', $member_name, $about_content_html);
+                if (is_string($education) && $education !== '') {
+                    $education = str_ireplace('John Lynch', $member_name, $education);
+                }
+                if (is_string($testimonials_heading) && $testimonials_heading !== '') {
+                    $testimonials_heading = str_ireplace('John Lynch', $member_name, $testimonials_heading);
+                }
+            }
 
             // Default profile image if no ACF headshot or featured image
             $default_profile_url = '/wp-content/uploads/2025/12/image-2-1.png';
@@ -96,6 +157,10 @@ get_header();
                     $source = isset($row['attribution_source']) ? wp_strip_all_tags($row['attribution_source']) : '';
                     $year   = isset($row['attribution_year']) ? wp_strip_all_tags($row['attribution_year']) : '';
                     if ($quote || $source || $year) {
+                        if (is_array($profile_fallback)) {
+                            $quote = str_ireplace('John Lynch', $member_name, $quote);
+                            $source = str_ireplace('John Lynch', $member_name, $source);
+                        }
                         $slides[] = [
                             'quote'  => $quote,
                             'source' => $source,
@@ -278,8 +343,8 @@ get_header();
                             </header>
 
                             <!-- Main Description (post content) -->
-                            <div class="relative self-stretch text-lg tracking-wider leading-7 text-black max-sm:text-base max-sm:leading-6 wp_editor">
-                                <?php the_content(); ?>
+                            <div class="relative self-stretch text-lg tracking-wider leading-7 text-black max-sm:text-base max-sm:leading-6 wp_editor wp_editor--article-lists">
+                                <?php echo $about_content_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </div>
 
                             <!-- Education (optional WYSIWYG) -->
@@ -288,7 +353,7 @@ get_header();
                                     <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-primary max-sm:text-2xl max-sm:leading-8">
                                         Education
                                     </h2>
-                                    <div class="relative self-stretch text-lg tracking-wider leading-7 text-black max-sm:text-base max-sm:leading-6 wp_editor">
+                                    <div class="relative self-stretch text-lg tracking-wider leading-7 text-black max-sm:text-base max-sm:leading-6 wp_editor wp_editor--article-lists">
                                         <?php echo wp_kses_post($education); ?>
                                     </div>
                                 </section>
@@ -394,6 +459,11 @@ get_header();
                                           if (!$slider.length || typeof $slider.slick !== 'function') return;
                                           if ($slider.hasClass('slick-initialized')) return;
 
+                                          $slider.on('init', function(){
+                                            // Ensure slider is visible even if Slick leaves loading class behind.
+                                            $slider.removeClass('slick-loading');
+                                          });
+
                                           $slider.slick({
                                             slidesToShow: 1,
                                             slidesToScroll: 1,
@@ -420,11 +490,26 @@ get_header();
 
                         <!-- Right Column - Practice Areas Sidebar -->
                         <aside class="flex relative flex-col gap-6 items-start p-2 w-1/3 max-md:w-full">
+                            <a href="<?php echo esc_url(get_post_type_archive_link('team') ?: home_url('/team/')); ?>"
+                               class="btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap hover:bg-primary text-primary hover:text-white">
+                                <span class="relative text-lg font-semibold leading-6 max-sm:text-base max-sm:leading-6">
+                                    Return to People
+                                </span>
+                            </a>
                             <h2 class="relative self-stretch text-3xl font-semibold leading-9 text-primary max-sm:text-2xl max-sm:leading-8">
                                 Practice areas
                             </h2>
                             <nav class="flex relative flex-col gap-3 items-start self-stretch" aria-label="Practice areas">
-                                <?php if (!empty($practice_terms) && !is_wp_error($practice_terms)) : ?>
+                                <?php if (!empty($fallback_practice_areas)) : ?>
+                                    <?php foreach ($fallback_practice_areas as $practice_label) : ?>
+                                        <span
+                                           class="practice-pill btn flex relative gap-2 justify-center items-center px-6 py-2.5 border border-primary border-solid rounded-[100px] max-sm:px-5 max-sm:py-2 w-fit whitespace-nowrap text-primary">
+                                            <span class="relative text-lg font-semibold leading-6 max-sm:text-base max-sm:leading-6">
+                                                <?php echo esc_html($practice_label); ?>
+                                            </span>
+                                        </span>
+                                    <?php endforeach; ?>
+                                <?php elseif (!empty($practice_terms) && !is_wp_error($practice_terms)) : ?>
                                     <?php foreach ($practice_terms as $term) :
                                         $term_link = get_term_link($term);
                                         if (is_wp_error($term_link)) { continue; } ?>
@@ -504,7 +589,13 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
   };
 
   $fallback_img = '/wp-content/uploads/2025/12/image-2-1.png'; // change if you prefer
-  $fallback_desc = 'Lorem ipsum dolor sit amet consectetur. Mauris cras diam lectus pretium.';
+  $fallback_desc_for = static function($title) {
+    $title = trim((string) $title);
+    if ($title === '') {
+      return 'Strategic, practical legal advice tailored to this sector.';
+    }
+    return sprintf('Strategic, practical legal advice for %s.', $title);
+  };
   ?>
   <section class="flex overflow-hidden relative  tracking-wider bg-[#F5F5F5] max-md:px-5" role="region" aria-labelledby="sectors-heading">
     <div class="flex flex-col items-center py-6 mx-auto w-full max-w-[1568px] max-xxl:px-5 xl:pt-16 xl:pb-200">
@@ -550,14 +641,14 @@ if (!empty($sector_terms) && !is_wp_error($sector_terms)) :
             } else {
               // No matching sectors CPT found – link to the sectors archive (or skip)
               $card_link = get_post_type_archive_link('sectors') ?: home_url('/sectors/');
-              $desc      = $fallback_desc;
+              $desc      = $fallback_desc_for($term->name);
               $img_html  = sprintf(
                 '<img src="%s" alt="%s" class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105" loading="lazy" />',
                 esc_url($fallback_img),
                 esc_attr($term->name)
               );
             }
-            $desc = !empty($desc) ? $desc : $fallback_desc;
+            $desc = !empty($desc) ? $desc : $fallback_desc_for($term->name);
             ?>
             <article class="overflow-hidden flex-1" role="listitem">
               <a href="<?php echo esc_url($card_link); ?>" class="block relative group">

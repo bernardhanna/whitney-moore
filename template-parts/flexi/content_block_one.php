@@ -1,10 +1,38 @@
 <?php
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 // Get ACF fields
 $section_name   = get_sub_field('section_name');
 $heading        = get_sub_field('heading');
 $heading_tag    = get_sub_field('heading_tag');
 $content        = get_sub_field('content');
 $reverse_layout = get_sub_field('reverse_layout');
+
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($section_name) || trim($section_name) === '') {
+        $section_name = 'About us';
+    }
+    if (!is_string($heading) || trim($heading) === '') {
+        $heading = 'Built on trusted relationships and practical advice';
+    }
+    if (!is_string($content) || trim(wp_strip_all_tags($content)) === '') {
+        $content = 'For over a century, our team has supported businesses, institutions, and investors with clear legal guidance grounded in commercial reality. We focus on outcomes, stay close to your priorities, and deliver advice that is straightforward to act on.';
+    }
+    if (!is_string($heading_tag) || trim($heading_tag) === '') {
+        $heading_tag = 'h2';
+    }
+    $reverse_layout = false;
+}
+
+if (is_string($heading)) {
+    $heading = matrix_replace_real_estate_copy($heading);
+    $heading = matrix_replace_lorem_copy($heading, 'Practical support across key areas');
+}
+
+if (is_string($content)) {
+    $content = matrix_replace_real_estate_copy($content);
+    $content = matrix_replace_lorem_copy($content, 'Our team combines sector insight with clear, responsive legal advice to support your business goals.');
+}
 
 // Background color
 $background_color = get_sub_field('background_color');
@@ -31,6 +59,14 @@ if (have_rows('padding_settings')) {
 
 // Generate unique ID for accessibility
 $section_id = 'content-block-' . wp_rand(1000, 9999);
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'content_block_one';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
 
 // Enforce allowed heading tags (include span & p)
 $allowed_heading_tags = ['h1','h2','h3','h4','h5','h6','span','p'];
@@ -66,7 +102,7 @@ if ($image_id) {
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
     class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"

@@ -127,7 +127,7 @@ if (function_exists('load_hero_templates')) {
             </div>
 
             <!-- Post Content -->
-            <div class="mt-5 w-full xl:mt-12 max-md:mt-10 max-md:max-w-full wp_editor">
+            <div class="mt-5 w-full xl:mt-12 max-md:mt-10 max-md:max-w-full wp_editor wp_editor--article-lists">
               <?php the_content(); ?>
             </div>
           </div>

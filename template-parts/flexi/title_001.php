@@ -1,7 +1,31 @@
 <?php
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 $heading = get_sub_field('heading');
 $heading_tag = get_sub_field('heading_tag');
 $description = get_sub_field('description');
+
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($heading) || trim($heading) === '') {
+        $heading = 'Why clients choose Whitney Moore';
+    }
+    if (!is_string($description) || trim(wp_strip_all_tags($description)) === '') {
+        $description = 'We combine deep sector insight, responsive service, and clear commercial advice to help clients move with confidence.';
+    }
+    if (!is_string($heading_tag) || trim($heading_tag) === '') {
+        $heading_tag = 'h2';
+    }
+}
+
+if (is_string($heading)) {
+    $heading = matrix_replace_real_estate_copy($heading);
+    $heading = matrix_replace_lorem_copy($heading, 'How we support our clients');
+}
+
+if (is_string($description)) {
+    $description = matrix_replace_real_estate_copy($description);
+    $description = matrix_replace_lorem_copy($description, 'We provide commercially focused legal advice tailored to your sector, strategy, and objectives.');
+}
 
 // Padding settings
 $padding_classes = [];
@@ -18,10 +42,18 @@ if (have_rows('padding_settings')) {
 
 // Generate unique section ID
 $section_id = 'title_' . uniqid();
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'title_001';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
     class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     role="region"
     aria-labelledby="<?php echo esc_attr($section_id); ?>_heading"

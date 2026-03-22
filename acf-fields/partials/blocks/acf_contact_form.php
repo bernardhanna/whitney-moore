@@ -10,7 +10,7 @@ $contact_form
     ->addTab('Content')
         ->addText('heading', [
             'label' => 'Main Heading',
-            'default_value' => 'Lorem ipsum'
+            'default_value' => 'Get in touch'
         ])
         ->addSelect('heading_tag', [
             'label' => 'Main Heading Tag',
@@ -28,7 +28,7 @@ $contact_form
         ])
         ->addWysiwyg('description', [
             'label' => 'Description',
-            'default_value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis.',
+            'default_value' => 'Our team is here to help. Share your query and we will connect you with the right lawyer.',
             'wrapper' => ['class' => 'wp_editor'],
             'media_upload' => 0,
             'tabs' => 'visual',

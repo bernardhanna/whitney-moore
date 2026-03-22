@@ -27,6 +27,9 @@ $hero_text = $settings['hero_heading_text'] ?? "What's new at Tyrecare";
 
 // 4) Sub-heading
 $sub_text  = $settings['hero_subheading_text'] ?? 'Latest and greatest.';
+if (is_string($sub_text) && stripos($sub_text, 'lorem ipsum') !== false) {
+  $sub_text = 'Explore the latest legal updates, practical insights, and firm news from Whitney Moore.';
+}
 
 // 5) Filter title
 $filter_title = $settings['filter_section_title'] ?? 'Filter by';

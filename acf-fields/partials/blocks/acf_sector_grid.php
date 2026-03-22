@@ -47,7 +47,7 @@ $sectors_grid
                 'manual'    => 'Select Specific Posts (Mixed)',
                 'manual_cards' => 'Manual Cards (Image/Text/Link)',
             ],
-            'default_value' => 'post_type',
+            'default_value' => 'manual',
             'ui' => 1,
         ])
         ->addRelationship('manual_items', [

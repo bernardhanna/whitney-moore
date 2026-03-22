@@ -16,7 +16,7 @@ $content_block_one
     ->addText('heading', [
         'label' => 'Main Heading',
         'instructions' => 'Enter the main heading text.',
-        'default_value' => 'Lorem ipsum dolor sit amet is a placeholder',
+        'default_value' => 'How we help',
     ])
     ->addSelect('heading_tag', [
         'label' => 'Heading Tag',
@@ -36,7 +36,7 @@ $content_block_one
     ->addWysiwyg('content', [
         'label' => 'Content',
         'instructions' => 'Enter the main content text. Use line breaks and formatting as needed.',
-        'default_value' => 'Lorem ipsum dolor sit amet consectetur. Feugiat vitae cursus tempus nibh. Amet odio malesuada id pharetra turpis tellus purus non facilisis. Varius est quis auctor.<br><br>Lorem ipsum dolor sit amet consectetur. Feugiat vitae cursus tempus nibh. Amet odio malesuada id pharetra turpis tellus purus non facilisis. Varius est quis auctor.<br><br>Acquisition and Disposal<br>Banking and Finance<br>Commercial Landlord and Tenant<br>Development<br>Distressed Properties<br>Property Finance<br>New Homes<br>Residential Property<br>Social Housing',
+        'default_value' => 'Use this section to outline your services and explain how your team supports clients in this area.<br><br>Add key capabilities as short bullet-style lines, for example:<br>Regulatory and compliance advice<br>Commercial contracts<br>Transactions and financings<br>Dispute resolution',
         'media_upload' => 0,
         'tabs' => 'all',
         'toolbar' => 'full',

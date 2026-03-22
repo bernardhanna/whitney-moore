@@ -15,6 +15,129 @@ if (empty($heading_tag) || !in_array($heading_tag, $allowed_heading_tags, true))
     $heading_tag = 'h2';
 }
 
+/**
+ * Resolve the best-matching WP author for a Team profile.
+ */
+$resolve_team_author_id = static function ($team_post_id) {
+    $team_post_id = (int) $team_post_id;
+    if ($team_post_id <= 0 || get_post_type($team_post_id) !== 'team') {
+        return 0;
+    }
+
+    $team_slug  = sanitize_title((string) get_post_field('post_name', $team_post_id));
+    $team_title = trim((string) get_the_title($team_post_id));
+
+    if ($team_slug !== '') {
+        $slug_user = get_user_by('slug', $team_slug);
+        if ($slug_user instanceof WP_User) {
+            return (int) $slug_user->ID;
+        }
+
+        $login_user = get_user_by('login', $team_slug);
+        if ($login_user instanceof WP_User) {
+            return (int) $login_user->ID;
+        }
+    }
+
+    if ($team_title !== '') {
+        $candidate_users = get_users([
+            'search'         => $team_title,
+            'search_columns' => ['display_name'],
+            'number'         => 20,
+            'fields'         => ['ID', 'display_name'],
+        ]);
+
+        foreach ($candidate_users as $candidate_user) {
+            $candidate_name = isset($candidate_user->display_name) ? trim((string) $candidate_user->display_name) : '';
+            if ($candidate_name !== '' && strcasecmp($candidate_name, $team_title) === 0) {
+                return (int) $candidate_user->ID;
+            }
+        }
+    }
+
+    return 0;
+};
+
+/**
+ * Resolve blog category IDs from the current Team member taxonomy terms.
+ */
+$resolve_team_category_ids = static function ($team_post_id) {
+    $team_post_id = (int) $team_post_id;
+    if ($team_post_id <= 0 || get_post_type($team_post_id) !== 'team') {
+        return [];
+    }
+
+    $team_taxonomies = ['team_practice_area', 'team_sector', 'team_role'];
+    $candidate_terms = [];
+
+    foreach ($team_taxonomies as $team_taxonomy) {
+        $terms = get_the_terms($team_post_id, $team_taxonomy);
+        if (is_array($terms) && !empty($terms)) {
+            foreach ($terms as $term) {
+                if ($term instanceof WP_Term) {
+                    $candidate_terms[] = $term;
+                }
+            }
+        }
+    }
+
+    if (empty($candidate_terms)) {
+        return [];
+    }
+
+    $category_ids = [];
+    foreach ($candidate_terms as $candidate_term) {
+        $category_by_slug = get_term_by('slug', (string) $candidate_term->slug, 'category');
+        if ($category_by_slug instanceof WP_Term) {
+            $category_ids[] = (int) $category_by_slug->term_id;
+            continue;
+        }
+
+        $category_by_name = get_term_by('name', (string) $candidate_term->name, 'category');
+        if ($category_by_name instanceof WP_Term) {
+            $category_ids[] = (int) $category_by_name->term_id;
+        }
+    }
+
+    $category_ids = array_values(array_unique(array_filter(array_map('intval', $category_ids))));
+    return $category_ids;
+};
+
+/**
+ * Resolve blog category IDs from Team sector taxonomy terms only.
+ */
+$resolve_team_sector_category_ids = static function ($team_post_id) {
+    $team_post_id = (int) $team_post_id;
+    if ($team_post_id <= 0 || get_post_type($team_post_id) !== 'team') {
+        return [];
+    }
+
+    $sector_terms = get_the_terms($team_post_id, 'team_sector');
+    if (!is_array($sector_terms) || empty($sector_terms)) {
+        return [];
+    }
+
+    $category_ids = [];
+    foreach ($sector_terms as $sector_term) {
+        if (!$sector_term instanceof WP_Term) {
+            continue;
+        }
+
+        $category_by_slug = get_term_by('slug', (string) $sector_term->slug, 'category');
+        if ($category_by_slug instanceof WP_Term) {
+            $category_ids[] = (int) $category_by_slug->term_id;
+            continue;
+        }
+
+        $category_by_name = get_term_by('name', (string) $sector_term->name, 'category');
+        if ($category_by_name instanceof WP_Term) {
+            $category_ids[] = (int) $category_by_name->term_id;
+        }
+    }
+
+    return array_values(array_unique(array_filter(array_map('intval', $category_ids))));
+};
+
 // Padding classes
 $padding_classes = [];
 if (have_rows('padding_settings')) {
@@ -48,16 +171,25 @@ if (is_singular()) {
 }
 
 $tax_query = [];
-if ($filter_type === 'category' || $filter_type === 'category_author') {
-    $cat_ids = (array) get_sub_field('categories');
-    $cat_ids = array_filter(array_map('intval', $cat_ids));
-    if (!empty($cat_ids)) {
+$cat_ids = (array) get_sub_field('categories');
+$cat_ids = array_filter(array_map('intval', $cat_ids));
+
+$team_post_id = is_singular('team') ? (int) get_queried_object_id() : 0;
+$team_fallback_cat_ids = [];
+$team_sector_cat_ids = [];
+$team_author_id = 0;
+if ($team_post_id > 0) {
+    $team_fallback_cat_ids = $resolve_team_category_ids($team_post_id);
+    $team_sector_cat_ids = $resolve_team_sector_category_ids($team_post_id);
+    $team_author_id = $resolve_team_author_id($team_post_id);
+}
+
+if (($filter_type === 'category' || $filter_type === 'category_author') && !empty($cat_ids)) {
         $tax_query[] = [
             'taxonomy' => 'category',
             'field'    => 'term_id',
             'terms'    => $cat_ids,
         ];
-    }
 }
 if ($filter_type === 'tag') {
     $tag_ids = (array) get_sub_field('tags');
@@ -77,12 +209,100 @@ if (!empty($tax_query)) {
 if ($filter_type === 'author' || $filter_type === 'category_author') {
     $author_ids = (array) get_sub_field('authors');
     $author_ids = array_filter(array_map('intval', $author_ids));
+
+    // On single team pages, "Author" filtering should follow the current team member only.
+    if ($team_post_id > 0) {
+        if ($team_author_id > 0) {
+            $author_ids = [$team_author_id];
+        } else {
+            // Never fall back to manually selected authors (e.g. Bernard) on team pages.
+            $author_ids = [];
+        }
+    }
+
     if (!empty($author_ids)) {
         $args['author__in'] = $author_ids;
     }
 }
 
-$articles_query = new WP_Query($args);
+if ($team_post_id > 0 && $team_author_id === 0 && ($filter_type === 'author' || $filter_type === 'category_author')) {
+    $fallback_cat_ids = !empty($team_fallback_cat_ids) ? $team_fallback_cat_ids : $cat_ids;
+    if (!empty($fallback_cat_ids)) {
+        $args['tax_query'] = [
+            [
+                'taxonomy' => 'category',
+                'field'    => 'term_id',
+                'terms'    => $fallback_cat_ids,
+            ],
+        ];
+    }
+}
+
+$articles_query = null;
+
+if ($team_post_id > 0) {
+    // Team member pages always use a fixed fallback chain:
+    // 1) same author, 2) team categories, 3) team sector categories, 4) latest.
+    $build_team_query_args = static function (array $base_args, array $overrides = []) {
+        $query_args = $base_args;
+        unset($query_args['author__in'], $query_args['tax_query']);
+
+        foreach ($overrides as $key => $value) {
+            $query_args[$key] = $value;
+        }
+
+        return $query_args;
+    };
+
+    $team_query_candidates = [];
+
+    if ($team_author_id > 0) {
+        $team_query_candidates[] = $build_team_query_args($args, [
+            'author__in' => [$team_author_id],
+        ]);
+    }
+
+    if (!empty($team_fallback_cat_ids)) {
+        $team_query_candidates[] = $build_team_query_args($args, [
+            'tax_query' => [
+                [
+                    'taxonomy' => 'category',
+                    'field'    => 'term_id',
+                    'terms'    => $team_fallback_cat_ids,
+                ],
+            ],
+        ]);
+    }
+
+    if (!empty($team_sector_cat_ids)) {
+        $team_query_candidates[] = $build_team_query_args($args, [
+            'tax_query' => [
+                [
+                    'taxonomy' => 'category',
+                    'field'    => 'term_id',
+                    'terms'    => $team_sector_cat_ids,
+                ],
+            ],
+        ]);
+    }
+
+    $team_query_candidates[] = $build_team_query_args($args);
+
+    foreach ($team_query_candidates as $team_query_args) {
+        $candidate_query = new WP_Query($team_query_args);
+        if ($candidate_query->have_posts()) {
+            $articles_query = $candidate_query;
+            break;
+        }
+    }
+
+    if (!$articles_query instanceof WP_Query) {
+        $articles_query = new WP_Query($build_team_query_args($args));
+    }
+} else {
+    $articles_query = new WP_Query($args);
+}
+
 $section_id = 'related-content-' . wp_rand(1000, 9999);
 $default_related_fallback_image = home_url('/wp-content/uploads/2025/12/lawyers-meeting-with-chef-in-office-2022-02-07-21-47-35-utc-1.png');
 

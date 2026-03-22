@@ -8,11 +8,32 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 $section_id = 'partners-' . wp_generate_uuid4();
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'partners';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
 
 $heading_text = get_sub_field('heading_text') ? get_sub_field('heading_text') : 'They trust us';
 $heading_tag  = get_sub_field('heading_tag') ? get_sub_field('heading_tag') : 'h2';
 $subheading   = get_sub_field('subheading') ? get_sub_field('subheading') : 'Our team advises leading companies in the real estate field';
+
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($heading_text) || trim($heading_text) === '') {
+        $heading_text = 'Trusted by leading organisations';
+    }
+    $subheading = 'We support clients across sectors with practical, commercially focused advice.';
+}
+
+if (is_string($subheading)) {
+    $subheading = matrix_replace_real_estate_copy($subheading);
+}
 
 $background_color = get_sub_field('background_color') ? get_sub_field('background_color') : '#FFFFFF';
 
@@ -78,7 +99,7 @@ $prev_id   = $section_id . '-prev';
 $next_id   = $section_id . '-next';
 ?>
 
-<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>"  class="bg-[#F5F5F5]  flex overflow-hidden relative">
+<section id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>"  class="bg-[#F5F5F5]  flex overflow-hidden relative">
     <div class="flex flex-col items-center w-full mx-auto max-w-[1590px] py-10 max-xxl:px-5<?php echo esc_attr($padding_classes_string); ?>">
 
         <header class="flex justify-between items-center w-full max-md:flex-col max-md:gap-6 max-md:items-start max-md:mb-6 max-sm:gap-5 max-sm:mb-5">

@@ -3,7 +3,17 @@
  * Flexi Block: Testimonials Slider (Slick)
  */
 
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 $section_id = 'testimonials-' . wp_rand(1000, 9999);
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+  $layout_name = 'testimonials_slider';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+  $row_index = 0;
+}
 
 /** Content */
 $subheading       = get_sub_field('subheading');
@@ -27,6 +37,21 @@ $slides_xl = 4;
 $slides_lg = (int) get_sub_field('slides_lg') ?: 3;
 $slides_md = (int) get_sub_field('slides_md') ?: 2;
 $slides_sm = (int) get_sub_field('slides_sm') ?: 1;
+
+if ($block_context === 'why_us_fallback') {
+  if (!is_string($subheading) || trim($subheading) === '') {
+    $subheading = 'Client feedback';
+  }
+  if (!is_string($main_heading) || trim($main_heading) === '') {
+    $main_heading = 'What our clients say';
+  }
+  if (!is_string($intro_text) || trim(wp_strip_all_tags($intro_text)) === '') {
+    $intro_text = '<p>We are proud to be a long-term partner to leading organisations across Ireland and beyond.</p>';
+  }
+  $arrow_enabled = true;
+  $dots_enabled = true;
+  $autoplay_enabled = true;
+}
 
 /** Padding classes */
 $padding_classes = [];
@@ -68,8 +93,11 @@ if ($data_source === 'latest') {
     $position  = has_excerpt($pid) ? wp_strip_all_tags((string) get_post_field('post_excerpt', $pid)) : '';
     $text_html = apply_filters('the_content', get_post_field('post_content', $pid));
     $image_id  = get_post_thumbnail_id($pid);
+    $person_id   = (int) get_post_meta($pid, 'mentioned_person_id', true);
+    $person_name = $person_id ? get_the_title($person_id) : '';
+    $person_link = $person_id ? get_permalink($person_id) : '';
     [$logo_img_id, $logo_svg] = _matrix_t_logo($pid);
-    $slides[] = compact('name','position','text_html','image_id','logo_img_id','logo_svg');
+    $slides[] = compact('name','position','text_html','image_id','logo_img_id','logo_svg','person_name','person_link');
   }
   wp_reset_postdata();
 
@@ -80,8 +108,11 @@ if ($data_source === 'latest') {
     $position  = has_excerpt($pid) ? wp_strip_all_tags((string) get_post_field('post_excerpt', $pid)) : '';
     $text_html = apply_filters('the_content', get_post_field('post_content', $pid));
     $image_id  = get_post_thumbnail_id($pid);
+    $person_id   = (int) get_post_meta($pid, 'mentioned_person_id', true);
+    $person_name = $person_id ? get_the_title($person_id) : '';
+    $person_link = $person_id ? get_permalink($person_id) : '';
     [$logo_img_id, $logo_svg] = _matrix_t_logo($pid);
-    $slides[] = compact('name','position','text_html','image_id','logo_img_id','logo_svg');
+    $slides[] = compact('name','position','text_html','image_id','logo_img_id','logo_svg','person_name','person_link');
   }
 
 } elseif ($data_source === 'manual' && !empty($manual_items)) {
@@ -92,7 +123,9 @@ if ($data_source === 'latest') {
     $image_id    = (int) ($row['photo'] ?? 0);
     $logo_img_id = (int) ($row['logo_image'] ?? 0);
     $logo_svg    = $row['logo_svg'] ?? '';
-    $slides[]    = compact('name','position','text_html','image_id','logo_img_id','logo_svg');
+    $person_name = '';
+    $person_link = '';
+    $slides[]    = compact('name','position','text_html','image_id','logo_img_id','logo_svg','person_name','person_link');
   }
 }
 
@@ -100,17 +133,20 @@ if (empty($slides)) return;
 
 /** Allowed tags for inline SVG logos */
 $allowed_svg = [
-  'svg'  => ['xmlns'=>true,'viewBox'=>true,'width'=>true,'height'=>true,'fill'=>true],
+  'svg'  => ['xmlns'=>true,'xmlns:xlink'=>true,'viewBox'=>true,'width'=>true,'height'=>true,'fill'=>true,'class'=>true],
   'path' => ['d'=>true,'fill'=>true,'stroke'=>true,'stroke-width'=>true,'fill-rule'=>true,'clip-rule'=>true,'stroke-linecap'=>true,'stroke-linejoin'=>true,'opacity'=>true],
   'g'    => ['clip-path'=>true,'opacity'=>true],
   'defs' => [],
   'clipPath'=>['id'=>true],
+  'pattern' => ['id'=>true,'patternContentUnits'=>true,'width'=>true,'height'=>true],
+  'use' => ['xlink:href'=>true,'href'=>true,'transform'=>true],
+  'image' => ['id'=>true,'width'=>true,'height'=>true,'preserveAspectRatio'=>true,'xlink:href'=>true,'href'=>true],
   'rect' => ['width'=>true,'height'=>true,'fill'=>true,'x'=>true,'y'=>true,'rx'=>true],
 ];
 ?>
 
 <section
-  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+  id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
   class="relative flex overflow-hidden <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
   aria-labelledby="<?php echo esc_attr($section_id); ?>-heading"
 >
@@ -143,53 +179,80 @@ $allowed_svg = [
           <?php foreach ($slides as $s) :
             $name        = $s['name'];
             $position    = $s['position'];
+            $company     = !empty($position) ? $position : $name;
             $text_html   = $s['text_html'];
             $image_id    = (int) $s['image_id'];
             $logo_img_id = (int) $s['logo_img_id'];
             $logo_svg    = $s['logo_svg'];
+            $person_name = isset($s['person_name']) ? (string) $s['person_name'] : '';
+            $person_link = isset($s['person_link']) ? (string) $s['person_link'] : '';
+            $has_logo    = $logo_img_id || !empty($logo_svg);
             $img_alt     = $image_id ? (get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: $name) : $name;
             $img_title   = $image_id ? (get_the_title($image_id) ?: $name) : $name;
+            $has_person_link = !empty($person_link);
           ?>
             <div class="px-4">
-              <article class="relative h-[480px] overflow-hidden group t-card flex justify-end items-end p-4">
+              <?php if ($has_person_link) : ?>
+                <a href="<?php echo esc_url($person_link); ?>" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50">
+              <?php endif; ?>
+              <article class="relative h-[480px] overflow-hidden group t-card flex justify-center items-end p-4">
                 <?php if ($image_id) :
-                  echo wp_get_attachment_image($image_id, 'large', false, [
+                  echo wp_get_attachment_image($image_id, 'full', false, [
                     'alt' => esc_attr($img_alt), 'title' => esc_attr($img_title),
                     'class' => 'absolute inset-0 w-full h-full object-cover object-top', 'loading' => 'lazy',
                   ]);
                 endif; ?>
 
-                <div class="relative z-20">
-                  <div class="relative backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-6">
-                    <div class="flex items-start">
-                      <?php
-                      if ($logo_img_id) {
-                        echo wp_get_attachment_image($logo_img_id, 'medium', false, [
-                          'alt' => esc_attr($name . ' logo'), 'class' => 'h-6 w-auto', 'loading' => 'lazy',
-                        ]);
-                      } elseif (!empty($logo_svg)) {
-                        echo wp_kses($logo_svg, $allowed_svg);
-                      }
-                      ?>
-                    </div>
+                <div class="relative z-20 w-full">
+                  <div class="relative w-full backdrop-blur-lg bg-[#ffffff85] shadow-[0_4px_16px_0_rgba(0,0,0,0.12),0_2px_4px_0_rgba(0,0,0,0.12)] p-6 flex flex-col gap-4">
+                    <?php if ($has_logo) : ?>
+                      <div class="flex items-start">
+                        <?php
+                        if ($logo_img_id) {
+                          echo wp_get_attachment_image($logo_img_id, 'medium', false, [
+                            'alt' => esc_attr($name . ' logo'), 'class' => 'h-6 md:h-7 w-auto object-contain', 'loading' => 'lazy',
+                          ]);
+                        } elseif (!empty($logo_svg)) {
+                          // Some legacy inline SVG logos embed base64 image data, which wp_kses strips.
+                          // Render the uploaded file directly for that signature so the logo remains visible.
+                          if (strpos($logo_svg, 'image0_3257_141') !== false || strpos($logo_svg, 'data:image/png;base64') !== false) {
+                            echo '<img src="' . esc_url('/wp-content/uploads/2025/12/legal-500.svg') . '" alt="' . esc_attr($name . ' logo') . '" class="h-6 md:h-7 w-auto object-contain" style="filter: brightness(0) saturate(100%);" loading="lazy" />';
+                          } elseif (strpos($logo_svg, 'width="219"') !== false && strpos($logo_svg, 'height="58"') !== false) {
+                            // Chambers logo: prefer file-based SVG here to avoid occasional inline clipping.
+                            echo '<img src="' . esc_url('/wp-content/uploads/2025/12/chambers-and-partners-logo.svg') . '" alt="' . esc_attr($name . ' logo') . '" class="h-6 md:h-7 w-auto object-contain" style="filter: brightness(0) saturate(100%);" loading="lazy" />';
+                          } else {
+                            $render_logo_svg = $logo_svg;
+                            // Normalize inline logo visual size across providers.
+                            $render_logo_svg = preg_replace('/<svg\b(?![^>]*\bclass=)/i', '<svg class="h-6 md:h-7 w-auto object-contain" ', $render_logo_svg, 1);
+                            echo wp_kses($render_logo_svg, $allowed_svg);
+                          }
+                        }
+                        ?>
+                      </div>
+                    <?php endif; ?>
 
                     <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
                       <?php echo $text_html; ?>
                     </div>
 
-                    <div class="flex flex-col">
-                      <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
-                        <?php echo esc_html($name); ?>
-                      </div>
-                      <?php if (!empty($position)) : ?>
-                        <div class="text-sm tracking-tight leading-5 text-black/60">
-                          <?php echo esc_html($position); ?>
+                    <?php if (!empty($company)) : ?>
+                      <div class="flex flex-col">
+                        <div class="text-neutral-900 text-base font-medium leading-[22px] tracking-tight">
+                          <?php echo esc_html($company); ?>
                         </div>
-                      <?php endif; ?>
-                    </div>
+                        <?php if (!empty($person_name)) : ?>
+                          <div class="mt-1 text-sm tracking-tight leading-5 text-black/70">
+                            <?php echo esc_html('About ' . $person_name); ?>
+                          </div>
+                        <?php endif; ?>
+                      </div>
+                    <?php endif; ?>
                   </div>
                 </div>
               </article>
+              <?php if ($has_person_link) : ?>
+                </a>
+              <?php endif; ?>
             </div>
           <?php endforeach; ?>
         </div>

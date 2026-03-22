@@ -1,11 +1,26 @@
 <?php
 // Get ACF fields
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 $heading          = get_sub_field('heading');
 $heading_tag      = get_sub_field('heading_tag');
 $profile_image    = get_sub_field('profile_image');
 $button           = get_sub_field('button');
 $background_color = get_sub_field('background_color');
 $background_image = get_sub_field('background_image');
+
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($heading) || trim($heading) === '') {
+        $heading = 'Ready to talk through your next move?';
+    }
+    if (!is_string($heading_tag) || trim($heading_tag) === '') {
+        $heading_tag = 'h2';
+    }
+}
+
+if (is_string($heading)) {
+    $heading = matrix_replace_real_estate_copy($heading);
+}
 
 // -------------------------------------------------
 // Make image fields robust (ACF can return ID or Array)
@@ -37,6 +52,14 @@ $background_image_alt = $background_image_id
 
 // Generate unique section ID
 $section_id = 'cta-two-' . uniqid();
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'cta_two';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
 
 // Build padding classes
 $padding_classes = [];
@@ -84,7 +107,7 @@ if (!in_array($heading_tag, $allowed_heading_tags, true)) {
 ?>
 
 <section
-    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
     class="relative flex overflow-hidden  max-w-full w-full <?php echo esc_attr(implode(' ', $padding_classes)); ?>"
     style="background-color: <?php echo esc_attr($background_color); ?>;"
     role="region"

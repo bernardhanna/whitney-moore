@@ -51,6 +51,13 @@ module.exports = {
   },
 
   devServer: {
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false,
+        runtimeErrors: false,
+      },
+    },
     static: { directory: path.join(__dirname), watch: true },
     compress: true,
     port: process.env.DEV_SERVER_PORT || 3000,

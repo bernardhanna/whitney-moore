@@ -6,6 +6,8 @@
  * - Integrates Metronet Reorder Posts when active
  */
 
+$block_context = isset($args['matrix_flexi_context']) ? (string) $args['matrix_flexi_context'] : '';
+
 $section_heading      = get_sub_field('section_heading');
 $section_heading_tag  = get_sub_field('section_heading_tag') ?: 'p';
 
@@ -27,7 +29,23 @@ $override_link        = get_sub_field('override_link');
 
 $image_radius         = get_sub_field('image_radius') ?: 'rounded-none';
 $tile_radius          = get_sub_field('tile_radius')  ?: 'rounded-none';
-$default_item_description = 'Lorem ipsum dolor sit amet consectetur. Mauris cras diam lectus pretium.';
+$default_item_description_for = static function($title) {
+    $title = trim((string) $title);
+    if ($title === '') {
+        return 'Strategic, practical legal advice tailored to this area.';
+    }
+    return sprintf('Strategic, practical legal advice for %s.', $title);
+};
+$default_card_image_url = home_url('/wp-content/uploads/2025/12/image-2-1.png');
+
+if ($block_context === 'why_us_fallback') {
+    if (!is_string($section_heading) || trim($section_heading) === '') {
+        $section_heading = 'Our sectors';
+    }
+    if (!is_string($main_heading) || trim($main_heading) === '') {
+        $main_heading = 'Experience across the markets that matter';
+    }
+}
 
 $allowed_tags = ['h1','h2','h3','h4','h5','h6','span','p'];
 if (!in_array($section_heading_tag, $allowed_tags, true)) { $section_heading_tag = 'p'; }
@@ -61,6 +79,19 @@ if (function_exists('is_plugin_active')) {
 $grid_items    = [];
 $sectors_query = null;
 $allowed_mixed_post_types = ['sectors', 'practice_areas', 'what_we_do'];
+$resolve_post_object = static function ($value) {
+    if ($value instanceof WP_Post) {
+        return $value;
+    }
+
+    $post_id = (int) $value;
+    if ($post_id <= 0) {
+        return null;
+    }
+
+    $post = get_post($post_id);
+    return ($post instanceof WP_Post) ? $post : null;
+};
 
 $build_post_item = static function ($post_obj) use ($override_link) {
     if (!($post_obj instanceof WP_Post)) {
@@ -121,6 +152,7 @@ if ($items_source === 'manual_cards') {
 } elseif ($items_source === 'manual') {
     $manual_items = is_array($manual_items) ? $manual_items : [];
     foreach ($manual_items as $item) {
+        $item = $resolve_post_object($item);
         if (!($item instanceof WP_Post)) {
             continue;
         }
@@ -140,6 +172,7 @@ if ($items_source === 'manual_cards') {
     $query_selected_posts = is_array($query_selected_posts) ? $query_selected_posts : [];
     $selected_ids = [];
     foreach ($query_selected_posts as $selected_post) {
+        $selected_post = $resolve_post_object($selected_post);
         if (!($selected_post instanceof WP_Post)) {
             continue;
         }
@@ -197,11 +230,20 @@ if ($items_source === 'manual_cards') {
     }
 }
 
-$total      = is_array($grid_items) ? count($grid_items) : 0;
 $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
+$layout_name = get_row_layout();
+if (!is_string($layout_name) || $layout_name === '') {
+    $layout_name = 'sectors_grid';
+}
+$row_index = get_row_index();
+if (!is_numeric($row_index)) {
+    $row_index = 0;
+}
+
+$total = is_array($grid_items) ? count($grid_items) : 0;
 ?>
 <section
-    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', get_row_layout()) . '-' . get_row_index()); ?>" 
+    id="<?php echo esc_attr($section_id); ?>" data-matrix-block="<?php echo esc_attr(str_replace('_', '-', $layout_name) . '-' . $row_index); ?>" 
     class="flex overflow-hidden relative"
     style="<?php
         echo $background_color ? 'background-color:' . esc_attr($background_color) . ';' : '';
@@ -264,13 +306,23 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                 decoding="async"
                                             >
                                             <?php
+                                        } else {
+                                            ?>
+                                            <img
+                                                src="<?php echo esc_url($default_card_image_url); ?>"
+                                                alt="<?php echo esc_attr($item['image_alt'] ?: $item['title']); ?>"
+                                                class="w-full object-cover min-h-[275px] h-[275px] sm:h-[340px] sm:min-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
+                                                loading="lazy"
+                                                decoding="async"
+                                            >
+                                            <?php
                                         }
                                         ?>
                                     </div>
                                     <div class="relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color ?>">
                                         <span class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block max-md:text-[18px] max-md:not-italic max-md:font-semibold max-md:leading-[24px] max-md:tracking-[2px] max-md:whitespace-pre-wrap max-md:text-[#0902A4] lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></span>
                                         <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
-                                            <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                            <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description_for($item['title'] ?? '')); ?>
                                         </p>
                                     </div>
                                 </a>
@@ -323,13 +375,23 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     decoding="async"
                                                 >
                                                 <?php
+                                            } else {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($default_card_image_url); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt'] ?: $item['title']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
                                         <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
                                             <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
-                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description_for($item['title'] ?? '')); ?>
                                             </p>
                                         </div>
                                     </a>
@@ -374,13 +436,23 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     decoding="async"
                                                 >
                                                 <?php
+                                            } else {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($default_card_image_url); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt'] ?: $item['title']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
                                         <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color; ?>">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
                                             <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
-                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description_for($item['title'] ?? '')); ?>
                                             </p>
                                         </div>
                                     </a>
@@ -422,13 +494,23 @@ $section_id = 'sectors-grid-' . wp_rand(1000, 9999);
                                                     decoding="async"
                                                 >
                                                 <?php
+                                            } else {
+                                                ?>
+                                                <img
+                                                    src="<?php echo esc_url($default_card_image_url); ?>"
+                                                    alt="<?php echo esc_attr($item['image_alt'] ?: $item['title']); ?>"
+                                                    class="w-full h-full object-cover lg:min-h-[340px] lg:max-h-[340px] transition-transform duration-500 ease-out lg:group-hover:scale-105 lg:group-focus-visible:scale-105"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                >
+                                                <?php
                                             }
                                             ?>
                                         </div>
                                         <div class="bg-[#F5F5F5] relative overflow-hidden px-4 py-3 max-lg:relative max-lg:bg-transparent lg:absolute lg:left-0 lg:right-0 lg:bottom-0 lg:z-20 lg:translate-y-[calc(100%-3.2rem)] lg:transition-all lg:duration-500 lg:ease-out lg:group-hover:translate-y-0 lg:group-focus-visible:translate-y-0 lg:group-hover:bg-[#F5F5F5] lg:group-focus-visible:bg-[#F5F5F5]" style="<?php echo $underline_color ? 'border-top:2px solid ' . esc_attr($underline_color) . ';' : ''; ?>">
                                             <h3 class="w-full relative text-[1.25rem] tracking-[2px] font-semibold font-primary text-gray text-left inline-block lg:transition-colors lg:duration-300 lg:group-hover:text-[#0902A4] lg:group-focus-visible:text-[#0902A4]"><?php echo esc_html($item['title']); ?></h3>
                                             <p class="mt-2 text-[14px] leading-[1.35rem] text-black/80 transition-all duration-300 ease-out max-lg:opacity-100 lg:opacity-0 lg:max-h-0 lg:overflow-hidden lg:group-hover:opacity-100 lg:group-hover:max-h-[4.25rem] lg:group-focus-visible:opacity-100 lg:group-focus-visible:max-h-[4.25rem]">
-                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description); ?>
+                                                <?php echo esc_html(!empty($item['description']) ? $item['description'] : $default_item_description_for($item['title'] ?? '')); ?>
                                             </p>
                                         </div>
                                     </a>

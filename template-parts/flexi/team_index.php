@@ -69,18 +69,58 @@ $posts_per_page = 16;
 /**
  * Terms for dropdowns
  */
-$practice_area_terms = get_terms(array(
-    'taxonomy'   => 'team_practice_area',
-    'hide_empty' => true,
+$team_ids_for_filters = get_posts(array(
+    'post_type'      => 'team',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'fields'         => 'ids',
+    'no_found_rows'  => true,
 ));
-$sector_terms = get_terms(array(
-    'taxonomy'   => 'team_sector',
-    'hide_empty' => true,
-));
-$role_terms = get_terms(array(
-    'taxonomy'   => 'team_role',
-    'hide_empty' => true,
-));
+
+$practice_area_terms = !empty($team_ids_for_filters)
+    ? wp_get_object_terms($team_ids_for_filters, 'team_practice_area', array('orderby' => 'name', 'order' => 'ASC'))
+    : array();
+$sector_terms = !empty($team_ids_for_filters)
+    ? wp_get_object_terms($team_ids_for_filters, 'team_sector', array('orderby' => 'name', 'order' => 'ASC'))
+    : array();
+
+$role_options_map = array();
+if (!empty($team_ids_for_filters)) {
+    foreach ($team_ids_for_filters as $team_id_for_filter) {
+        $job_title = function_exists('get_field') ? trim((string) get_field('job_title', $team_id_for_filter)) : '';
+        if ($job_title !== '') {
+            $role_options_map[$job_title] = $job_title;
+        }
+    }
+}
+
+$role_options = array_values($role_options_map);
+if (!empty($role_options)) {
+    natcasesort($role_options);
+}
+
+$selected_practice_area_label = 'All practice areas';
+if ($selected_practice_area !== 'all') {
+    $selected_pa_term = get_term_by('slug', $selected_practice_area, 'team_practice_area');
+    if ($selected_pa_term && !is_wp_error($selected_pa_term)) {
+        $selected_practice_area_label = $selected_pa_term->name;
+    }
+}
+
+$selected_sector_label = 'All sectors';
+if ($selected_sector !== 'all') {
+    $selected_sector_term = get_term_by('slug', $selected_sector, 'team_sector');
+    if ($selected_sector_term && !is_wp_error($selected_sector_term)) {
+        $selected_sector_label = $selected_sector_term->name;
+    }
+}
+
+$selected_role_label = 'All roles';
+if ($selected_role !== 'all') {
+    if (in_array($selected_role, $role_options, true)) {
+        $selected_role_label = $selected_role;
+    }
+}
 
 /**
  * Query with filters
@@ -103,14 +143,6 @@ if ($selected_sector !== 'all') {
     );
 }
 
-if ($selected_role !== 'all') {
-    $tax_query[] = array(
-        'taxonomy' => 'team_role',
-        'field'    => 'slug',
-        'terms'    => array($selected_role),
-    );
-}
-
 $query_args = array(
     'post_type'      => 'team',
     'post_status'    => 'publish',
@@ -126,6 +158,16 @@ if (!empty($search_name)) {
 
 if (count($tax_query) > 1) {
     $query_args['tax_query'] = $tax_query;
+}
+
+if ($selected_role !== 'all') {
+    $query_args['meta_query'] = array(
+        array(
+            'key'     => 'job_title',
+            'value'   => $selected_role,
+            'compare' => '=',
+        ),
+    );
 }
 
 $team_query  = new WP_Query($query_args);
@@ -151,20 +193,22 @@ $base_args = array(
     class="box-border flex flex-wrap justify-between items-start pt-6 pb-0 w-full max-md:flex-col max-md:gap-6 max-md:pt-8 max-md:pb-0 max-sm:pt-5 max-sm:pb-0 relative xxl:left-[1.5rem]"
     method="get"
     action="<?php echo esc_url(get_permalink()); ?>"
+    x-ref="teamFiltersForm"
     role="search"
     aria-label="Filter and search options"
     x-data="{
         paOpen:false, sectorOpen:false, roleOpen:false,
-        paValue:'<?php echo esc_js($selected_practice_area); ?>',
-        sectorValue:'<?php echo esc_js($selected_sector); ?>',
-        roleValue:'<?php echo esc_js($selected_role); ?>',
-        paLabel:'<?php echo esc_js($selected_practice_area === 'all' ? 'All practice areas' : $selected_practice_area); ?>',
-        sectorLabel:'<?php echo esc_js($selected_sector === 'all' ? 'All Sectors' : $selected_sector); ?>',
-        roleLabel:'<?php echo esc_js($selected_role === 'all' ? 'All roles' : $selected_role); ?>',
+        paValue: <?php echo esc_attr(wp_json_encode((string) $selected_practice_area)); ?>,
+        sectorValue: <?php echo esc_attr(wp_json_encode((string) $selected_sector)); ?>,
+        roleValue: <?php echo esc_attr(wp_json_encode((string) $selected_role)); ?>,
+        paLabel: <?php echo esc_attr(wp_json_encode((string) $selected_practice_area_label)); ?>,
+        sectorLabel: <?php echo esc_attr(wp_json_encode((string) $selected_sector_label)); ?>,
+        roleLabel: <?php echo esc_attr(wp_json_encode((string) $selected_role_label)); ?>,
         closeAll(){ this.paOpen=false; this.sectorOpen=false; this.roleOpen=false; },
-        selectPA(slug,label){ this.paValue=slug; this.paLabel=label; this.paOpen=false; },
-        selectSector(slug,label){ this.sectorValue=slug; this.sectorLabel=label; this.sectorOpen=false; },
-        selectRole(slug,label){ this.roleValue=slug; this.roleLabel=label; this.roleOpen=false; }
+        submitFilters(){ this.$nextTick(() => this.$refs.teamFiltersForm.submit()); },
+        selectPA(slug,label){ this.paValue=slug; this.paLabel=label; this.paOpen=false; this.submitFilters(); },
+        selectSector(slug,label){ this.sectorValue=slug; this.sectorLabel=label; this.sectorOpen=false; this.submitFilters(); },
+        selectRole(slug,label){ this.roleValue=slug; this.roleLabel=label; this.roleOpen=false; this.submitFilters(); }
     }"
     @click.outside="closeAll()"
 >
@@ -218,7 +262,7 @@ $base_args = array(
                                 class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                 role="option"
                                 tabindex="0"
-                                @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                                @click="selectPA(<?php echo esc_attr(wp_json_encode((string) $term->slug)); ?>, <?php echo esc_attr(wp_json_encode((string) $term->name)); ?>)"
                             >
                                 <?php echo esc_html($term->name); ?>
                             </li>
@@ -269,7 +313,7 @@ $base_args = array(
                                 class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                 role="option"
                                 tabindex="0"
-                                @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                                @click="selectSector(<?php echo esc_attr(wp_json_encode((string) $term->slug)); ?>, <?php echo esc_attr(wp_json_encode((string) $term->name)); ?>)"
                             >
                                 <?php echo esc_html($term->name); ?>
                             </li>
@@ -314,15 +358,15 @@ $base_args = array(
                         All roles
                     </li>
 
-                    <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
-                        <?php foreach ($role_terms as $term) : ?>
+                    <?php if (!empty($role_options)) : ?>
+                        <?php foreach ($role_options as $role_option) : ?>
                             <li
                                 class="px-4 py-3 cursor-pointer hover:bg-primary-light"
                                 role="option"
                                 tabindex="0"
-                                @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')"
+                                @click="selectRole(<?php echo esc_attr(wp_json_encode((string) $role_option)); ?>, <?php echo esc_attr(wp_json_encode((string) $role_option)); ?>)"
                             >
-                                <?php echo esc_html($term->name); ?>
+                                <?php echo esc_html($role_option); ?>
                             </li>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -394,7 +438,7 @@ $base_args = array(
                     <?php if (!empty($practice_area_terms) && !is_wp_error($practice_area_terms)) : ?>
                         <?php foreach ($practice_area_terms as $term) : ?>
                             <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
-                                @click="selectPA('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
+                                @click="selectPA(<?php echo esc_attr(wp_json_encode((string) $term->slug)); ?>, <?php echo esc_attr(wp_json_encode((string) $term->name)); ?>)">
                                 <?php echo esc_html($term->name); ?>
                             </li>
                         <?php endforeach; ?>
@@ -432,7 +476,7 @@ $base_args = array(
                     <?php if (!empty($sector_terms) && !is_wp_error($sector_terms)) : ?>
                         <?php foreach ($sector_terms as $term) : ?>
                             <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
-                                @click="selectSector('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
+                                @click="selectSector(<?php echo esc_attr(wp_json_encode((string) $term->slug)); ?>, <?php echo esc_attr(wp_json_encode((string) $term->name)); ?>)">
                                 <?php echo esc_html($term->name); ?>
                             </li>
                         <?php endforeach; ?>
@@ -467,11 +511,11 @@ $base_args = array(
                         All roles
                     </li>
 
-                    <?php if (!empty($role_terms) && !is_wp_error($role_terms)) : ?>
-                        <?php foreach ($role_terms as $term) : ?>
+                    <?php if (!empty($role_options)) : ?>
+                        <?php foreach ($role_options as $role_option) : ?>
                             <li class="px-4 py-3 cursor-pointer hover:bg-primary-light" role="option" tabindex="0"
-                                @click="selectRole('<?php echo esc_js($term->slug); ?>','<?php echo esc_js($term->name); ?>')">
-                                <?php echo esc_html($term->name); ?>
+                                @click="selectRole(<?php echo esc_attr(wp_json_encode((string) $role_option)); ?>, <?php echo esc_attr(wp_json_encode((string) $role_option)); ?>)">
+                                <?php echo esc_html($role_option); ?>
                             </li>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -527,7 +571,10 @@ $base_args = array(
                     <?php
                     $post_id   = get_the_ID();
                     $name      = get_the_title();
-                    $role      = get_the_excerpt();
+                    $role      = function_exists('get_field') ? (string) get_field('job_title', $post_id) : '';
+                    if ($role === '') {
+                        $role = get_the_excerpt();
+                    }
                     $permalink = get_permalink();
 
                     $thumb_id  = get_post_thumbnail_id($post_id);

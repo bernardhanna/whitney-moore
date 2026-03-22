@@ -148,8 +148,12 @@ wp_add_inline_script(
     }
     if (in_array('leaflet', $enabled_scripts, true)) { wp_enqueue_style('leaflet'); wp_enqueue_script('leaflet'); }
 
-    // Optional: force-load Turnstile globally (even if provider not selected)
-    if (in_array('cloudflare_turnstile', $enabled_scripts, true) && !wp_script_is('turnstile','enqueued')) {
+    // Optional: only force-load Turnstile when provider is actually enabled.
+    if (
+      $provider === 'turnstile' &&
+      in_array('cloudflare_turnstile', $enabled_scripts, true) &&
+      !wp_script_is('turnstile','enqueued')
+    ) {
       wp_enqueue_script('turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js', [], null, true);
     }
 
@@ -274,6 +278,18 @@ add_filter('script_loader_tag', function ($tag) {
   }
   return $tag;
 }, 10000);
+
+/**
+ * Cloudflare Turnstile rejects unknown query args (like ?ver=...).
+ * Strip version params from its script URL.
+ */
+add_filter('script_loader_src', function ($src, $handle) {
+  if ($handle !== 'turnstile') {
+    return $src;
+  }
+
+  return remove_query_arg('ver', $src);
+}, 10, 2);
 
 /**
  * 4) (Optional) Ask optimizers to back off on checkout

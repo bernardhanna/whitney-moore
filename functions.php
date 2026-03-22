@@ -64,7 +64,9 @@ require_once get_template_directory() . '/inc/enqueue-fonts.php';
 require_once get_template_directory() . '/inc/enqueue-scripts.php';
 require_once get_template_directory() . '/inc/hero-functions.php';
 require_once get_template_directory() . '/inc/flexible-content-functions.php';
+require_once get_template_directory() . '/inc/helpers/utils/contextual-copy.php';
 require_once get_template_directory() . '/inc/helpers/utils/menu-icon.php';
+require_once get_template_directory() . '/inc/helpers/utils/team-vcard.php';
 
 /**
  * CPTs & taxonomies

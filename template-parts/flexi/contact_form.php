@@ -1,8 +1,8 @@
 <?php
 // === Variables (always use get_sub_field) ===
-$heading = get_sub_field('heading') ?: 'Lorem ipsum';
+$heading = get_sub_field('heading') ?: 'Get in touch';
 $heading_tag = get_sub_field('heading_tag') ?: 'h2';
-$description = get_sub_field('description') ?: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis.';
+$description = get_sub_field('description') ?: 'Our team is here to help. Share your query and we will connect you with the right lawyer.';
 
 // Contact details
 $phone_label = get_sub_field('phone_label') ?: 'CALL US';

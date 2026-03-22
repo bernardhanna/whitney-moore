@@ -10,6 +10,16 @@ $left_image           = get_sub_field('left_image');
 $right_image          = get_sub_field('right_image');
 $background_color     = get_sub_field('background_color');
 
+if (is_string($main_heading)) {
+    $main_heading = matrix_replace_real_estate_copy($main_heading);
+    $main_heading = matrix_replace_lorem_copy($main_heading, 'Focused legal guidance');
+}
+
+if (is_string($description)) {
+    $description = matrix_replace_real_estate_copy($description);
+    $description = matrix_replace_lorem_copy($description, 'We deliver practical, commercially grounded advice designed around your priorities.');
+}
+
 // NEW: mobile-only image below button + radius control
 $mobile_below_button_image        = get_sub_field('mobile_below_button_image');
 $mobile_below_button_image_radius = get_sub_field('mobile_below_button_image_radius') ?: 'rounded-none';

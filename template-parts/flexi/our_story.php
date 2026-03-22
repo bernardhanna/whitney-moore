@@ -9,6 +9,10 @@ $main_heading_tag  = get_sub_field('main_heading_tag') ?: 'h2';
 $description       = get_sub_field('description');
 $cta_button        = get_sub_field('cta_button'); // ACF link array
 
+if (is_string($description) && stripos($description, 'lorem ipsum') !== false) {
+    $description = '<p>Founded in Dublin in 1882, Whitney Moore has built a long-standing reputation for practical, business-focused legal advice. We combine deep sector knowledge with a collaborative approach to help clients navigate complex legal and commercial challenges.</p>';
+}
+
 // Right-side single image (SVG or any media)
 $right_image_id    = get_sub_field('right_image');
 

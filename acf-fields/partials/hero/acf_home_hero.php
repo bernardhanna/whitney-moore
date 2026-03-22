@@ -11,7 +11,7 @@ $hero_001
   ->addText('small_heading', [
       'label' => 'Small Heading Text',
       'instructions' => 'Enter the small heading text that appears above the main heading.',
-      'default_value' => 'Lorem Ipsum Dolar',
+      'default_value' => 'Sector Spotlight',
       'required' => 0,
   ])
   ->addSelect('small_heading_tag', [
@@ -33,7 +33,7 @@ $hero_001
   ->addText('main_heading', [
       'label' => 'Main Heading Text',
       'instructions' => 'Enter the main heading text for the hero section.',
-      'default_value' => 'Lorem Ipsum',
+      'default_value' => 'Your heading here',
       'required' => 1,
   ])
   ->addSelect('main_heading_tag', [
@@ -55,7 +55,7 @@ $hero_001
   ->addWysiwyg('description', [
       'label' => 'Description Text',
       'instructions' => 'Enter the description text that appears below the main heading.',
-      'default_value' => 'Lorem ipsum dolor sit amet consectetur. Eget vitae iaculis facilisi mattis duis arcu.',
+      'default_value' => 'Add a short, clear introduction to this page and the support your team provides.',
       'media_upload' => 0,
       'tabs' => 'all',
       'toolbar' => 'full',
